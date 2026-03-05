@@ -4,9 +4,9 @@
    ============================================================================ */
 
 /* Import all component style files */
-@import 'components.card.css';
-@import 'components.navigation.css';
-@import 'components.slideshow.css';
-@import 'components.announcement-bar.css';
-@import 'components.fly-to-cart.css';
-@import 'components.product.css';
+@import 'components.card.css.liquid';
+@import 'components.navigation.css.liquid';
+@import 'components.slideshow.css.liquid';
+@import 'components.announcement-bar.css.liquid';
+@import 'components.fly-to-cart.css.liquid';
+@import 'components.product.css.liquid';
