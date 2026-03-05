@@ -1,22 +1,20 @@
 class AnnouncementBar extends HTMLElement {
   constructor() {
     super();
+
+    // Elementos base
     this.messagesContainer = this.querySelector('[data-announcement-messages]');
-    this.messages = Array.from(
-      this.querySelectorAll('[data-announcement-message]')
-    );
+    this.messages = Array.from(this.querySelectorAll('[data-announcement-message]'));
     this.closeButton = this.querySelector('[data-announcement-close]');
+
+    // Configuración
     this.storageKey = this.dataset.storageKey || 'announcement_closed';
+    this.animationStyle = this.dataset.animation || 'vertical';
+
+    // Estado
     this.currentIndex = 0;
     this.interval = null;
   }
-
-  this.animationStyle = this.dataset.animation || 'vertical';
-
-if (this.animationStyle === 'marquee') {
-  this.initMarquee();
-  return;
-}
 
   connectedCallback() {
     if (!this.messages.length) return;
@@ -28,6 +26,17 @@ if (this.animationStyle === 'marquee') {
       return;
     }
 
+    // 🔥 MODO MARQUEE
+    if (this.animationStyle === 'marquee') {
+      this.initMarquee();
+      this.updateAnnouncementHeight();
+      if (this.closeButton) {
+        this.closeButton.addEventListener('click', () => this.handleClose());
+      }
+      return;
+    }
+
+    // 🔥 MODO VERTICAL (NORMAL)
     this.initMessages();
     this.updateAnnouncementHeight();
     this.startRotation();
@@ -46,6 +55,10 @@ if (this.animationStyle === 'marquee') {
     window.removeEventListener('resize', () => this.updateAnnouncementHeight());
   }
 
+  /* ============================================================
+     MODO VERTICAL
+     ============================================================ */
+
   initMessages() {
     this.messages.forEach((msg, index) => {
       msg.classList.toggle('is-active', index === 0);
@@ -53,6 +66,7 @@ if (this.animationStyle === 'marquee') {
   }
 
   startRotation() {
+    if (this.animationStyle === 'marquee') return;
     if (this.messages.length <= 1) return;
 
     const prefersReduced =
@@ -66,8 +80,7 @@ if (this.animationStyle === 'marquee') {
   }
 
   getRotationSpeed() {
-    // 20s por defecto, puedes mapear var(--announcement-speed) si lo deseas
-    return 8000;
+    return 8000; // 8s por mensaje
   }
 
   nextMessage() {
@@ -78,6 +91,32 @@ if (this.animationStyle === 'marquee') {
     if (current) current.classList.remove('is-active');
     if (next) next.classList.add('is-active');
   }
+
+  /* ============================================================
+     MODO MARQUEE
+     ============================================================ */
+
+  initMarquee() {
+    const track = document.createElement('div');
+    track.classList.add('announcement-bar__track');
+
+    // Duplicar mensajes para scroll infinito
+    const allMessages = [...this.messages, ...this.messages];
+
+    allMessages.forEach(msg => {
+      const clone = msg.cloneNode(true);
+      clone.classList.remove('is-active');
+      track.appendChild(clone);
+    });
+
+    // Reemplazar contenido
+    this.messagesContainer.innerHTML = '';
+    this.messagesContainer.appendChild(track);
+  }
+
+  /* ============================================================
+     CIERRE Y ALTURA
+     ============================================================ */
 
   handleClose() {
     this.style.display = 'none';
