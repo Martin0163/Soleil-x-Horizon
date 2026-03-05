@@ -30,7 +30,7 @@
     {%- render 'scripts' -%}
     {%- render 'theme-styles-variables' -%}
     {%- render 'color-schemes' -%}
-    {{ 'soleil-horizon.css' | asset_url | stylesheet_tag }}
+    {{ 'soleil-horizon.css.liquid' | asset_url | stylesheet_tag }}
 
 
     {% comment %}/* Start Soleil Color Bridge — loads after Horizon color schemes to properly override */{% endcomment %}
