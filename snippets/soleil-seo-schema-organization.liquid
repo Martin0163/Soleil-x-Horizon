@@ -1,0 +1,54 @@
+{%- comment -%}
+  INTEGRATED FROM: Codigo Soleil (Snippets/seo-schema-organization.liquid)
+  INTEGRATION DATE: 2026-02-11
+  CHANGES: Added soleil- prefix, updated internal references
+  NOTE: This snippet uses Codigo Soleil's custom CSS variables.
+        Include soleil-design-tokens.liquid for full variable support.
+{%- endcomment -%}
+
+{% comment %}
+  Component: SEO Schema - Organization
+  Purpose: Generates JSON-LD structured data for organization/business
+  Dependencies: None
+  Usage: {% render 'soleil-seo-schema-organization' %}
+  
+  Parameters: None (uses shop object)
+  
+  SEO Benefits:
+  - Helps search engines understand business identity
+  - Enables rich snippets in search results
+  - Improves knowledge graph presence
+  - Supports local SEO
+  
+  Maintenance Notes:
+  - Update social media URLs in theme settings
+  - Ensure logo is high quality (minimum 112x112px)
+  - Add contact information if available
+{% endcomment %}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": {{ shop.name | json }},
+  "url": {{ shop.url | json }},
+  {% if settings.logo %}
+  "logo": {{ settings.logo | image_url: width: 600 | prepend: 'https:' | json }},
+  {% endif %}
+  "description": {{ shop.description | strip_html | truncate: 200 | json }},
+  "sameAs": [
+    {% if settings.social_facebook_link != blank %}
+      {{ settings.social_facebook_link | json }}{% if settings.social_instagram_link != blank or settings.social_twitter_link != blank or settings.social_pinterest_link != blank %},{% endif %}
+    {% endif %}
+    {% if settings.social_instagram_link != blank %}
+      {{ settings.social_instagram_link | json }}{% if settings.social_twitter_link != blank or settings.social_pinterest_link != blank %},{% endif %}
+    {% endif %}
+    {% if settings.social_twitter_link != blank %}
+      {{ settings.social_twitter_link | json }}{% if settings.social_pinterest_link != blank %},{% endif %}
+    {% endif %}
+    {% if settings.social_pinterest_link != blank %}
+      {{ settings.social_pinterest_link | json }}
+    {% endif %}
+  ]
+}
+</script>

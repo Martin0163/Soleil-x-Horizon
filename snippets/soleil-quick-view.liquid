@@ -1,0 +1,880 @@
+{%- comment -%}
+  INTEGRATED FROM: Codigo Soleil (Snippets/quick_view.liquid)
+  INTEGRATION DATE: 2026-02-11
+  CHANGES: Added soleil- prefix, updated internal references
+  NOTE: This snippet uses Codigo Soleil's custom CSS variables.
+        Include soleil-design-tokens.liquid for full variable support.
+{%- endcomment -%}
+
+{% liquid
+
+  assign current_variant = product.selected_or_first_available_variant
+
+  assign featured_image = current_variant.featured_image | default: product.featured_image
+
+%}
+
+
+
+<div class="quick-view" data-product-id="{{ product.id }}">
+
+  
+
+  <div class="quick-view-grid">
+
+    
+
+    {% comment %} Product Images {% endcomment %}
+
+    <div class="quick-view-images">
+
+      <div class="quick-view-main-image">
+
+        <img
+  src="{{ featured_image | image_url: width: 800 }}"
+  alt="{{ featured_image.alt | escape | default: product.title }}"
+  data-main-image
+  loading="eager"
+  width="800"
+  height="800" 
+>
+
+      </div>
+
+
+
+      {% if product.images.size > 1 %}
+
+        <div class="quick-view-thumbnails">
+
+          {% for image in product.images limit: 4 %}
+
+            <button 
+
+              class="thumbnail{% if forloop.first %} is-active{% endif %}"
+
+              data-thumbnail
+
+              data-image-url="{{ image | image_url: width: 800 }}"
+
+              aria-label="View image {{ forloop.index }}"
+
+            >
+
+              <img
+  src="{{ image | image_url: width: 100 }}"
+  alt="{{ image.alt | escape }}"
+  loading="lazy"
+  width="100"
+  height="100" 
+>
+
+            </button>
+
+          {% endfor %}
+
+        </div>
+
+      {% endif %}
+
+    </div>
+
+
+
+    {% comment %} Product Info {% endcomment %}
+
+    <div class="quick-view-info">
+
+      
+
+      {% if product.vendor %}
+
+        <p class="quick-view-vendor">
+
+          <a href="{{ product.vendor | url_for_vendor }}">{{ product.vendor }}</a>
+
+        </p>
+
+      {% endif %}
+
+
+
+      <h2 class="quick-view-title">
+
+        <a href="{{ product.url }}">{{ product.title }}</a>
+
+      </h2>
+
+
+
+      {% render 'soleil-price', product: product, show_badges: true, show_savings: true %}
+
+
+
+      {% if product.description != blank %}
+
+        <div class="quick-view-description">
+
+          {{ product.description | strip_html | truncatewords: 30 }}
+
+        </div>
+
+      {% endif %}
+
+
+
+      {% form 'product', product, class: 'quick-view-form', data-product-form: '' %}
+
+        
+
+        {% unless product.has_only_default_variant %}
+
+          <div class="quick-view-variants">
+
+            {% for option in product.options_with_values %}
+
+              <div class="variant-option">
+
+                <label class="variant-label">
+
+                  {{ option.name }}
+
+                </label>
+
+                
+
+                {% if option.name == 'Color' or option.name == 'Colour' %}
+
+                  <div class="variant-swatches">
+
+                    {% for value in option.values %}
+
+                      <input
+
+                        type="radio"
+
+                        name="options[{{ option.name }}]"
+
+                        value="{{ value | escape }}"
+
+                        id="quick-view-{{ product.id }}-{{ option.name }}-{{ forloop.index }}"
+
+                        {% if option.selected_value == value %}checked{% endif %}
+
+                      >
+
+                      <label 
+
+                        for="quick-view-{{ product.id }}-{{ option.name }}-{{ forloop.index }}"
+
+                        class="variant-swatch"
+
+                        style="background-color: {{ value | handleize }};"
+
+                        title="{{ value }}"
+
+                      >
+
+                        <span class="visually-hidden">{{ value }}</span>
+
+                      </label>
+
+                    {% endfor %}
+
+                  </div>
+
+                {% else %}
+
+                  <select
+
+                    name="options[{{ option.name }}]"
+
+                    class="variant-select"
+
+                  >
+
+                    {% for value in option.values %}
+
+                      <option 
+
+                        value="{{ value | escape }}"
+
+                        {% if option.selected_value == value %}selected{% endif %}
+
+                      >
+
+                        {{ value }}
+
+                      </option>
+
+                    {% endfor %}
+
+                  </select>
+
+                {% endif %}
+
+              </div>
+
+            {% endfor %}
+
+          </div>
+
+        {% endunless %}
+
+
+
+        <div class="quick-view-quantity">
+
+          <label for="quick-view-quantity" class="quantity-label">Quantity</label>
+
+          <div class="quantity-input">
+
+            <button type="button" class="quantity-btn quantity-minus" aria-label="Decrease quantity">
+
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+
+                <path d="M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+
+              </svg>
+
+            </button>
+
+            <input
+
+              type="number"
+
+              name="quantity"
+
+              id="quick-view-quantity"
+
+              value="1"
+
+              min="1"
+
+              class="quantity-value"
+
+            >
+
+            <button type="button" class="quantity-btn quantity-plus" aria-label="Increase quantity">
+
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+
+                <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+
+              </svg>
+
+            </button>
+
+          </div>
+
+        </div>
+
+
+
+        <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id>
+
+
+
+        <div class="quick-view-actions">
+
+          <button
+
+            type="submit"
+
+            name="add"
+
+            class="btn btn-primary btn-lg btn-full"
+
+            {% unless current_variant.available %}disabled{% endunless %}
+
+            data-add-to-cart
+
+          >
+
+            <span class="btn-text">
+
+              {% if current_variant.available %}
+
+                {{ 'products.product.add_to_cart' | t }}
+
+              {% else %}
+
+                {{ 'products.product.sold_out' | t }}
+
+              {% endif %}
+
+            </span>
+
+            <span class="btn-loader" hidden>
+
+              <svg class="spinner" width="20" height="20" viewBox="0 0 20 20">
+
+                <circle class="spinner-path" cx="10" cy="10" r="8" fill="none" stroke-width="2"/>
+
+              </svg>
+
+            </span>
+
+          </button>
+
+
+
+          <a href="{{ product.url }}" class="btn btn-secondary btn-lg btn-full">
+
+            {{ 'products.product.view_full_details' | t }}
+
+          </a>
+
+        </div>
+
+
+
+      {% endform %}
+
+
+
+      {% if product.metafields.custom.features %}
+
+        <div class="quick-view-features">
+
+          <ul class="features-list">
+
+            {% assign features = product.metafields.custom.features | split: ',' %}
+
+            {% for feature in features limit: 3 %}
+
+              <li class="feature-item">
+
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+
+                  <path d="M13.333 4L6 11.333L2.667 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+                </svg>
+
+                {{ feature }}
+
+              </li>
+
+            {% endfor %}
+
+          </ul>
+
+        </div>
+
+      {% endif %}
+
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+</div>
+
+
+
+<style>
+
+  .quick-view {
+
+    background: var(--color-white);
+
+    border-radius: var(--radius-xl);
+
+    overflow: hidden;
+
+    max-width: 1000px;
+
+    width: 100%;
+
+  }
+
+
+
+  .quick-view-grid {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: var(--space-3xl);
+
+  }
+
+
+
+  /* Images */
+
+  .quick-view-images {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: var(--space-md);
+
+  }
+
+
+
+  .quick-view-main-image {
+
+    aspect-ratio: 1;
+
+    overflow: hidden;
+
+    border-radius: var(--radius-lg);
+
+    background: var(--color-gray-100);
+
+  }
+
+
+
+  .quick-view-main-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+  }
+
+
+
+  .quick-view-thumbnails {
+
+    display: flex;
+
+    gap: var(--space-sm);
+
+  }
+
+
+
+  .thumbnail {
+
+    flex: 1;
+
+    aspect-ratio: 1;
+
+    border: 2px solid var(--color-gray-200);
+
+    border-radius: var(--radius-md);
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+    transition: border-color var(--duration-base) var(--ease-out);
+
+    background: none;
+
+    padding: 0;
+
+  }
+
+
+
+  .thumbnail:hover,
+
+  .thumbnail.is-active {
+
+    border-color: var(--color-yellow);
+
+  }
+
+
+
+  .thumbnail img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+  }
+
+
+
+  /* Info */
+
+  .quick-view-info {
+
+    padding: var(--space-xl);
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: var(--space-lg);
+
+  }
+
+
+
+  .quick-view-vendor {
+
+    font-size: var(--font-size-sm);
+
+    font-weight: var(--font-weight-semibold);
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
+
+    color: var(--color-gray-600);
+
+  }
+
+
+
+  .quick-view-vendor a {
+
+    color: inherit;
+
+    text-decoration: none;
+
+  }
+
+
+
+  .quick-view-vendor a:hover {
+
+    color: var(--color-yellow);
+
+  }
+
+
+
+  .quick-view-title {
+
+    font-size: var(--font-size-2xl);
+
+    font-weight: var(--font-weight-bold);
+
+    line-height: 1.2;
+
+    margin: 0;
+
+  }
+
+
+
+  .quick-view-title a {
+
+    color: inherit;
+
+    text-decoration: none;
+
+  }
+
+
+
+  .quick-view-description {
+
+    font-size: var(--font-size-base);
+
+    line-height: var(--line-height-relaxed);
+
+    color: var(--color-gray-600);
+
+  }
+
+
+
+  /* Variants */
+
+  .quick-view-variants {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: var(--space-md);
+
+  }
+
+
+
+  .variant-label {
+
+    display: block;
+
+    font-size: var(--font-size-sm);
+
+    font-weight: var(--font-weight-semibold);
+
+    margin-bottom: var(--space-xs);
+
+    color: var(--color-gray-700);
+
+  }
+
+
+
+  .variant-select {
+
+    width: 100%;
+
+    padding: var(--space-sm) var(--space-md);
+
+    border: 1px solid var(--color-gray-300);
+
+    border-radius: var(--radius-md);
+
+    font-size: var(--font-size-base);
+
+    background: var(--color-white);
+
+    cursor: pointer;
+
+  }
+
+
+
+  .variant-swatches {
+
+    display: flex;
+
+    gap: var(--space-sm);
+
+    flex-wrap: wrap;
+
+  }
+
+
+
+  .variant-swatches input {
+
+    position: absolute;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+  }
+
+
+
+  .variant-swatch {
+
+    width: 40px;
+
+    height: 40px;
+
+    border-radius: var(--radius-full);
+
+    border: 2px solid var(--color-gray-300);
+
+    cursor: pointer;
+
+    transition: all var(--duration-base) var(--ease-out);
+
+  }
+
+
+
+  .variant-swatches input:checked  .variant-swatch {
+
+    border-color: var(--color-yellow);
+
+    box-shadow: 0 0 0 2px var(--color-yellow);
+
+  }
+
+
+
+  /* Quantity */
+
+  .quick-view-quantity {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: var(--space-xs);
+
+  }
+
+
+
+  .quantity-label {
+
+    font-size: var(--font-size-sm);
+
+    font-weight: var(--font-weight-semibold);
+
+    color: var(--color-gray-700);
+
+  }
+
+
+
+  .quantity-input {
+
+    display: flex;
+
+    align-items: center;
+
+    border: 1px solid var(--color-gray-300);
+
+    border-radius: var(--radius-md);
+
+    overflow: hidden;
+
+    width: fit-content;
+
+  }
+
+
+
+  .quantity-btn {
+
+    padding: var(--space-sm);
+
+    background: var(--color-gray-100);
+
+    border: none;
+
+    cursor: pointer;
+
+    color: var(--color-gray-700);
+
+    transition: all var(--duration-base) var(--ease-out);
+
+  }
+
+
+
+  .quantity-btn:hover {
+
+    background: var(--color-yellow);
+
+    color: var(--color-black);
+
+  }
+
+
+
+  .quantity-value {
+
+    width: 60px;
+
+    padding: var(--space-sm);
+
+    border: none;
+
+    text-align: center;
+
+    font-size: var(--font-size-base);
+
+    font-weight: var(--font-weight-semibold);
+
+  }
+
+
+
+  /* Actions */
+
+  .quick-view-actions {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: var(--space-sm);
+
+  }
+
+
+
+  /* Features */
+
+  .quick-view-features {
+
+    padding-top: var(--space-lg);
+
+    border-top: 1px solid var(--color-gray-200);
+
+  }
+
+
+
+  .features-list {
+
+    list-style: none;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: var(--space-sm);
+
+  }
+
+
+
+  .feature-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: var(--space-sm);
+
+    font-size: var(--font-size-sm);
+
+    color: var(--color-gray-700);
+
+  }
+
+
+
+  .feature-item svg {
+
+    color: var(--color-yellow);
+
+    flex-shrink: 0;
+
+  }
+
+
+
+  /* Responsive */
+
+  @media (max-width: 768px) {
+
+    .quick-view-grid {
+
+      grid-template-columns: 1fr;
+
+      gap: var(--space-xl);
+
+    }
+
+
+
+    .quick-view-info {
+
+      padding: var(--space-lg);
+
+    }
+
+
+
+    .quick-view-title {
+
+      font-size: var(--font-size-xl);
+
+    }
+
+  }
+
+</style>

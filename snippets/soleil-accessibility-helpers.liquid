@@ -1,0 +1,328 @@
+{%- comment -%}
+  INTEGRATED FROM: Codigo Soleil (Snippets/accessibility-helpers.liquid)
+  INTEGRATION DATE: 2026-02-11
+  CHANGES: Added soleil- prefix, updated internal references
+  NOTE: This snippet uses Codigo Soleil's custom CSS variables.
+        Include soleil-design-tokens.liquid for full variable support.
+{%- endcomment -%}
+
+{% comment %}
+  Component: Accessibility Helpers
+  Purpose: Provides reusable accessibility utilities and CSS classes
+  Dependencies: None
+  Usage: Include in theme.liquid or sections requiring a11y utilities
+  
+  Utilities include:
+  - Visually hidden class (screen reader only)
+  - Focus visible styles
+  - Skip links
+  - Reduced motion support
+  - High contrast mode support
+  - Keyboard navigation helpers
+  
+  Maintenance Notes:
+  - Test with screen readers (NVDA, JAWS, VoiceOver)
+  - Verify keyboard navigation (Tab, Enter, Escape, Arrow keys)
+  - Check color contrast ratios (WCAG AA minimum)
+  - Test with browser zoom (up to 200%)
+{% endcomment %}
+
+<style>
+  /* ========================================
+     VISUALLY HIDDEN (Screen Reader Only)
+     ======================================== */
+  .visually-hidden,
+  .sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+  
+  /* Focusable when navigated to via keyboard */
+  .visually-hidden:focus,
+  .sr-only:focus {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    padding: inherit !important;
+    margin: inherit !important;
+    overflow: visible !important;
+    clip: auto !important;
+    white-space: normal !important;
+  }
+  
+  /* ========================================
+     FOCUS VISIBLE STYLES
+     ======================================== */
+  /* Remove default outline */
+  *:focus {
+    outline: none;
+  }
+  
+  /* Add custom focus indicator for keyboard navigation */
+  *:focus-visible {
+    outline: 3px solid var(--color-yellow, #FFD700);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm, 2px);
+  }
+  
+  /* Focus within (for containers) */
+  .focus-within:focus-within {
+    outline: 2px solid var(--color-yellow, #FFD700);
+    outline-offset: 2px;
+  }
+  
+  /* ========================================
+     SKIP LINKS
+     ======================================== */
+  .skip-link {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    background: var(--color-yellow, #FFD700);
+    color: var(--color-black, #000);
+    padding: 1rem 2rem;
+    text-decoration: none;
+    font-weight: 600;
+    z-index: var(--z-index-notification, 10001);
+    transition: top var(--transition-fast, 150ms ease-in-out);
+    border-radius: 0 0 var(--radius-md, 6px) 0;
+  }
+  
+  .skip-link:focus {
+    top: 0;
+    outline: 3px solid var(--color-black, #000);
+    outline-offset: -3px;
+  }
+  
+  /* ========================================
+     KEYBOARD NAVIGATION HELPERS
+     ======================================== */
+  /* Show focus indicator only for keyboard users */
+  .js-focus-visible :focus:not(.focus-visible) {
+    outline: none;
+  }
+  
+  /* Trap focus within modal/drawer */
+  .focus-trap {
+    position: relative;
+  }
+  
+  .focus-trap::before,
+  .focus-trap::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+  }
+  
+  /* ========================================
+     ARIA LIVE REGIONS
+     ======================================== */
+  .aria-live-region {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  
+  /* ========================================
+     HIGH CONTRAST MODE SUPPORT
+     ======================================== */
+  @media (prefers-contrast: high) {
+    * {
+      border-color: currentColor !important;
+    }
+    
+    button,
+    a,
+    input,
+    select,
+    textarea {
+      border: 2px solid currentColor !important;
+    }
+  }
+  
+  /* ========================================
+     REDUCED MOTION SUPPORT
+     ======================================== */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    
+    /* Disable parallax effects */
+    .parallax {
+      transform: none !important;
+    }
+    
+    /* Disable auto-playing animations */
+    .animate-on-scroll {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+  
+  /* ========================================
+     TOUCH TARGET SIZES (Minimum 44x44px)
+     ======================================== */
+  button,
+  a,
+  input[type="checkbox"],
+  input[type="radio"],
+  select {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  /* Exception for inline links in text */
+  p a,
+  li a {
+    min-width: auto;
+    min-height: auto;
+  }
+  
+  /* ========================================
+     SCREEN READER ANNOUNCEMENTS
+     ======================================== */
+  .sr-announcement {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  
+  /* ========================================
+     LOADING STATES
+     ======================================== */
+  [aria-busy="true"] {
+    cursor: wait;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  
+  /* ========================================
+     DISABLED STATES
+     ======================================== */
+  [aria-disabled="true"],
+  [disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  
+  /* ========================================
+     EXPANDED/COLLAPSED STATES
+     ======================================== */
+  [aria-expanded="false"] + * {
+    display: none;
+  }
+  
+  [aria-expanded="true"] + * {
+    display: block;
+  }
+</style>
+
+<div id="a11y-announcer" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
+
+<script>
+  /**
+   * Accessibility Helper Functions
+   * Provides utilities for managing focus, announcements, and keyboard navigation
+   */
+  
+  window.A11yHelpers = {
+    /**
+     * Announces a message to screen readers
+     * @param {string} message - Message to announce
+     * @param {string} priority - 'polite' or 'assertive'
+     */
+    announce: function(message, priority = 'polite') {
+      const announcer = document.getElementById('a11y-announcer');
+      if (announcer) {
+        announcer.setAttribute('aria-live', priority);
+        announcer.textContent = message;
+        
+        // Clear after announcement
+        setTimeout(() => {
+          announcer.textContent = '';
+        }, 1000);
+      }
+    },
+    
+    /**
+     * Traps focus within an element (for modals/drawers)
+     * @param {HTMLElement} element - Container element
+     */
+    trapFocus: function(element) {
+      const focusableElements = element.querySelectorAll(
+        'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      
+      const firstFocusable = focusableElements[0];
+      const lastFocusable = focusableElements[focusableElements.length - 1];
+      
+      element.addEventListener('keydown', function(e) {
+        if (e.key === 'Tab') {
+          if (e.shiftKey) {
+            if (document.activeElement === firstFocusable) {
+              e.preventDefault();
+              lastFocusable.focus();
+            }
+          } else {
+            if (document.activeElement === lastFocusable) {
+              e.preventDefault();
+              firstFocusable.focus();
+            }
+          }
+        }
+      });
+      
+      // Focus first element
+      if (firstFocusable) {
+        firstFocusable.focus();
+      }
+    },
+    
+    /**
+     * Removes focus trap from an element
+     * @param {HTMLElement} element - Container element
+     */
+    removeFocusTrap: function(element) {
+      element.removeEventListener('keydown', this.trapFocus);
+    },
+    
+    /**
+     * Checks if user prefers reduced motion
+     * @returns {boolean}
+     */
+    prefersReducedMotion: function() {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    },
+    
+    /**
+     * Gets all focusable elements within a container
+     * @param {HTMLElement} container - Container element
+     * @returns {NodeList}
+     */
+    getFocusableElements: function(container) {
+      return container.querySelectorAll(
+        'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+    }
+  };
+</script>

@@ -1,0 +1,39 @@
+<nav class="mega-menu" aria-label="Main navigation">
+  <ul class="mega-menu__list">
+    {%- for link in linklists.main-menu.links -%}
+      <li class="mega-menu__item">
+        {%- if link.links != blank -%}
+          <details class="mega-menu__details">
+            <summary class="mega-menu__summary">
+              {{ link.title }}
+            </summary>
+            <div class="mega-menu__panel">
+              <div class="mega-menu__columns">
+                {%- for child_link in link.links -%}
+                  <div class="mega-menu__column">
+                    <a href="{{ child_link.url }}" class="mega-menu__link">
+                      {{ child_link.title }}
+                    </a>
+                    {%- if child_link.links != blank -%}
+                      <ul class="mega-menu__sublist">
+                        {%- for grandchild_link in child_link.links -%}
+                          <li>
+                            <a href="{{ grandchild_link.url }}" class="mega-menu__sublink">
+                              {{ grandchild_link.title }}
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    {%- endif -%}
+                  </div>
+                {%- endfor -%}
+              </div>
+            </div>
+          </details>
+        {%- else -%}
+          <a href="{{ link.url }}" class="mega-menu__link">{{ link.title }}</a>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</nav>

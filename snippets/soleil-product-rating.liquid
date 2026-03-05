@@ -1,0 +1,241 @@
+{%- comment -%}
+  INTEGRATED FROM: Codigo Soleil (Snippets/product_rating.liquid)
+  INTEGRATION DATE: 2026-02-11
+  CHANGES: Added soleil- prefix, updated internal references
+  NOTE: This snippet uses Codigo Soleil's custom CSS variables.
+        Include soleil-design-tokens.liquid for full variable support.
+{%- endcomment -%}
+
+{% comment %}
+  Component: Product Rating
+  Purpose: Displays star rating for products with accessibility support
+  Dependencies: None
+  Usage: {% render 'soleil-product-rating', rating: 4.5, count: 123, show_count: true %}
+  
+  Parameters:
+  - rating (required): Rating value (0-5)
+  - count (optional): Number of reviews
+  - show_count (optional): Show review count
+  - size (optional): 'sm', 'md', 'lg'
+  - color (optional): Star color override
+  
+  Accessibility Features:
+  - ARIA labels for screen readers
+  - Semantic markup
+  - Keyboard accessible
+  
+  Maintenance Notes:
+  - Ensure rating value is between 0-5
+  - Test with screen readers
+  - Verify color contrast
+{% endcomment %}
+
+{% liquid
+  assign rating = rating | default: 0
+  assign count = count | default: 0
+  assign show_count = show_count | default: true
+  assign size = size | default: 'md'
+  assign color = color | default: 'var(--color-yellow)'
+  
+  assign rating_rounded = rating | round: 1
+  assign rating_percentage = rating | times: 20
+%}
+
+<div class="product-rating product-rating--{{ size }}" 
+     data-rating="{{ rating }}"
+     aria-label="{{ 'products.reviews.rating_aria' | t | default: 'Rating' }}: {{ rating_rounded }} {{ 'products.reviews.out_of_5' | t | default: 'out of 5 stars' }}">
+  
+  <div class="rating-stars" style="--rating-color: {{ color }}; --rating-percentage: {{ rating_percentage }}%;">
+    {% for i in (1..5) %}
+      <svg class="star star--{{ i }}" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" 
+              fill="{% if i <= rating %}{{ color }}{% else %}var(--color-gray-300){% endif %}" 
+              stroke="none"/>
+      </svg>
+    {% endfor %}
+    
+    {%- comment -%} Filled stars overlay for partial ratings {%- endcomment -%}
+    <div class="rating-stars-filled" aria-hidden="true">
+      {% for i in (1..5) %}
+        <svg class="star star--filled" width="16" height="16" viewBox="0 0 24 24">
+          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" 
+                fill="{{ color }}" 
+                stroke="none"/>
+        </svg>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% if show_count and count > 0 %}
+    <span class="rating-count" aria-label="{{ count }} {{ 'products.reviews.reviews' | t | default: 'reviews' }}">
+      ({{ count }})
+    </span>
+  {% endif %}
+
+  {%- comment -%} Screen reader text {%- endcomment -%}
+  <span class="visually-hidden">
+    {{ rating_rounded }} {{ 'products.reviews.out_of_5' | t | default: 'out of 5 stars' }}
+    {% if count > 0 %}
+      {{ 'products.reviews.based_on' | t | default: 'based on' }} {{ count }} {{ 'products.reviews.reviews' | t | default: 'reviews' }}
+    {% endif %}
+  </span>
+</div>
+
+<style>
+  .product-rating {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+
+  .rating-stars {
+    position: relative;
+    display: flex;
+    gap: 2px;
+  }
+
+  .star {
+    flex-shrink: 0;
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .rating-stars-filled {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    gap: 2px;
+    overflow: hidden;
+    width: var(--rating-percentage, 0%);
+  }
+
+  .rating-count {
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-600);
+    font-weight: var(--font-weight-medium);
+  }
+
+  /* Size Variants */
+  .product-rating--sm .star {
+    width: 12px;
+    height: 12px;
+  }
+
+  .product-rating--sm .rating-count {
+    font-size: var(--font-size-xs);
+  }
+
+  .product-rating--md .star {
+    width: 16px;
+    height: 16px;
+  }
+
+  .product-rating--lg .star {
+    width: 20px;
+    height: 20px;
+  }
+
+  .product-rating--lg .rating-count {
+    font-size: var(--font-size-base);
+  }
+
+  /* Interactive Rating (for review forms) */
+  .product-rating--interactive .star {
+    cursor: pointer;
+  }
+
+  .product-rating--interactive .star:hover {
+    transform: scale(1.1);
+  }
+
+  .product-rating--interactive .star:hover,
+  .product-rating--interactive .star:hover ~ .star {
+    fill: var(--color-gray-300);
+  }
+
+  .product-rating--interactive .star:hover,
+  .product-rating--interactive .star:hover ~ .star {
+    fill: var(--rating-color, var(--color-yellow));
+  }
+
+  /* Hover effect for product cards */
+  .product-card:hover .rating-stars .star {
+    transform: scale(1.05);
+  }
+
+  /* Accessibility */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* High contrast mode */
+  @media (prefers-contrast: high) {
+    .star {
+      stroke: currentColor;
+      stroke-width: 1px;
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .star {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  // Interactive rating functionality (for review forms)
+  document.addEventListener('DOMContentLoaded', function() {
+    const interactiveRatings = document.querySelectorAll('.product-rating--interactive');
+    
+    interactiveRatings.forEach(rating => {
+      const stars = rating.querySelectorAll('.star');
+      const input = rating.querySelector('input[type="hidden"]');
+      
+      stars.forEach((star, index) => {
+        star.addEventListener('click', function() {
+          const ratingValue = index + 1;
+          
+          // Update visual state
+          stars.forEach((s, i) => {
+            if (i < ratingValue) {
+              s.style.fill = 'var(--rating-color, var(--color-yellow))';
+            } else {
+              s.style.fill = 'var(--color-gray-300)';
+            }
+          });
+          
+          // Update hidden input
+          if (input) {
+            input.value = ratingValue;
+          }
+          
+          // Update ARIA label
+          rating.setAttribute('aria-label', `Rating: ${ratingValue} out of 5 stars`);
+          
+          // Announce to screen readers
+          if (window.A11yHelpers) {
+            window.A11yHelpers.announce(`Rating set to ${ratingValue} out of 5 stars`);
+          }
+        });
+
+        // Keyboard support
+        star.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            star.click();
+          }
+        });
+      });
+    });
+  });
+</script>

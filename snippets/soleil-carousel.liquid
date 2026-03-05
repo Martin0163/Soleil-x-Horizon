@@ -1,0 +1,537 @@
+{%- comment -%}
+  INTEGRATED FROM: Codigo Soleil (Snippets/carousel.liquid)
+  INTEGRATION DATE: 2026-02-11
+  CHANGES: Added soleil- prefix, updated internal references
+  NOTE: This snippet uses Codigo Soleil's custom CSS variables.
+        Include soleil-design-tokens.liquid for full variable support.
+{%- endcomment -%}
+
+{% comment %}
+  Component: Accessible Image Carousel
+  Purpose: Reusable carousel/slider component with full accessibility support
+  Dependencies: None (vanilla JS)
+  Usage: {% render 'soleil-carousel', items: collection.products, carousel_id: 'featured-products' %}
+  
+  Parameters:
+  - items (required): Array of items to display
+  - carousel_id (required): Unique ID for this carousel instance
+  - autoplay (optional): Enable autoplay (default: false)
+  - autoplay_speed (optional): Autoplay interval in ms (default: 5000)
+  - show_arrows (optional): Show prev/next arrows (default: true)
+  - show_dots (optional): Show pagination dots (default: true)
+  - items_per_view (optional): Number of items visible (default: 1)
+  
+  Accessibility Features:
+  - Keyboard navigation (Arrow keys, Tab, Enter, Escape)
+  - Screen reader announcements
+  - Pause on hover/focus
+  - Respects prefers-reduced-motion
+  - ARIA labels and roles
+  - Focus management
+  
+  Maintenance Notes:
+  - Test with keyboard only
+  - Verify screen reader announcements
+  - Check touch/swipe on mobile
+  - Ensure autoplay can be paused
+{% endcomment %}
+
+{% assign carousel_id = carousel_id | default: 'carousel-' | append: section.id %}
+{% assign autoplay = autoplay | default: false %}
+{% assign autoplay_speed = autoplay_speed | default: 5000 %}
+{% assign show_arrows = show_arrows | default: true %}
+{% assign show_dots = show_dots | default: true %}
+{% assign items_per_view = items_per_view | default: 1 %}
+
+<div 
+  class="carousel" 
+  id="{{ carousel_id }}"
+  data-carousel
+  data-autoplay="{{ autoplay }}"
+  data-autoplay-speed="{{ autoplay_speed }}"
+  data-items-per-view="{{ items_per_view }}"
+  role="region"
+  aria-roledescription="carousel"
+  aria-label="{{ carousel_label | default: 'Image carousel' }}"
+>
+  <div class="carousel__container">
+    {% comment %} Previous Button {% endcomment %}
+    {% if show_arrows %}
+    <button 
+      type="button"
+      class="carousel__button carousel__button--prev"
+      data-carousel-prev
+      aria-label="{{ 'carousel.previous' | t | default: 'Previous slide' }}"
+      aria-controls="{{ carousel_id }}-track"
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    {% endif %}
+    
+    {% comment %} Carousel Track {% endcomment %}
+    <div 
+      class="carousel__track-container"
+      aria-live="polite"
+      aria-atomic="false"
+    >
+      <ul 
+        class="carousel__track" 
+        id="{{ carousel_id }}-track"
+        data-carousel-track
+      >
+        {% for item in items %}
+        <li 
+          class="carousel__slide{% if forloop.first %} is-active{% endif %}"
+          data-carousel-slide
+          data-slide-index="{{ forloop.index0 }}"
+          role="group"
+          aria-roledescription="slide"
+          aria-label="{{ forloop.index }} of {{ items.size }}"
+          {% unless forloop.first %}aria-hidden="true"{% endunless %}
+        >
+          {{ item }}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    
+    {% comment %} Next Button {% endcomment %}
+    {% if show_arrows %}
+    <button 
+      type="button"
+      class="carousel__button carousel__button--next"
+      data-carousel-next
+      aria-label="{{ 'carousel.next' | t | default: 'Next slide' }}"
+      aria-controls="{{ carousel_id }}-track"
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    {% endif %}
+  </div>
+  
+  {% comment %} Pagination Dots {% endcomment %}
+  {% if show_dots %}
+  <div class="carousel__pagination" role="tablist" aria-label="Carousel pagination">
+    {% for item in items %}
+    <button
+      type="button"
+      class="carousel__dot{% if forloop.first %} is-active{% endif %}"
+      data-carousel-dot
+      data-slide-index="{{ forloop.index0 }}"
+      role="tab"
+      aria-label="Go to slide {{ forloop.index }}"
+      aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+      aria-controls="{{ carousel_id }}-track"
+      tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+    ></button>
+    {% endfor %}
+  </div>
+  {% endif %}
+  
+  {% comment %} Autoplay Control {% endcomment %}
+  {% if autoplay %}
+  <button
+    type="button"
+    class="carousel__autoplay-toggle"
+    data-carousel-autoplay-toggle
+    aria-label="{{ 'carousel.pause' | t | default: 'Pause autoplay' }}"
+  >
+    <svg class="carousel__autoplay-icon carousel__autoplay-icon--pause" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M10 4H6V20H10V4Z" fill="currentColor"/>
+      <path d="M18 4H14V20H18V4Z" fill="currentColor"/>
+    </svg>
+    <svg class="carousel__autoplay-icon carousel__autoplay-icon--play" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="display: none;">
+      <path d="M8 5V19L19 12L8 5Z" fill="currentColor"/>
+    </svg>
+  </button>
+  {% endif %}
+  
+  {% comment %} Screen Reader Announcement Region {% endcomment %}
+  <div class="visually-hidden" role="status" aria-live="polite" aria-atomic="true" data-carousel-announcement></div>
+</div>
+
+<style>
+  /* Carousel Container */
+  .carousel {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .carousel__container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Track Container */
+  .carousel__track-container {
+    overflow: hidden;
+    width: 100%;
+  }
+  
+  /* Track */
+  .carousel__track {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    transition: transform var(--transition-base, 250ms ease-in-out);
+  }
+  
+  /* Slides */
+  .carousel__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+  }
+  
+  .carousel__slide:not(.is-active) {
+    visibility: hidden;
+  }
+  
+  /* Navigation Buttons */
+  .carousel__button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: var(--z-index-base, 1);
+    background: var(--color-white, #fff);
+    border: 2px solid var(--color-gray-200, #e5e7eb);
+    border-radius: var(--radius-full, 9999px);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-fast, 150ms ease-in-out);
+    box-shadow: var(--shadow-md, 0 4px 6px rgba(0,0,0,0.1));
+  }
+  
+  .carousel__button:hover {
+    background: var(--color-yellow, #FFD700);
+    border-color: var(--color-yellow, #FFD700);
+    transform: translateY(-50%) scale(1.1);
+  }
+  
+  .carousel__button:focus-visible {
+    outline: 3px solid var(--color-yellow, #FFD700);
+    outline-offset: 2px;
+  }
+  
+  .carousel__button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  
+  .carousel__button--prev {
+    left: 1rem;
+  }
+  
+  .carousel__button--next {
+    right: 1rem;
+  }
+  
+  /* Pagination Dots */
+  .carousel__pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+  
+  .carousel__dot {
+    width: 12px;
+    height: 12px;
+    border-radius: var(--radius-full, 9999px);
+    background: var(--color-gray-300, #d6d3d1);
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-fast, 150ms ease-in-out);
+    padding: 0;
+  }
+  
+  .carousel__dot:hover {
+    background: var(--color-gray-500, #8d8d8d);
+    transform: scale(1.2);
+  }
+  
+  .carousel__dot.is-active {
+    background: var(--color-yellow, #FFD700);
+    width: 32px;
+  }
+  
+  .carousel__dot:focus-visible {
+    outline: 2px solid var(--color-yellow, #FFD700);
+    outline-offset: 2px;
+  }
+  
+  /* Autoplay Toggle */
+  .carousel__autoplay-toggle {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: var(--z-index-base, 1);
+    background: var(--color-white, #fff);
+    border: 2px solid var(--color-gray-200, #e5e7eb);
+    border-radius: var(--radius-full, 9999px);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-fast, 150ms ease-in-out);
+  }
+  
+  .carousel__autoplay-toggle:hover {
+    background: var(--color-yellow, #FFD700);
+    border-color: var(--color-yellow, #FFD700);
+  }
+  
+  /* Reduced Motion */
+  @media (prefers-reduced-motion: reduce) {
+    .carousel__track {
+      transition: none;
+    }
+    
+    .carousel[data-autoplay="true"] {
+      /* Disable autoplay for users who prefer reduced motion */
+    }
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .carousel__button {
+      width: 40px;
+      height: 40px;
+    }
+    
+    .carousel__button--prev {
+      left: 0.5rem;
+    }
+    
+    .carousel__button--next {
+      right: 0.5rem;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Accessible Carousel Component
+   * Supports keyboard navigation, screen readers, and touch gestures
+   */
+  class AccessibleCarousel {
+    constructor(element) {
+      this.carousel = element;
+      this.track = element.querySelector('[data-carousel-track]');
+      this.slides = Array.from(element.querySelectorAll('[data-carousel-slide]'));
+      this.prevButton = element.querySelector('[data-carousel-prev]');
+      this.nextButton = element.querySelector('[data-carousel-next]');
+      this.dots = Array.from(element.querySelectorAll('[data-carousel-dot]'));
+      this.autoplayToggle = element.querySelector('[data-carousel-autoplay-toggle]');
+      this.announcement = element.querySelector('[data-carousel-announcement]');
+      
+      this.currentIndex = 0;
+      this.autoplay = element.dataset.autoplay === 'true';
+      this.autoplaySpeed = parseInt(element.dataset.autoplaySpeed) || 5000;
+      this.autoplayInterval = null;
+      this.isAutoplayPaused = false;
+      
+      this.init();
+    }
+    
+    init() {
+      this.bindEvents();
+      if (this.autoplay && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        this.startAutoplay();
+      }
+    }
+    
+    bindEvents() {
+      // Button clicks
+      if (this.prevButton) {
+        this.prevButton.addEventListener('click', () => this.prev());
+      }
+      if (this.nextButton) {
+        this.nextButton.addEventListener('click', () => this.next());
+      }
+      
+      // Dot clicks
+      this.dots.forEach(dot => {
+        dot.addEventListener('click', (e) => {
+          const index = parseInt(e.target.dataset.slideIndex);
+          this.goToSlide(index);
+        });
+      });
+      
+      // Keyboard navigation
+      this.carousel.addEventListener('keydown', (e) => this.handleKeydown(e));
+      
+      // Pause autoplay on hover/focus
+      this.carousel.addEventListener('mouseenter', () => this.pauseAutoplay());
+      this.carousel.addEventListener('mouseleave', () => this.resumeAutoplay());
+      this.carousel.addEventListener('focusin', () => this.pauseAutoplay());
+      this.carousel.addEventListener('focusout', () => this.resumeAutoplay());
+      
+      // Autoplay toggle
+      if (this.autoplayToggle) {
+        this.autoplayToggle.addEventListener('click', () => this.toggleAutoplay());
+      }
+      
+      // Touch gestures
+      this.bindTouchEvents();
+    }
+    
+    bindTouchEvents() {
+      let touchStartX = 0;
+      let touchEndX = 0;
+      
+      this.track.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+      
+      this.track.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        this.handleSwipe(touchStartX, touchEndX);
+      }, { passive: true });
+    }
+    
+    handleSwipe(startX, endX) {
+      const threshold = 50;
+      const diff = startX - endX;
+      
+      if (Math.abs(diff) > threshold) {
+        if (diff > 0) {
+          this.next();
+        } else {
+          this.prev();
+        }
+      }
+    }
+    
+    handleKeydown(e) {
+      switch(e.key) {
+        case 'ArrowLeft':
+          e.preventDefault();
+          this.prev();
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          this.next();
+          break;
+        case 'Home':
+          e.preventDefault();
+          this.goToSlide(0);
+          break;
+        case 'End':
+          e.preventDefault();
+          this.goToSlide(this.slides.length - 1);
+          break;
+      }
+    }
+    
+    prev() {
+      const newIndex = this.currentIndex === 0 ? this.slides.length - 1 : this.currentIndex - 1;
+      this.goToSlide(newIndex);
+    }
+    
+    next() {
+      const newIndex = this.currentIndex === this.slides.length - 1 ? 0 : this.currentIndex + 1;
+      this.goToSlide(newIndex);
+    }
+    
+    goToSlide(index) {
+      // Update slides
+      this.slides[this.currentIndex].classList.remove('is-active');
+      this.slides[this.currentIndex].setAttribute('aria-hidden', 'true');
+      
+      this.slides[index].classList.add('is-active');
+      this.slides[index].removeAttribute('aria-hidden');
+      
+      // Update dots
+      if (this.dots.length) {
+        this.dots[this.currentIndex].classList.remove('is-active');
+        this.dots[this.currentIndex].setAttribute('aria-selected', 'false');
+        this.dots[this.currentIndex].setAttribute('tabindex', '-1');
+        
+        this.dots[index].classList.add('is-active');
+        this.dots[index].setAttribute('aria-selected', 'true');
+        this.dots[index].setAttribute('tabindex', '0');
+      }
+      
+      // Update track position
+      const offset = -100 * index;
+      this.track.style.transform = `translateX(${offset}%)`;
+      
+      // Announce to screen readers
+      if (this.announcement) {
+        this.announcement.textContent = `Slide ${index + 1} of ${this.slides.length}`;
+      }
+      
+      this.currentIndex = index;
+    }
+    
+    startAutoplay() {
+      this.autoplayInterval = setInterval(() => {
+        if (!this.isAutoplayPaused) {
+          this.next();
+        }
+      }, this.autoplaySpeed);
+    }
+    
+    stopAutoplay() {
+      if (this.autoplayInterval) {
+        clearInterval(this.autoplayInterval);
+        this.autoplayInterval = null;
+      }
+    }
+    
+    pauseAutoplay() {
+      this.isAutoplayPaused = true;
+    }
+    
+    resumeAutoplay() {
+      this.isAutoplayPaused = false;
+    }
+    
+    toggleAutoplay() {
+      if (this.autoplayInterval) {
+        this.stopAutoplay();
+        this.updateAutoplayButton(false);
+      } else {
+        this.startAutoplay();
+        this.updateAutoplayButton(true);
+      }
+    }
+    
+    updateAutoplayButton(isPlaying) {
+      if (!this.autoplayToggle) return;
+      
+      const pauseIcon = this.autoplayToggle.querySelector('.carousel__autoplay-icon--pause');
+      const playIcon = this.autoplayToggle.querySelector('.carousel__autoplay-icon--play');
+      
+      if (isPlaying) {
+        pauseIcon.style.display = 'block';
+        playIcon.style.display = 'none';
+        this.autoplayToggle.setAttribute('aria-label', 'Pause autoplay');
+      } else {
+        pauseIcon.style.display = 'none';
+        playIcon.style.display = 'block';
+        this.autoplayToggle.setAttribute('aria-label', 'Play autoplay');
+      }
+    }
+  }
+  
+  // Initialize all carousels
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('[data-carousel]').forEach(carousel => {
+      new AccessibleCarousel(carousel);
+    });
+  });
+</script>

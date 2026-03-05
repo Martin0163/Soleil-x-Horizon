@@ -1,0 +1,22 @@
+{% comment %}
+  ============================================================================
+  SOLEIL SCRIPTS SNIPPET
+  ============================================================================
+  
+  Purpose: Load Soleil JavaScript files into Horizon theme
+  Usage: Include this snippet in layout/theme.liquid before </body>
+  
+  Example:
+  {% render 'soleil-scripts' %}
+  
+  Aquí puedes agregar nueva información al código sin romperlo.
+  ============================================================================
+{% endcomment %}
+
+{% comment %} Load Soleil AJAX Cart {% endcomment %}
+<script src="{{ 'soleil-ajax-cart.js' | asset_url }}" defer></script>
+
+{% comment %} Load Soleil Interactions {% endcomment %}
+<script src="{{ 'soleil-interactions.js' | asset_url }}" defer></script>
+
+{% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}

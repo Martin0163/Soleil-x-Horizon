@@ -1,0 +1,60 @@
+{%- comment -%}
+  INTEGRATED FROM: Codigo Soleil (Snippets/seo-schema-breadcrumbs.liquid)
+  INTEGRATION DATE: 2026-02-11
+  CHANGES: Added soleil- prefix, updated internal references
+  NOTE: This snippet uses Codigo Soleil's custom CSS variables.
+        Include soleil-design-tokens.liquid for full variable support.
+{%- endcomment -%}
+
+{% comment %}
+  Component: SEO Schema - Breadcrumbs
+  Purpose: Generates JSON-LD structured data for breadcrumb navigation
+  Dependencies: None
+  Usage: {% render 'soleil-seo-schema-breadcrumbs', collection: collection, product: product %}
+  
+  Parameters:
+  - collection (optional): Collection object for collection/product pages
+  - product (optional): Product object for product pages
+  
+  SEO Benefits:
+  - Shows breadcrumb trail in search results
+  - Improves site structure understanding
+  - Enhances user navigation from SERPs
+  - Supports hierarchical site architecture
+  
+  Maintenance Notes:
+  - Ensure collection hierarchy is logical
+  - Keep URLs clean and descriptive
+  - Test breadcrumbs on all page types
+{% endcomment %}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": {{ 'general.breadcrumbs.home' | t | json }},
+      "item": {{ shop.url | json }}
+    }
+    {% if collection %},
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": {{ collection.title | json }},
+      "item": {{ shop.url | append: collection.url | json }}
+    }
+    {% endif %}
+    {% if product %},
+    {
+      "@type": "ListItem",
+      "position": {% if collection %}3{% else %}2{% endif %},
+      "name": {{ product.title | json }},
+      "item": {{ shop.url | append: product.url | json }}
+    }
+    {% endif %}
+  ]
+}
+</script>

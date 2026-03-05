@@ -1,0 +1,600 @@
+{%- comment -%}
+  INTEGRATED FROM: Codigo Soleil (Snippets/button.liquid)
+  INTEGRATION DATE: 2026-02-11
+  CHANGES: Added soleil- prefix, updated internal references
+  NOTE: This snippet uses Codigo Soleil's custom CSS variables.
+        Include soleil-design-tokens.liquid for full variable support.
+{%- endcomment -%}
+
+{% render 'soleil-button' with
+  text: 'Click Me',
+  style: 'primary',
+  size: 'md',
+  url: '/collections/all',
+  type: 'link',
+  icon: '<svg>...</svg>', 
+  icon_position: 'right',
+  full_width: false,
+  disabled: false,
+  loading: false
+%}
+
+{% liquid
+
+  assign text = text | default: 'Button'
+
+  assign style = style | default: 'primary'
+
+  assign size = size | default: 'md'
+
+  assign url = url | default: '#'
+
+  assign type = type | default: 'link'
+
+  assign icon = icon | default: ''
+
+  assign icon_position = icon_position | default: 'right'
+
+  assign full_width = full_width | default: false
+
+  assign disabled = disabled | default: false
+
+  assign loading = loading | default: false
+
+  assign classes = classes | default: ''
+
+  assign attributes = attributes | default: ''
+
+%}
+
+
+
+{% capture button_classes %}
+
+  btn
+
+  btn-{{ style }}
+
+  btn-{{ size }}
+
+  {% if full_width %}btn-full{% endif %}
+
+  {% if disabled %}btn-disabled{% endif %}
+
+  {% if loading %}btn-loading{% endif %}
+
+  {{ classes }}
+
+{% endcapture %}
+
+
+
+{% if type == 'link' %}
+
+  <a 
+
+    href="{{ url }}" 
+
+    class="{{ button_classes | strip_newlines | strip }}"
+
+    {% if disabled %}aria-disabled="true"{% endif %}
+
+    {{ attributes }}
+
+  >
+
+    {% if loading %}
+
+      <span class="btn-loader">
+
+        <svg class="spinner" width="20" height="20" viewBox="0 0 20 20">
+
+          <circle class="spinner-path" cx="10" cy="10" r="8" fill="none" stroke-width="2"/>
+
+        </svg>
+
+      </span>
+
+    {% endif %}
+
+
+
+    {% if icon and icon_position == 'left' %}
+
+      <span class="btn-icon btn-icon-left">{{ icon }}</span>
+
+    {% endif %}
+
+
+
+    <span class="btn-text">{{ text }}</span>
+
+
+
+    {% if icon and icon_position == 'right' %}
+
+      <span class="btn-icon btn-icon-right">{{ icon }}</span>
+
+    {% endif %}
+
+  </a>
+
+{% else %}
+
+  <button 
+
+    type="{{ type }}"
+
+    class="{{ button_classes | strip_newlines | strip }}"
+
+    {% if disabled %}disabled{% endif %}
+
+    {{ attributes }}
+
+  >
+
+    {% if loading %}
+
+      <span class="btn-loader">
+
+        <svg class="spinner" width="20" height="20" viewBox="0 0 20 20">
+
+          <circle class="spinner-path" cx="10" cy="10" r="8" fill="none" stroke-width="2"/>
+
+        </svg>
+
+      </span>
+
+    {% endif %}
+
+
+
+    {% if icon and icon_position == 'left' %}
+
+      <span class="btn-icon btn-icon-left">{{ icon }}</span>
+
+    {% endif %}
+
+
+
+    <span class="btn-text">{{ text }}</span>
+
+
+
+    {% if icon and icon_position == 'right' %}
+
+      <span class="btn-icon btn-icon-right">{{ icon }}</span>
+
+    {% endif %}
+
+  </button>
+
+{% endif %}
+
+
+
+<style>
+
+  /* Base Button Styles */
+
+  .btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: var(--space-sm);
+
+    font-family: inherit;
+
+    font-weight: var(--font-weight-semibold);
+
+    text-align: center;
+
+    text-decoration: none;
+
+    border: 2px solid transparent;
+
+    border-radius: var(--radius-md);
+
+    cursor: pointer;
+
+    transition: all var(--duration-base) var(--ease-out);
+
+    position: relative;
+
+    overflow: hidden;
+
+  }
+
+
+
+  .btn:focus-visible {
+
+    outline: 2px solid var(--color-yellow);
+
+    outline-offset: 2px;
+
+  }
+
+
+
+  /* Button Sizes */
+
+  .btn-sm {
+
+    padding: var(--space-xs) var(--space-md);
+
+    font-size: var(--font-size-sm);
+
+  }
+
+
+
+  .btn-md {
+
+    padding: var(--space-sm) var(--space-lg);
+
+    font-size: var(--font-size-base);
+
+  }
+
+
+
+  .btn-lg {
+
+    padding: var(--space-md) var(--space-xl);
+
+    font-size: var(--font-size-lg);
+
+  }
+
+
+
+  .btn-xl {
+
+    padding: var(--space-lg) var(--space-2xl);
+
+    font-size: var(--font-size-xl);
+
+  }
+
+
+
+  /* Button Styles */
+
+  .btn-primary {
+
+    background: var(--color-yellow);
+
+    color: var(--color-black);
+
+    border-color: var(--color-yellow);
+
+  }
+
+
+
+  .btn-primary:hover {
+
+    background: var(--color-yellow-dark);
+
+    border-color: var(--color-yellow-dark);
+
+    transform: translateY(-2px);
+
+    box-shadow: var(--shadow-yellow);
+
+  }
+
+
+
+  .btn-secondary {
+
+    background: var(--color-black);
+
+    color: var(--color-white);
+
+    border-color: var(--color-black);
+
+  }
+
+
+
+  .btn-secondary:hover {
+
+    background: var(--color-gray-800);
+
+    border-color: var(--color-gray-800);
+
+    transform: translateY(-2px);
+
+    box-shadow: var(--shadow-lg);
+
+  }
+
+
+
+  .btn-outline {
+
+    background: transparent;
+
+    color: var(--color-black);
+
+    border-color: var(--color-black);
+
+  }
+
+
+
+  .btn-outline:hover {
+
+    background: var(--color-black);
+
+    color: var(--color-white);
+
+  }
+
+
+
+  .btn-outline-yellow {
+
+    background: transparent;
+
+    color: var(--color-yellow);
+
+    border-color: var(--color-yellow);
+
+  }
+
+
+
+  .btn-outline-yellow:hover {
+
+    background: var(--color-yellow);
+
+    color: var(--color-black);
+
+  }
+
+
+
+  .btn-ghost {
+
+    background: transparent;
+
+    color: var(--color-gray-700);
+
+    border-color: transparent;
+
+  }
+
+
+
+  .btn-ghost:hover {
+
+    background: var(--color-gray-100);
+
+    color: var(--color-black);
+
+  }
+
+
+
+  .btn-text {
+
+    background: transparent;
+
+    color: var(--color-gray-700);
+
+    border-color: transparent;
+
+    padding: 0;
+
+  }
+
+
+
+  .btn-text:hover {
+
+    color: var(--color-yellow);
+
+    text-decoration: underline;
+
+  }
+
+
+
+  /* Full Width */
+
+  .btn-full {
+
+    width: 100%;
+
+  }
+
+
+
+  /* Disabled State */
+
+  .btn-disabled,
+
+  .btn:disabled {
+
+    opacity: 0.5;
+
+    cursor: not-allowed;
+
+    pointer-events: none;
+
+  }
+
+
+
+  /* Loading State */
+
+  .btn-loading {
+
+    pointer-events: none;
+
+  }
+
+
+
+  .btn-loading .btn-text,
+
+  .btn-loading .btn-icon {
+
+    opacity: 0;
+
+  }
+
+
+
+  .btn-loader {
+
+    position: absolute;
+
+    top: 50%;
+
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+  }
+
+
+
+  .spinner {
+
+    animation: spin 1s linear infinite;
+
+  }
+
+
+
+  .spinner-path {
+
+    stroke: currentColor;
+
+    stroke-linecap: round;
+
+    stroke-dasharray: 50;
+
+    stroke-dashoffset: 0;
+
+    animation: dash 1.5s ease-in-out infinite;
+
+  }
+
+
+
+  @keyframes spin {
+
+    to {
+
+      transform: rotate(360deg);
+
+    }
+
+  }
+
+
+
+  @keyframes dash {
+
+    0% {
+
+      stroke-dasharray: 1, 150;
+
+      stroke-dashoffset: 0;
+
+    }
+
+    50% {
+
+      stroke-dasharray: 90, 150;
+
+      stroke-dashoffset: -35;
+
+    }
+
+    100% {
+
+      stroke-dasharray: 90, 150;
+
+      stroke-dashoffset: -124;
+
+    }
+
+  }
+
+
+
+  /* Icons */
+
+  .btn-icon {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+  }
+
+
+
+  .btn-icon svg {
+
+    width: 1em;
+
+    height: 1em;
+
+  }
+
+
+
+  .btn-icon-left {
+
+    margin-right: calc(var(--space-xs) * -1);
+
+  }
+
+
+
+  .btn-icon-right {
+
+    margin-left: calc(var(--space-xs) * -1);
+
+  }
+
+
+
+  /* Responsive */
+
+  @media (max-width: 768px) {
+
+    .btn-lg {
+
+      padding: var(--space-sm) var(--space-lg);
+
+      font-size: var(--font-size-base);
+
+    }
+
+
+
+    .btn-xl {
+
+      padding: var(--space-md) var(--space-xl);
+
+      font-size: var(--font-size-lg);
+
+    }
+
+  }
+
+</style>

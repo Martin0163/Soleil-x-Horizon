@@ -1,0 +1,64 @@
+{% comment %}
+  ============================================================================
+  SOLEIL STYLESHEETS SNIPPET
+  ============================================================================
+  
+  Purpose: Load Soleil theme styles into Horizon theme
+  Usage: Include this snippet in layout/theme.liquid head section
+  
+  Example:
+  {% render 'soleil-stylesheets' %}
+  
+  Aquí puedes agregar nueva información al código sin romperlo.
+  ============================================================================
+{% endcomment %}
+
+{% comment %} /* Start Soleil + Custom Sections Stylesheets */ {% endcomment %}
+
+{% comment %}
+/* Start: Soleil Theme Styles */
+  Loads the Soleil Beauty design system CSS:
+  - CSS custom properties (colors, spacing, typography, shadows, radius)
+  - Global typography (Inter + Playfair Display font stack)
+  - Button, card, form, cart, footer base styles
+/* End: Soleil Theme Styles */
+{% endcomment %}
+{{ 'soleil-theme.css' | asset_url | stylesheet_tag }}
+
+{% comment %}
+/* Start: Custom Sections CSS */
+  Loads styles for:
+  - Hero Banner Responsive (Luna Hernández)
+  - New Arrivals Section (Luna Hernández)
+  - Multicolumn Info Section (Luna Hernández)
+  - Animated Announcement Bar (Koelleza dual-direction marquee)
+  - Sephora-style product card enhancements
+  - Visual separation utilities
+/* End: Custom Sections CSS */
+/* You can paste future updates here without breaking anything */
+{% endcomment %}
+{{ 'custom-sections.css' | asset_url | stylesheet_tag }}
+
+{% comment %}
+/* Start: Custom Sections JS */
+  Loads JavaScript for:
+  - New Arrivals carousel navigation
+  - Scroll reveal animations
+  - Animated Announcement Bar pause-on-focus
+/* End: Custom Sections JS */
+{% endcomment %}
+<script src="{{ 'custom-sections.js' | asset_url }}" defer></script>
+
+{% comment %}
+/* Start: Mega Menu Enhancement */
+  Renders Koelleza-style mega menu CSS + JS:
+  - Hover-triggered dropdowns (desktop)
+  - Mobile accordion behavior
+  - Keyboard navigation (Tab + Enter + Escape)
+  - Soleil yellow accent underlines
+/* End: Mega Menu Enhancement */
+{% endcomment %}
+{%- render 'mega-menu' -%}
+
+{% comment %} /* End Soleil + Custom Sections Stylesheets */ {% endcomment %}
+{% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}

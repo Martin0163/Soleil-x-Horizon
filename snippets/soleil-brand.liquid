@@ -1,0 +1,385 @@
+{%- comment -%}
+  INTEGRATED FROM: Codigo Soleil (Snippets/brand.liquid)
+  INTEGRATION DATE: 2026-02-11
+  CHANGES: Added soleil- prefix, updated internal references
+  NOTE: This snippet uses Codigo Soleil's custom CSS variables.
+        Include soleil-design-tokens.liquid for full variable support.
+{%- endcomment -%}
+
+{% liquid
+
+  assign brand_name = brand_name | default: 'Brand Name'
+
+  assign brand_url = brand_url | default: '#'
+
+  assign brand_description = brand_description | default: ''
+
+%}
+
+
+
+<article class="brand-card">
+
+  <a href="{{ brand_url }}" class="brand-card-link" aria-label="View {{ brand_name }} products">
+
+    <div class="brand-card-inner">
+
+      
+
+      {% if brand_logo %}
+
+        <div class="brand-logo">
+
+          <img
+
+            src="{{ brand_logo | image_url: width: 300 }}"
+
+            srcset="
+
+              {{ brand_logo | image_url: width: 150 }} 150w,
+
+              {{ brand_logo | image_url: width: 300 }} 300w
+
+            "
+
+            sizes="(max-width: 768px) 150px, 200px"
+
+            alt="{{ brand_name }}"
+
+            loading="lazy"
+
+            width="200"
+
+            height="auto"
+
+          >
+
+        </div>
+
+      {% else %}
+
+        <div class="brand-logo-placeholder">
+
+          <span class="brand-name-text">{{ brand_name }}</span>
+
+        </div>
+
+      {% endif %}
+
+
+
+      <div class="brand-overlay">
+
+        <span class="brand-cta">View Products</span>
+
+      </div>
+
+
+
+    </div>
+
+  </a>
+
+
+
+  {% if brand_description != blank %}
+
+    <div class="brand-tooltip">
+
+      <p>{{ brand_description }}</p>
+
+    </div>
+
+  {% endif %}
+
+</article>
+
+
+
+<style>
+
+  .brand-card {
+
+    position: relative;
+
+    background: var(--color-white);
+
+    border: 1px solid var(--color-gray-200);
+
+    border-radius: var(--radius-lg);
+
+    overflow: hidden;
+
+    transition: all var(--duration-base) var(--ease-out);
+
+  }
+
+
+
+  .brand-card:hover {
+
+    border-color: var(--color-yellow);
+
+    box-shadow: var(--shadow-lg);
+
+    transform: translateY(-4px);
+
+  }
+
+
+
+  .brand-card-link {
+
+    display: block;
+
+    text-decoration: none;
+
+  }
+
+
+
+  .brand-card-inner {
+
+    position: relative;
+
+    padding: var(--space-xl);
+
+    aspect-ratio: 1;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+  }
+
+
+
+  .brand-logo {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: var(--space-md);
+
+  }
+
+
+
+  .brand-logo img {
+
+    max-width: 100%;
+
+    max-height: 100%;
+
+    object-fit: contain;
+
+    filter: grayscale(100%);
+
+    transition: filter var(--duration-base) var(--ease-out);
+
+  }
+
+
+
+  .brand-card:hover .brand-logo img {
+
+    filter: grayscale(0%);
+
+  }
+
+
+
+  .brand-logo-placeholder {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: var(--color-gray-100);
+
+  }
+
+
+
+  .brand-name-text {
+
+    font-size: var(--font-size-xl);
+
+    font-weight: var(--font-weight-bold);
+
+    color: var(--color-gray-400);
+
+    text-align: center;
+
+  }
+
+
+
+  .brand-overlay {
+
+    position: absolute;
+
+    top: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    background: rgba(255, 215, 0, 0.95);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    opacity: 0;
+
+    transition: opacity var(--duration-base) var(--ease-out);
+
+  }
+
+
+
+  .brand-card:hover .brand-overlay {
+
+    opacity: 1;
+
+  }
+
+
+
+  .brand-cta {
+
+    font-size: var(--font-size-lg);
+
+    font-weight: var(--font-weight-bold);
+
+    color: var(--color-black);
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
+
+  }
+
+
+
+  .brand-tooltip {
+
+    position: absolute;
+
+    bottom: 100%;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    padding: var(--space-md);
+
+    background: var(--color-black);
+
+    color: var(--color-white);
+
+    border-radius: var(--radius-md);
+
+    font-size: var(--font-size-sm);
+
+    white-space: nowrap;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: opacity var(--duration-base) var(--ease-out);
+
+    z-index: 10;
+
+    margin-bottom: var(--space-sm);
+
+  }
+
+
+
+  .brand-tooltip::after {
+
+    content: '';
+
+    position: absolute;
+
+    top: 100%;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    border: 6px solid transparent;
+
+    border-top-color: var(--color-black);
+
+  }
+
+
+
+  .brand-card:hover .brand-tooltip {
+
+    opacity: 1;
+
+  }
+
+
+
+  /* Responsive */
+
+  @media (max-width: 768px) {
+
+    .brand-card-inner {
+
+      padding: var(--space-lg);
+
+    }
+
+
+
+    .brand-name-text {
+
+      font-size: var(--font-size-lg);
+
+    }
+
+
+
+    .brand-cta {
+
+      font-size: var(--font-size-base);
+
+    }
+
+
+
+    .brand-tooltip {
+
+      display: none;
+
+    }
+
+  }
+
+</style>

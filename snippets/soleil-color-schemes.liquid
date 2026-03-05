@@ -1,0 +1,30 @@
+{%- comment -%}
+  INTEGRATED FROM: Codigo Soleil (Snippets/color-schemes.liquid)
+  INTEGRATION DATE: 2026-02-11
+  CHANGES: Added soleil- prefix, updated internal references
+  NOTE: This snippet uses Codigo Soleil's custom CSS variables.
+        Include soleil-design-tokens.liquid for full variable support.
+{%- endcomment -%}
+
+<style>
+  .color-scheme-light {
+    background-color: var(--color-white);
+    color: var(--color-black);
+  }
+
+  .color-scheme-dark {
+    background-color: var(--color-black);
+    color: var(--color-white);
+  }
+
+  /* Example for primary button adapt to color scheme */
+  .btn-primary {
+    background-color: var(--color-yellow);
+    color: var(--color-black);
+  }
+
+  .color-scheme-dark .btn-primary {
+    background-color: var(--color-yellow-dark);
+    color: var(--color-white);
+  }
+</style>

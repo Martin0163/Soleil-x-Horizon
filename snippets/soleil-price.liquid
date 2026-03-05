@@ -1,0 +1,475 @@
+{%- comment -%}
+  INTEGRATED FROM: Codigo Soleil (Snippets/price.liquid)
+  INTEGRATION DATE: 2026-02-11
+  CHANGES: Added soleil- prefix, updated internal references
+  NOTE: This snippet uses Codigo Soleil's custom CSS variables.
+        Include soleil-design-tokens.liquid for full variable support.
+{%- endcomment -%}
+
+{% liquid
+
+  if variant
+
+    assign price = variant.price
+
+    assign compare_at_price = variant.compare_at_price
+
+    assign available = variant.available
+
+    assign unit_price = variant.unit_price
+
+    assign unit_price_measurement = variant.unit_price_measurement
+
+  elsif product
+
+    assign price = product.price
+
+    assign compare_at_price = product.compare_at_price
+
+    assign available = product.available
+
+    assign unit_price = product.selected_or_first_available_variant.unit_price
+
+    assign unit_price_measurement = product.selected_or_first_available_variant.unit_price_measurement
+
+  endif
+
+
+
+  assign on_sale = false
+
+  if compare_at_price > price
+
+    assign on_sale = true
+
+    assign savings = compare_at_price | minus: price
+
+    assign savings_percent = savings | times: 100 | divided_by: compare_at_price
+
+  endif
+
+
+
+  assign show_badges = show_badges | default: true
+
+  assign show_savings = show_savings | default: true
+
+  assign show_unit_price = show_unit_price | default: false
+
+%}
+
+
+
+<div class="price-wrapper" data-price-wrapper>
+
+  
+
+  {% if available %}
+
+    
+
+    {% if on_sale %}
+
+      <div class="price price--on-sale">
+
+        <span class="price__sale">
+
+          <span class="visually-hidden">{{ 'products.product.sale_price' | t }}</span>
+
+          <span class="price__amount">{{ price | money }}</span>
+
+        </span>
+
+        <span class="price__compare">
+
+          <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
+
+          <s class="price__amount">{{ compare_at_price | money }}</s>
+
+        </span>
+
+      </div>
+
+
+
+      {% if show_savings %}
+
+        <div class="price__savings">
+
+          <span class="savings-text">
+
+            {{ 'products.product.save' | t }}
+
+            <strong>{{ savings | money }}</strong>
+
+            ({{ savings_percent }}%)
+
+          </span>
+
+        </div>
+
+      {% endif %}
+
+
+
+      {% if show_badges %}
+
+        <span class="price__badge price__badge--sale">
+
+          {{ 'products.product.on_sale' | t }}
+
+        </span>
+
+      {% endif %}
+
+
+
+    {% else %}
+
+      <div class="price">
+
+        <span class="price__regular">
+
+          <span class="visually-hidden">{{ 'products.product.price' | t }}</span>
+
+          <span class="price__amount">{{ price | money }}</span>
+
+        </span>
+
+      </div>
+
+    {% endif %}
+
+
+
+    {% if show_unit_price and unit_price %}
+
+      <div class="price__unit">
+
+        <span class="visually-hidden">{{ 'products.product.unit_price' | t }}</span>
+
+        <span class="price__unit-amount">{{ unit_price | money }}</span>
+
+        <span class="price__unit-separator">/</span>
+
+        <span class="price__unit-measurement">
+
+          {% if unit_price_measurement.reference_value != 1 %}
+
+            {{ unit_price_measurement.reference_value }}
+
+          {% endif %}
+
+          {{ unit_price_measurement.reference_unit }}
+
+        </span>
+
+      </div>
+
+    {% endif %}
+
+
+
+  {% else %}
+
+    <div class="price price--sold-out">
+
+      <span class="price__sold-out">
+
+        {{ 'products.product.sold_out' | t }}
+
+      </span>
+
+    </div>
+
+
+
+    {% if show_badges %}
+
+      <span class="price__badge price__badge--sold-out">
+
+        {{ 'products.product.sold_out' | t }}
+
+      </span>
+
+    {% endif %}
+
+  {% endif %}
+
+
+
+</div>
+
+
+
+<style>
+
+  .price-wrapper {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: var(--space-xs);
+
+  }
+
+
+
+  .price {
+
+    display: flex;
+
+    align-items: baseline;
+
+    gap: var(--space-sm);
+
+    flex-wrap: wrap;
+
+  }
+
+
+
+  .price__amount {
+
+    font-size: var(--font-size-xl);
+
+    font-weight: var(--font-weight-bold);
+
+    color: var(--color-black);
+
+  }
+
+
+
+  /* Sale Price */
+
+  .price--on-sale .price__sale .price__amount {
+
+    color: var(--color-error);
+
+  }
+
+
+
+  .price__compare {
+
+    font-size: var(--font-size-lg);
+
+    color: var(--color-gray-500);
+
+  }
+
+
+
+  .price__compare .price__amount {
+
+    font-size: inherit;
+
+    font-weight: var(--font-weight-normal);
+
+    color: inherit;
+
+  }
+
+
+
+  /* Savings */
+
+  .price__savings {
+
+    font-size: var(--font-size-sm);
+
+    color: var(--color-success);
+
+  }
+
+
+
+  .savings-text strong {
+
+    font-weight: var(--font-weight-bold);
+
+  }
+
+
+
+  /* Sold Out */
+
+  .price--sold-out .price__sold-out {
+
+    font-size: var(--font-size-lg);
+
+    font-weight: var(--font-weight-bold);
+
+    color: var(--color-gray-500);
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
+
+  }
+
+
+
+  /* Badges */
+
+  .price__badge {
+
+    display: inline-block;
+
+    padding: var(--space-xs) var(--space-sm);
+
+    font-size: var(--font-size-xs);
+
+    font-weight: var(--font-weight-bold);
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
+
+    border-radius: var(--radius-full);
+
+    width: fit-content;
+
+  }
+
+
+
+  .price__badge--sale {
+
+    background: var(--color-error);
+
+    color: var(--color-white);
+
+  }
+
+
+
+  .price__badge--sold-out {
+
+    background: var(--color-gray-300);
+
+    color: var(--color-gray-700);
+
+  }
+
+
+
+  /* Unit Price */
+
+  .price__unit {
+
+    font-size: var(--font-size-sm);
+
+    color: var(--color-gray-600);
+
+  }
+
+
+
+  .price__unit-amount {
+
+    font-weight: var(--font-weight-semibold);
+
+  }
+
+
+
+  .price__unit-separator {
+
+    margin: 0 var(--space-xs);
+
+  }
+
+
+
+  /* Visually Hidden */
+
+  .visually-hidden {
+
+    position: absolute;
+
+    width: 1px;
+
+    height: 1px;
+
+    padding: 0;
+
+    margin: -1px;
+
+    overflow: hidden;
+
+    clip: rect(0, 0, 0, 0);
+
+    white-space: nowrap;
+
+    border-width: 0;
+
+  }
+
+
+
+  /* Size Variants */
+
+  .price-wrapper--small .price__amount {
+
+    font-size: var(--font-size-lg);
+
+  }
+
+
+
+  .price-wrapper--small .price__compare {
+
+    font-size: var(--font-size-base);
+
+  }
+
+
+
+  .price-wrapper--large .price__amount {
+
+    font-size: var(--font-size-3xl);
+
+  }
+
+
+
+  .price-wrapper--large .price__compare {
+
+    font-size: var(--font-size-xl);
+
+  }
+
+
+
+  /* Responsive */
+
+  @media (max-width: 768px) {
+
+    .price__amount {
+
+      font-size: var(--font-size-lg);
+
+    }
+
+
+
+    .price__compare {
+
+      font-size: var(--font-size-base);
+
+    }
+
+
+
+    .price-wrapper--large .price__amount {
+
+      font-size: var(--font-size-2xl);
+
+    }
+
+  }
+
+</style>

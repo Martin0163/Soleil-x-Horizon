@@ -1,0 +1,71 @@
+{%- comment -%}
+  INTEGRATED FROM: Codigo Soleil (Snippets/seo-schema-product.liquid)
+  INTEGRATION DATE: 2026-02-11
+  CHANGES: Added soleil- prefix, updated internal references
+  NOTE: This snippet uses Codigo Soleil's custom CSS variables.
+        Include soleil-design-tokens.liquid for full variable support.
+{%- endcomment -%}
+
+{% comment %}
+  Component: SEO Schema - Product
+  Purpose: Generates JSON-LD structured data for product pages
+  Dependencies: None
+  Usage: {% render 'soleil-seo-schema-product', product: product %}
+  
+  Parameters:
+  - product (required): Product object
+  
+  SEO Benefits:
+  - Enables rich product snippets in search results
+  - Shows price, availability, ratings in SERPs
+  - Improves click-through rates
+  - Supports Google Shopping integration
+  
+  Maintenance Notes:
+  - Ensure product images are high quality
+  - Keep product descriptions accurate and detailed
+  - Update availability status regularly
+  - Add review metafields for rating display
+{% endcomment %}
+
+{% if product %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "description": {{ product.description | strip_html | truncate: 500 | json }},
+  "image": [
+    {% for image in product.images limit: 5 %}
+      {{ image | image_url: width: 1200 | prepend: 'https:' | json }}{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ],
+  "sku": {{ product.selected_or_first_available_variant.sku | json }},
+  "brand": {
+    "@type": "Brand",
+    "name": {{ product.vendor | json }}
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": {{ shop.url | append: product.url | json }},
+    "priceCurrency": {{ cart.currency.iso_code | json }},
+    "price": {{ product.selected_or_first_available_variant.price | divided_by: 100.0 | json }},
+    "availability": "{% if product.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
+    "priceValidUntil": {{ 'now' | date: '%s' | plus: 31536000 | date: '%Y-%m-%d' | json }},
+    "seller": {
+      "@type": "Organization",
+      "name": {{ shop.name | json }}
+    }
+  }
+  {% if product.metafields.reviews.rating.value %},
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": {{ product.metafields.reviews.rating.value | json }},
+    "reviewCount": {{ product.metafields.reviews.rating_count | default: 1 | json }},
+    "bestRating": "5",
+    "worstRating": "1"
+  }
+  {% endif %}
+}
+</script>
+{% endif %}
