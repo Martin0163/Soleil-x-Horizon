@@ -1,0 +1,247 @@
+/* =========================================================
+   TOKENS MAESTROS — SOLEIL + HORIZON
+   Sistema unificado de diseño
+   ---------------------------------------------------------
+   Este archivo define:
+   - Colores
+   - Tipografía
+   - Espaciados
+   - Capas
+   - Animaciones
+   - Breakpoints
+   - Variables dinámicas
+   - Tokens de componentes
+========================================================= */
+
+:root {
+
+  /* =========================================================
+     1. COLORES — BASE HORIZON
+  ========================================================== */
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f7f7f7;
+  --color-bg-tertiary: #efefef;
+
+  --color-text-primary: #111111;
+  --color-text-secondary: #555555;
+
+  --color-border-light: #e5e5e5;
+  --color-border-medium: #cccccc;
+  --color-border-strong: #999999;
+
+  /* =========================================================
+     1.2 COLORES — MARCA SOLEIL
+  ========================================================== */
+  --color-brand-primary: #d4af37;   /* Oro Soleil */
+  --color-brand-secondary: #1a1a1a; /* Negro Soleil */
+  --color-brand-accent: #f5e9c8;    /* Oro suave editorial */
+  --color-brand-muted: #faf7f0;     /* Beige editorial */
+
+  /* =========================================================
+     1.3 COLORES — ESTADOS
+  ========================================================== */
+  --color-success: #2ecc71;
+  --color-warning: #f1c40f;
+  --color-error: #e74c3c;
+  --color-info: #3498db;
+
+  /* =========================================================
+     1.4 COLORES — DARK MODE / HIGH CONTRAST
+  ========================================================== */
+  --color-bg-primary-dark: #0f0f0f;
+  --color-text-primary-dark: #f5f5f5;
+  --color-brand-primary-dark: #caa32f;
+
+  /* =========================================================
+     2. TIPOGRAFÍA — ESCALA BASE HORIZON
+  ========================================================== */
+  --font-size-xs: 0.75rem;   /* 12px */
+  --font-size-sm: 0.875rem;  /* 14px */
+  --font-size-base: 1rem;    /* 16px */
+  --font-size-lg: 1.125rem;  /* 18px */
+  --font-size-xl: 1.25rem;   /* 20px */
+
+  /* =========================================================
+     2.2 TIPOGRAFÍA — ESCALA EDITORIAL SOLEIL
+  ========================================================== */
+  --font-size-display-sm: 2rem;   /* 32px */
+  --font-size-display-md: 2.5rem; /* 40px */
+  --font-size-display-lg: 3.5rem; /* 56px */
+
+  /* =========================================================
+     2.3 TIPOGRAFÍA — PESOS
+  ========================================================== */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --font-weight-black: 900;
+
+  /* =========================================================
+     2.4 TIPOGRAFÍA — LINE HEIGHT
+  ========================================================== */
+  --line-height-tight: 1.1;
+  --line-height-normal: 1.4;
+  --line-height-relaxed: 1.6;
+}
+
+:root {
+
+  /* =========================================================
+     3. ESPACIADOS — ESCALA BASE HORIZON
+  ========================================================== */
+  --space-2xs: 0.25rem; /* 4px */
+  --space-xs: 0.5rem;   /* 8px */
+  --space-sm: 0.75rem;  /* 12px */
+  --space-md: 1rem;     /* 16px */
+  --space-lg: 1.5rem;   /* 24px */
+  --space-xl: 2rem;     /* 32px */
+
+  /* =========================================================
+     3.2 ESPACIADOS — EXTENSIONES SOLEIL
+  ========================================================== */
+  --space-2xl: 3rem;    /* 48px */
+  --space-3xl: 4rem;    /* 64px */
+  --space-section: 6rem; /* 96px */
+
+  /* =========================================================
+     4. CAPAS (Z-INDEX)
+  ========================================================== */
+  --layer-flat: 0;
+  --layer-raised: 10;
+  --layer-heightened: 20;
+  --layer-high: 30;
+  --layer-highest: 40;
+
+  /* Extensiones Soleil */
+  --layer-announcement: 50;
+  --layer-mega-menu: 60;
+  --layer-fly-to-cart: 70;
+
+  /* =========================================================
+     5. ANIMACIONES — DURACIONES
+  ========================================================== */
+  --motion-duration-fast: 150ms;
+  --motion-duration-medium: 250ms;
+  --motion-duration-slow: 400ms;
+
+  /* =========================================================
+     5.2 ANIMACIONES — EASING
+  ========================================================== */
+  --motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --motion-ease-emphasized: cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-ease-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  --motion-ease-accelerate: cubic-bezier(0.4, 0, 1, 1);
+
+  /* =========================================================
+     5.3 ANIMACIONES — SOLEIL
+  ========================================================== */
+  --motion-shimmer-speed: 2.5s;
+  --motion-fade-distance: 20px;
+  --motion-slide-distance: 40px;
+
+  /* =========================================================
+     5.4 ACCESIBILIDAD — REDUCED MOTION
+  ========================================================== */
+  --motion-reduced: 0;
+}
+
+:root {
+
+  /* =========================================================
+     6. BREAKPOINTS — SISTEMA UNIFICADO
+  ========================================================== */
+  --breakpoint-sm: 750px;
+  --breakpoint-md: 990px;
+  --breakpoint-lg: 1200px;
+  --breakpoint-xl: 1440px;
+
+  /* =========================================================
+     7. RADIOS, BORDES Y SOMBRAS
+  ========================================================== */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  --border-width-thin: 1px;
+  --border-width-medium: 2px;
+  --border-width-thick: 3px;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 8px rgba(0,0,0,0.12);
+  --shadow-lg: 0 8px 20px rgba(0,0,0,0.16);
+  --shadow-floating: 0 12px 32px rgba(0,0,0,0.20);
+
+  /* =========================================================
+     8. VARIABLES DINÁMICAS (RUNTIME)
+  ========================================================== */
+
+  /* Header */
+  --sticky-header-offset: 0px;
+
+  /* Announcement Bar */
+  --announcement-height: 0px;
+
+  /* Fly-to-cart */
+  --travel-x: 0px;
+  --travel-y: 0px;
+  --travel-scale: 0.25;
+  --start-opacity: 1;
+
+  /* Slideshow */
+  --slideshow-gutter: 16px;
+  --slideshow-height: auto;
+  --slideshow-timeline: none;
+
+  /* Grid */
+  --product-grid-columns: 3;
+  --product-grid-gap: 24px;
+}
+
+:root {
+
+  /* =========================================================
+     9. TOKENS DE COMPONENTES
+  ========================================================== */
+
+  /* Announcement Bar */
+  --announcement-bg: var(--color-brand-primary);
+  --announcement-text: #ffffff;
+  --announcement-speed: 20s;
+
+  /* Mega Menú */
+  --mega-menu-width: 100%;
+  --mega-menu-padding: var(--space-lg);
+  --mega-menu-column-gap: var(--space-xl);
+
+  /* Botones */
+  --button-height: 48px;
+  --button-padding: 0 24px;
+  --button-radius: var(--radius-md);
+
+  /* Cards */
+  --card-padding: var(--space-md);
+  --card-radius: var(--radius-md);
+  --card-shadow: var(--shadow-sm);
+
+  /* Slideshow */
+  --slideshow-arrow-size: 40px;
+  --slideshow-dot-size: 10px;
+
+  /* Grid */
+  --grid-item-radius: var(--radius-md);
+  --grid-item-shadow: var(--shadow-sm);
+
+  /* Formularios */
+  --input-height: 44px;
+  --input-padding: 0 16px;
+  --input-radius: var(--radius-sm);
+
+  /* Header */
+  --header-height: 72px;
+  --header-padding: var(--space-md);
+
+  /* Footer */
+  --footer-padding: var(--space-xl);
+  --footer-bg: var(--color-bg-secondary);
+}
