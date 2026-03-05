@@ -1,0 +1,54 @@
+/*
+ * ------------------------------------------------------------
+ * INTEGRATED FROM: Codigo Soleil
+ * INTEGRATION DATE: 2026-02-11
+ *
+ * This template was created during the integration of
+ * Codigo Soleil custom pages into the Soleil Horizon Code theme.
+ * It references soleil-prefixed sections for compatibility.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "blocks": {
+        "heading": {
+          "type": "text",
+          "name": "Title",
+          "settings": {
+            "text": "<h1>{{ closest.page.title }}</h1>",
+            "width": "100%",
+            "alignment": "center",
+            "type_preset": "h2"
+          },
+          "blocks": {}
+        },
+        "page-content": {
+          "type": "page-content",
+          "settings": {},
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "heading",
+        "page-content"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "gap": 32,
+        "color_scheme": "",
+        "padding-block-start": 40,
+        "padding-block-end": 0
+      }
+    },
+    "new_arrivals": {
+      "type": "soleil-new-arrivals",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "new_arrivals"
+  ]
+}
