@@ -11,18 +11,18 @@
 >
     <div class="announcement-bar__inner">
       <div class="announcement-bar__messages" data-announcement-messages>
-        {%- for block in section.blocks -%}
-          {%- if block.type == 'message' and block.settings.text != blank -%}
-            <div
-              class="announcement-bar__message"
-              data-announcement-message
-              {{ block.shopify_attributes }}
-            >
-              {{ block.settings.text }}
-            </div>
-          {%- endif -%}
-        {%- endfor -%}
+        <div class="announcement-bar__track">
+        {% for block in section.blocks %}
+          <div class="announcement-bar__message">{{ block.settings.text }}<div/>
+        {% endfor %}
       </div>
+
+      <div class="announcement-bar__track">
+        {% for block in section.blocks %}
+          <div class="announcement-bar__message">{{block.settings.text }}<div/>
+        {% endfor %}
+      </div>
+    </div>
 
       {%- if section.settings.show_close_button -%}
         <button
@@ -37,6 +37,7 @@
     </div>
   </announcement-bar>
 {%- endif -%}
+
 
 
 
