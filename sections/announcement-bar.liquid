@@ -7,6 +7,17 @@
   {% render 'announcement-bar', section: section %}
 {% endif %}
 
+{
+  "type": "select",
+  "id": "animation_style",
+  "label": "Animation style",
+  "options": [
+    { "value": "vertical", "label": "Vertical rotation" },
+    { "value": "marquee", "label": "Horizontal marquee" }
+  ],
+  "default": "vertical"
+}
+
 {% schema %}
 {
   "name": "Announcement Bar",
@@ -35,18 +46,6 @@
       "label": "Show close button",
       "default": true
     }
-
-    {
-      "type": "select",
-      "id": "animation_style",
-      "label": "Animation style",
-      "options": [
-      { "value": "vertical", "label": "Vertical rotation" },
-      { "value": "marquee", "label": "Horizontal marquee" }
-  ],
-      "default": "vertical"
-}
-
   ],
   "blocks": [
     {

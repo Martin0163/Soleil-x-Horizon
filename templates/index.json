@@ -9,27 +9,6 @@
  */
 {
   "sections": {
-    "announcement_bar_ghYeHd": {
-      "type": "announcement-bar",
-      "blocks": {
-        "message_bkLRwV": {
-          "type": "message",
-          "settings": {
-            "text": "Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar."
-          }
-        }
-      },
-      "block_order": [
-        "message_bkLRwV"
-      ],
-      "name": "Announcement Bar",
-      "settings": {
-        "enable_announcement": true,
-        "background_color": "#e3f7c8",
-        "text_color": "#110933",
-        "show_close_button": false
-      }
-    },
     "header_8HFUJf": {
       "type": "header",
       "name": "Header",
@@ -178,7 +157,6 @@
     }
   },
   "order": [
-    "announcement_bar_ghYeHd",
     "header_8HFUJf",
     "hero_jVaWmY",
     "dreams_hbwTMd",
