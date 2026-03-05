@@ -9,6 +9,27 @@
  */
 {
   "sections": {
+    "announcement_bar_jrfAfh": {
+      "type": "announcement-bar",
+      "blocks": {
+        "message_GWL78r": {
+          "type": "message",
+          "settings": {
+            "text": "Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar.",
+            "enable_timer": false,
+            "end_date": ""
+          }
+        }
+      },
+      "block_order": [
+        "message_GWL78r"
+      ],
+      "name": "Announcement Bar",
+      "settings": {
+        "background": "#e3f7c8",
+        "text_color": "#110933"
+      }
+    },
     "header_8HFUJf": {
       "type": "header",
       "name": "Header",
@@ -157,6 +178,7 @@
     }
   },
   "order": [
+    "announcement_bar_jrfAfh",
     "header_8HFUJf",
     "hero_jVaWmY",
     "dreams_hbwTMd",
