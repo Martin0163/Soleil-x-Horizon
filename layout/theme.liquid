@@ -30,8 +30,8 @@
     {%- render 'scripts' -%}
     {%- render 'theme-styles-variables' -%}
     {%- render 'color-schemes' -%}
+    {%- render 'announcement-bar', section: section -%}
     {{ 'soleil-horizon.css' | asset_url | stylesheet_tag }}
-    {% section 'announcement-bar' %}
 
 
     {% comment %}/* Start Soleil Color Bridge — loads after Horizon color schemes to properly override */{% endcomment %}
