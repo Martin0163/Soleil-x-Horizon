@@ -9,6 +9,16 @@
  */
 {
   "sections": {
+    "announcement_bar_aMy8Gk": {
+      "type": "announcement-bar",
+      "name": "Announcement Bar",
+      "settings": {
+        "enable_announcement": true,
+        "background_color": "#e3f7c8",
+        "text_color": "#110933",
+        "show_close_button": false
+      }
+    },
     "header_8HFUJf": {
       "type": "header",
       "name": "Header",
@@ -157,6 +167,7 @@
     }
   },
   "order": [
+    "announcement_bar_aMy8Gk",
     "header_8HFUJf",
     "hero_jVaWmY",
     "dreams_hbwTMd",
