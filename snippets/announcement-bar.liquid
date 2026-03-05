@@ -19,14 +19,6 @@
               {% endfor %}
             </div>
 
-        <div class="announcement-bar__track">
-          {% for block in section.blocks %}
-            <div class="announcement-bar__message" {{ block.settings.text }}</div>
-              {{ block.settings.text }}
-          {% endfor %}
-        </div>
-      </div>
-
       {%- if section.settings.show_close_button -%}
         <button
           type="button"
@@ -41,6 +33,7 @@
     </div>
   </announcement-bar>
 {%- endif -%}
+
 
 
 
