@@ -101,27 +101,6 @@
         "padding-block-end": 72
       }
     },
-    "announcement_bar_L3a36e": {
-      "type": "announcement-bar",
-      "blocks": {
-        "message_c8UWcK": {
-          "type": "message",
-          "settings": {
-            "text": "Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar."
-          }
-        }
-      },
-      "block_order": [
-        "message_c8UWcK"
-      ],
-      "name": "Announcement Bar",
-      "settings": {
-        "enable_announcement": true,
-        "background_color": "#e3f7c8",
-        "text_color": "#110933",
-        "show_close_button": false
-      }
-    },
     "dreams_hbwTMd": {
       "type": "dreams",
       "name": "Dreams",
@@ -180,7 +159,6 @@
   "order": [
     "header_8HFUJf",
     "hero_jVaWmY",
-    "announcement_bar_L3a36e",
     "dreams_hbwTMd",
     "new_arrivals_eiLMCg",
     "soleil_products_gFXUHy"
