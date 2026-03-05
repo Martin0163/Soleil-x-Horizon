@@ -20,6 +20,27 @@
         "show_account": true
       }
     },
+    "announcement_bar_MnDQyP": {
+      "type": "announcement-bar",
+      "blocks": {
+        "message_LbM6rH": {
+          "type": "message",
+          "settings": {
+            "text": "Prueba de announcement bar, Prueba de announcement bar, Prueba de announcement bar, Prueba de announcement bar, Prueba de announcement bar, Prueba de announcement bar, Prueba de announcement bar."
+          }
+        }
+      },
+      "block_order": [
+        "message_LbM6rH"
+      ],
+      "name": "Announcement Bar",
+      "settings": {
+        "enable_announcement": true,
+        "background_color": "#e3f7c8",
+        "text_color": "#110933",
+        "show_close_button": false
+      }
+    },
     "hero_jVaWmY": {
       "type": "hero",
       "blocks": {
@@ -154,35 +175,14 @@
         "products_per_page": 24,
         "enable_pagination": true
       }
-    },
-    "announcement_bar_MnDQyP": {
-      "type": "announcement-bar",
-      "blocks": {
-        "message_LbM6rH": {
-          "type": "message",
-          "settings": {
-            "text": "Prueba de announcement bar, Prueba de announcement bar, Prueba de announcement bar, Prueba de announcement bar, Prueba de announcement bar, Prueba de announcement bar, Prueba de announcement bar."
-          }
-        }
-      },
-      "block_order": [
-        "message_LbM6rH"
-      ],
-      "name": "Announcement Bar",
-      "settings": {
-        "enable_announcement": true,
-        "background_color": "#e3f7c8",
-        "text_color": "#110933",
-        "show_close_button": false
-      }
     }
   },
   "order": [
     "header_8HFUJf",
+    "announcement_bar_MnDQyP",
     "hero_jVaWmY",
     "dreams_hbwTMd",
     "new_arrivals_eiLMCg",
-    "soleil_products_gFXUHy",
-    "announcement_bar_MnDQyP"
+    "soleil_products_gFXUHy"
   ]
 }
