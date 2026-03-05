@@ -30,11 +30,7 @@
     {%- render 'scripts' -%}
     {%- render 'theme-styles-variables' -%}
     {%- render 'color-schemes' -%}
-    {{ 'announcement-bar.css' | asset_url | stylesheet_tag }}
-    <script src="{{ 'announcement-bar.js' | asset_url }}" defer></script>
-    {{ 'slideshow.css' | asset_url | stylesheet_tag }}
-    <script src="{{ 'slideshow.js' | asset_url }}" defer></script>
-    {{ 'microinteractions.css' | asset_url | stylesheet_tag }}
+    {{ 'soleil-horizon.css' | asset_url | stylesheet_tag }}
 
     {% comment %}/* Start Soleil Color Bridge — loads after Horizon color schemes to properly override */{% endcomment %}
     {%- render 'soleil-color-bridge' -%}
