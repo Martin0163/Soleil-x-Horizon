@@ -1,0 +1,133 @@
+/* ============================================================================
+   FILE: components.announcement-bar.css.liquid
+   Component: Announcement Bar (Top Banner)
+   ============================================================================ */
+
+/* ============================================================================
+   BLOCK: Bar Container
+   ============================================================================ */
+
+.announcement-bar {
+  position: relative;
+  z-index: var(--layer-announcement);
+  background-color: var(--announcement-bg);
+  color: var(--announcement-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ============================================================================
+   BLOCK: Inner Layout
+   ============================================================================ */
+
+.announcement-bar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-md);
+  min-height: 32px;
+}
+
+/* ============================================================================
+   BLOCK: Messages — Container & Transitions
+   ============================================================================ */
+
+.announcement-bar__messages {
+  position: relative;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+/* --- Base --- */
+.announcement-bar__message {
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(100%);
+  transition:
+    opacity var(--motion-duration-medium) var(--motion-ease-standard),
+    transform var(--motion-duration-medium) var(--motion-ease-standard);
+}
+
+/* --- Variants (.is-active) --- */
+.announcement-bar__message.is-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================================
+   BLOCK: Close Button
+   ============================================================================ */
+
+/* --- Base --- */
+.announcement-bar__close {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+/* --- States (:hover, :focus-visible) --- */
+.announcement-bar__close:hover,
+.announcement-bar__close:focus-visible {
+  background-color: rgba(0, 0, 0, 0.08);
+  transform: scale(1.05);
+}
+
+/* ============================================================================
+   BLOCK: Reduced Motion
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .announcement-bar__message {
+    transition: none;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+}
+
+/* ============================================================================
+   VARIANT: Marquee Mode
+   ============================================================================ */
+
+.announcement-bar--marquee .announcement-bar__messages {
+  display: flex;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+
+.announcement-bar--marquee .announcement-bar__message {
+  display: inline-block;
+  padding-right: var(--space-xl);
+  opacity: 1 !important;
+  transform: none !important;
+  white-space: nowrap;
+}
+
+.announcement-bar--marquee .announcement-bar__track {
+  display: inline-flex;
+  animation: announcement-marquee var(--announcement-speed, 30s) linear infinite;
+}
+
+@keyframes announcement-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
