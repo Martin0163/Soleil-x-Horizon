@@ -1,0 +1,27 @@
+/* ============================================================================
+   FILE: main.css
+   Main CSS Import File for Soleil x Horizon Theme
+   ============================================================================ */
+
+/* Import Order:
+   1. Tokens (Design System Variables)
+   2. Base Styles (Reset, Typography, etc.)
+   3. Layout (Grid, Sections, etc.)
+   4. Components (Cards, Navigation, etc.)
+   5. Utilities (Spacing, Text, etc.)
+*/
+
+/* 1. Tokens */
+@import 'tokens/index.css';
+
+/* 2. Base Styles */
+@import 'base/index.css';
+
+/* 3. Layout */
+@import 'layout/index.css';
+
+/* 4. Components */
+@import 'components/index.css';
+
+/* 5. Utilities */
+@import 'utilities/index.css';
