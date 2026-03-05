@@ -19,17 +19,6 @@
               {% endfor %}
             </div>
 
-      {%- if section.settings.show_close_button -%}
-        <button
-          type="button"
-          class="announcement-bar__close"
-          data-announcement-close
-          aria-label="{{ 'general.close' | t }}"
-        >
-          ✕
-        </button>
-      {%- endif -%}
-
     </div>
   </announcement-bar>
 {%- endif -%}
