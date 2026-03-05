@@ -1,0 +1,1073 @@
+/*
+ * ============================================================================
+ * custom-sections.css
+ * Horizon Theme — Custom Sections Stylesheet
+ * ============================================================================
+ * Contains styles for:
+ *   1. Hero Banner Responsive (Luna Hernández)
+ *   2. New Arrivals Section (Luna Hernández)
+ *   3. Multicolumn Info Section (Luna Hernández)
+ *   4. Animated Announcement Bar (Koelleza dual-direction marquee)
+ *   5. Sephora-style Product Card enhancements
+ *   6. Visual Separation utilities (header/content)
+ *
+ * All rules use Horizon's CSS custom properties for full theme compatibility.
+ * ============================================================================
+ */
+
+/* ============================================================================
+   Start Hero Banner Responsive
+   ============================================================================ */
+
+.hero-banner-responsive {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: var(--hbr-valign, center);
+  justify-content: var(--hbr-halign, flex-start);
+  min-height: var(--hbr-min-height, 500px);
+}
+
+/* Start: Hero Banner — Picture Element */
+.hero-banner-responsive__picture {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-banner-responsive__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+}
+/* End: Hero Banner — Picture Element */
+
+/* Start: Hero Banner — Overlay */
+.hero-banner-responsive__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--hbr-overlay-color, transparent);
+  pointer-events: none;
+}
+/* End: Hero Banner — Overlay */
+
+/* Start: Hero Banner — Content */
+.hero-banner-responsive__content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: var(--hbr-padding-block, 60px) var(--hbr-padding-inline, 40px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: var(--hbr-content-max-width, 640px);
+}
+
+.hero-banner-responsive__content--center {
+  align-items: center;
+  text-align: center;
+  margin-inline: auto;
+}
+
+.hero-banner-responsive__content--right {
+  align-items: flex-end;
+  text-align: right;
+  margin-inline-start: auto;
+}
+
+.hero-banner-responsive__eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--hbr-text-color, var(--color-foreground));
+  opacity: 0.8;
+}
+
+.hero-banner-responsive__heading {
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--hbr-text-color, var(--color-foreground));
+  margin: 0;
+}
+
+.hero-banner-responsive__subheading {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  line-height: 1.5;
+  color: var(--hbr-text-color, var(--color-foreground));
+  opacity: 0.85;
+  margin: 0;
+  max-width: 520px;
+}
+
+.hero-banner-responsive__content--center .hero-banner-responsive__subheading,
+.hero-banner-responsive__content--right .hero-banner-responsive__subheading {
+  max-width: 100%;
+}
+
+.hero-banner-responsive__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 32px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  border-radius: var(--style-border-radius-button, 4px);
+  transition: background-color 0.25s ease, color 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+  background-color: var(--color-primary-button-background, var(--color-foreground));
+  color: var(--color-primary-button-text, var(--color-background));
+  border: 2px solid transparent;
+  align-self: flex-start;
+  cursor: pointer;
+}
+
+.hero-banner-responsive__content--center .hero-banner-responsive__button {
+  align-self: center;
+}
+
+.hero-banner-responsive__content--right .hero-banner-responsive__button {
+  align-self: flex-end;
+}
+
+.hero-banner-responsive__button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgb(0 0 0 / 0.15);
+}
+
+@media screen and (max-width: 749px) {
+  .hero-banner-responsive__content {
+    padding: var(--hbr-padding-block-mobile, 40px) var(--hbr-padding-inline-mobile, 20px);
+    max-width: 100%;
+  }
+
+  .hero-banner-responsive__heading {
+    font-size: clamp(1.75rem, 8vw, 2.5rem);
+  }
+}
+/* End: Hero Banner — Content */
+
+/* End Hero Banner Responsive */
+/* You can paste future updates here without breaking anything */
+
+
+/* ============================================================================
+   Start New Arrivals Section
+   ============================================================================ */
+
+/* Start: New Arrivals — Section Wrapper */
+.new-arrivals-section {
+  padding-block: var(--na-padding-block, 64px);
+  background-color: var(--color-background);
+}
+/* End: New Arrivals — Section Wrapper */
+
+/* Start: New Arrivals — Header */
+.new-arrivals__header {
+  text-align: var(--na-text-align, center);
+  margin-bottom: 48px;
+}
+
+.new-arrivals__eyebrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-foreground);
+  opacity: 0.6;
+  margin-bottom: 8px;
+}
+
+.new-arrivals__title {
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--color-foreground);
+  margin: 0 0 12px;
+}
+
+.new-arrivals__description {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-foreground);
+  opacity: 0.7;
+  max-width: 560px;
+  margin-inline: auto;
+}
+/* End: New Arrivals — Header */
+
+/* Start: New Arrivals — Grid */
+.new-arrivals__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--na-cols-mobile, 2), 1fr);
+  gap: var(--na-gap, 16px);
+}
+
+@media screen and (min-width: 750px) {
+  .new-arrivals__grid {
+    grid-template-columns: repeat(var(--na-cols-tablet, 3), 1fr);
+    gap: var(--na-gap-desktop, 24px);
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .new-arrivals__grid {
+    grid-template-columns: repeat(var(--na-cols-desktop, 4), 1fr);
+  }
+}
+/* End: New Arrivals — Grid */
+
+/* Start: New Arrivals — Carousel */
+.new-arrivals__carousel-wrapper {
+  position: relative;
+}
+
+.new-arrivals__carousel {
+  display: flex;
+  gap: var(--na-gap, 16px);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+
+.new-arrivals__carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.new-arrivals__carousel-item {
+  flex: 0 0 calc((100% - var(--na-gap, 16px) * (var(--na-cols-mobile, 2) - 1)) / var(--na-cols-mobile, 2));
+  scroll-snap-align: start;
+}
+
+@media screen and (min-width: 750px) {
+  .new-arrivals__carousel-item {
+    flex: 0 0 calc((100% - var(--na-gap-desktop, 24px) * (var(--na-cols-tablet, 3) - 1)) / var(--na-cols-tablet, 3));
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .new-arrivals__carousel-item {
+    flex: 0 0 calc((100% - var(--na-gap-desktop, 24px) * (var(--na-cols-desktop, 4) - 1)) / var(--na-cols-desktop, 4));
+  }
+}
+
+.new-arrivals__carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-background);
+  border: 1.5px solid rgb(var(--color-border-rgb) / 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  color: var(--color-foreground);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.08);
+}
+
+.new-arrivals__carousel-btn:hover {
+  background: var(--color-foreground);
+  color: var(--color-background);
+  border-color: var(--color-foreground);
+  transform: translateY(-50%) scale(1.05);
+}
+
+.new-arrivals__carousel-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.new-arrivals__carousel-btn--prev { left: -22px; }
+.new-arrivals__carousel-btn--next { right: -22px; }
+
+@media screen and (max-width: 749px) {
+  .new-arrivals__carousel-btn { display: none; }
+}
+/* End: New Arrivals — Carousel */
+
+/* Start: New Arrivals — CTA */
+.new-arrivals__cta {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.new-arrivals__cta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 2px solid var(--color-foreground);
+  border-radius: var(--style-border-radius-button, 4px);
+  color: var(--color-foreground);
+  background: transparent;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.new-arrivals__cta-link:hover {
+  background: var(--color-foreground);
+  color: var(--color-background);
+}
+/* End: New Arrivals — CTA */
+
+/* End New Arrivals Section */
+/* You can paste future updates here without breaking anything */
+
+
+/* ============================================================================
+   Start Multicolumn Info Section
+   ============================================================================ */
+
+/* Start: Multicolumn — Wrapper */
+.multicolumn-section {
+  padding-block: var(--mc-padding-block, 64px);
+  background-color: var(--color-background);
+}
+/* End: Multicolumn — Wrapper */
+
+/* Start: Multicolumn — Header */
+.multicolumn__header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.multicolumn__eyebrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-foreground);
+  opacity: 0.6;
+  margin-bottom: 8px;
+}
+
+.multicolumn__title {
+  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--color-foreground);
+  margin: 0 0 12px;
+}
+
+.multicolumn__subtitle {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-foreground);
+  opacity: 0.7;
+  max-width: 560px;
+  margin-inline: auto;
+}
+/* End: Multicolumn — Header */
+
+/* Start: Multicolumn — Grid */
+.multicolumn__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--mc-cols-mobile, 1), 1fr);
+  gap: var(--mc-gap, 32px);
+}
+
+@media screen and (min-width: 750px) {
+  .multicolumn__grid {
+    grid-template-columns: repeat(var(--mc-cols-tablet, 2), 1fr);
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .multicolumn__grid {
+    grid-template-columns: repeat(var(--mc-cols-desktop, 4), 1fr);
+    gap: var(--mc-gap-desktop, 40px);
+  }
+}
+/* End: Multicolumn — Grid */
+
+/* Start: Multicolumn — Column Item */
+.multicolumn__item {
+  display: flex;
+  flex-direction: column;
+  align-items: var(--mc-item-align, flex-start);
+  gap: 16px;
+  padding: var(--mc-item-padding, 0);
+}
+
+.multicolumn__item--center {
+  align-items: center;
+  text-align: center;
+}
+
+.multicolumn__item--bordered {
+  padding: 28px 24px;
+  border: 1.5px solid rgb(var(--color-border-rgb) / 0.2);
+  border-radius: var(--style-border-radius-card, 8px);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.multicolumn__item--bordered:hover {
+  border-color: rgb(var(--color-border-rgb) / 0.5);
+  box-shadow: 0 4px 20px rgb(0 0 0 / 0.06);
+}
+/* End: Multicolumn — Column Item */
+
+/* Start: Multicolumn — Icon */
+.multicolumn__icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--mc-icon-size, 56px);
+  height: var(--mc-icon-size, 56px);
+  border-radius: var(--mc-icon-radius, 50%);
+  background-color: var(--mc-icon-bg, rgb(var(--color-foreground-rgb) / 0.06));
+  flex-shrink: 0;
+}
+
+.multicolumn__icon-wrapper svg,
+.multicolumn__icon-wrapper img {
+  width: calc(var(--mc-icon-size, 56px) * 0.5);
+  height: calc(var(--mc-icon-size, 56px) * 0.5);
+  object-fit: contain;
+}
+/* End: Multicolumn — Icon */
+
+/* Start: Multicolumn — Text */
+.multicolumn__item-title {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--color-foreground);
+  margin: 0;
+}
+
+.multicolumn__item-text {
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--color-foreground);
+  opacity: 0.75;
+  margin: 0;
+}
+
+.multicolumn__item-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-foreground);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.2s ease;
+}
+
+.multicolumn__item-link:hover {
+  text-decoration-color: currentColor;
+}
+/* End: Multicolumn — Text */
+
+/* End Multicolumn Info Section */
+/* You can paste future updates here without breaking anything */
+
+/* ============================================================================
+   Start Sephora-Style Product Card Enhancements
+   ============================================================================ */
+
+/* Start: Product Card — Brand + Name + Description + Price layout */
+.product-card__brand {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-foreground);
+  opacity: 0.55;
+  margin: 0 0 4px;
+  line-height: 1.3;
+}
+
+.product-card__name {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--color-foreground);
+  margin: 0 0 4px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-card__short-desc {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--color-foreground);
+  opacity: 0.65;
+  margin: 0 0 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+/* End: Product Card — Brand + Name + Description */
+
+/* Start: Product Card — Sephora Price Format */
+.product-card__price-block {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.product-card__price-current {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-foreground);
+  line-height: 1;
+}
+
+.product-card__price-compare {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--color-foreground);
+  opacity: 0.5;
+  text-decoration: line-through;
+  line-height: 1;
+}
+
+.product-card__price-discount {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  background-color: #E63946;
+  color: #fff;
+  border-radius: 3px;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+}
+
+.product-card__price-current--sale {
+  color: #E63946;
+}
+/* End: Product Card — Sephora Price Format */
+
+/* End Sephora-Style Product Card Enhancements */
+/* You can paste future updates here without breaking anything */
+
+
+/* ============================================================================
+   Start Visual Separation Utilities (Header / Content)
+   ============================================================================ */
+
+/* Start: Header Group Separation */
+#header-group {
+  position: relative;
+  z-index: var(--layer-sticky, 300);
+}
+
+/* Subtle bottom shadow on header group to separate from content */
+.header-section {
+  box-shadow: 0 1px 0 0 rgb(var(--color-border-rgb) / 0.12),
+              0 2px 8px 0 rgb(0 0 0 / 0.04);
+}
+
+/* End: Header Group Separation */
+
+/* Start: Section Spacing Utilities */
+.section-separator {
+  height: 1px;
+  background: rgb(var(--color-border-rgb) / 0.15);
+  margin-block: 0;
+}
+
+.section-separator--thick {
+  height: 2px;
+}
+
+.section-separator--spaced {
+  margin-block: 32px;
+}
+/* End: Section Spacing Utilities */
+
+/* Start: Content Area Top Spacing */
+.content-for-layout > .shopify-section:first-child {
+  /* Ensure first section doesn't collapse into header */
+  position: relative;
+}
+/* End: Content Area Top Spacing */
+
+/* End Visual Separation Utilities */
+/* You can paste future updates here without breaking anything */
+
+
+/* ============================================================================
+   Start Sephora-Style Collection Filters
+   ============================================================================ */
+
+/* Start: Filter Panel — Sephora Visual Design */
+
+/* ── Filter sidebar/panel base ── */
+.facets-block-wrapper--vertical .facets--vertical {
+  border-right: 1px solid var(--color-gray-200, #E5E7EB);
+  padding-right: 1.5rem;
+}
+
+/* ── Filter heading ── */
+.facets--filters-title {
+  font-family: var(--font-heading, 'Playfair Display', serif);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-black, #000);
+  letter-spacing: -0.01em;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--color-yellow, #FFD700);
+  margin-bottom: 1rem;
+}
+
+/* ── Filter item (accordion) ── */
+.facets__item {
+  border-bottom: 1px solid var(--color-gray-100, #F5F5F0);
+}
+
+.facets__item::before {
+  display: none !important; /* Remove Horizon's default border — we use our own */
+}
+
+/* ── Filter summary (accordion toggle) ── */
+.facets__summary {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-black, #000);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.875rem 0;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: color var(--duration-fast, 150ms) ease;
+}
+
+.facets__summary:hover {
+  color: var(--color-yellow-dark, #E6A500);
+}
+
+.facets__summary::-webkit-details-marker {
+  display: none;
+}
+
+/* ── Filter caret icon ── */
+.facets__summary .icon-caret {
+  width: 16px;
+  height: 16px;
+  transition: transform var(--duration-base, 300ms) ease;
+  color: var(--color-gray-500, #8D8D8D);
+}
+
+details[open] .facets__summary .icon-caret {
+  transform: rotate(180deg);
+}
+
+/* ── Filter inputs wrapper ── */
+.facets__inputs-wrapper {
+  padding: 0.5rem 0 1rem;
+}
+
+/* ── Filter checkbox label ── */
+.facets__label {
+  font-size: 0.875rem;
+  color: var(--color-gray-700, #4A4A4A);
+  font-weight: 400;
+  transition: color var(--duration-fast, 150ms) ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.25rem 0;
+}
+
+.facets__label:hover {
+  color: var(--color-black, #000);
+}
+
+/* ── Checkbox styling ── */
+.facets__label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-gray-300, #D6D3D1);
+  border-radius: 3px;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  transition: border-color var(--duration-fast, 150ms) ease,
+              background-color var(--duration-fast, 150ms) ease;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.facets__label input[type="checkbox"]:checked {
+  background-color: var(--color-yellow, #FFD700);
+  border-color: var(--color-yellow, #FFD700);
+}
+
+.facets__label input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 4px;
+  width: 5px;
+  height: 9px;
+  border: 2px solid var(--color-black, #000);
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+.facets__label input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--color-yellow, #FFD700);
+  outline-offset: 2px;
+}
+
+/* ── Active filter count bubble ── */
+.facets__bubble {
+  background: var(--color-yellow, #FFD700);
+  color: var(--color-black, #000);
+  font-size: 0.625rem;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.375rem;
+}
+
+/* ── Price range filter ── */
+.price-filter__range-wrapper {
+  padding: 0.5rem 0;
+}
+
+.price-filter__inputs {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.price-filter__input {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: 2px solid var(--color-gray-200, #E5E7EB);
+  border-radius: var(--radius-md, 0.375rem);
+  font-size: 0.875rem;
+  color: var(--color-black, #000);
+  font-family: var(--font-body, 'Inter', sans-serif);
+  transition: border-color var(--duration-fast, 150ms) ease;
+}
+
+.price-filter__input:focus {
+  border-color: var(--color-yellow, #FFD700);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.15);
+}
+
+/* ── Price range slider ── */
+.price-filter__range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: var(--color-gray-200, #E5E7EB);
+  border-radius: 2px;
+  outline: none;
+  margin: 0.75rem 0;
+}
+
+.price-filter__range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-yellow, #FFD700);
+  border: 2px solid var(--color-black, #000);
+  cursor: pointer;
+  transition: transform var(--duration-fast, 150ms) ease;
+}
+
+.price-filter__range::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* ── Swatch filters (color/finish) ── */
+.facets__inputs-list--swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.variant-option__swatch-wrapper {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--color-gray-200, #E5E7EB);
+  cursor: pointer;
+  transition: border-color var(--duration-fast, 150ms) ease,
+              transform var(--duration-fast, 150ms) ease;
+  overflow: hidden;
+}
+
+.variant-option__swatch-wrapper:hover {
+  border-color: var(--color-black, #000);
+  transform: scale(1.1);
+}
+
+.variant-option__swatch-wrapper.is-active {
+  border-color: var(--color-yellow, #FFD700);
+  box-shadow: 0 0 0 2px var(--color-black, #000);
+}
+
+/* ── Filter remove buttons (active filters) ── */
+.filter-remove-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
+}
+
+.filter-remove-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  background: var(--color-yellow-light, #FFF3B0);
+  border: 1px solid var(--color-yellow, #FFD700);
+  border-radius: var(--radius-full, 9999px);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-black, #000);
+  cursor: pointer;
+  transition: background-color var(--duration-fast, 150ms) ease;
+}
+
+.filter-remove-button:hover {
+  background: var(--color-yellow, #FFD700);
+}
+
+.filter-remove-button svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* ── Clear all filters button ── */
+.facets__clear-all,
+.clear-filter {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-gray-600, #4B5563);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: transparent;
+  transition: color var(--duration-fast, 150ms) ease,
+              text-decoration-color var(--duration-fast, 150ms) ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.facets__clear-all:hover,
+.clear-filter:hover {
+  color: var(--color-black, #000);
+  text-decoration-color: currentColor;
+}
+
+/* ── Filter actions (Apply / See Results) ── */
+.facets__actions {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--color-gray-200, #E5E7EB);
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--color-white, #fff);
+}
+
+.facets__see-results {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  background: var(--color-yellow, #FFD700);
+  color: var(--color-black, #000);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  border: none;
+  border-radius: var(--radius-lg, 0.5rem);
+  cursor: pointer;
+  transition: background-color var(--duration-fast, 150ms) ease,
+              transform var(--duration-fast, 150ms) ease;
+  text-align: center;
+}
+
+.facets__see-results:hover {
+  background: var(--color-yellow-dark, #E6A500);
+  transform: translateY(-1px);
+}
+
+/* ── Filter toggle button (mobile) ── */
+.facets-toggle__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  background: var(--color-white, #fff);
+  border: 2px solid var(--color-black, #000);
+  border-radius: var(--radius-lg, 0.5rem);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-black, #000);
+  cursor: pointer;
+  transition: background-color var(--duration-fast, 150ms) ease,
+              color var(--duration-fast, 150ms) ease;
+}
+
+.facets-toggle__button:hover {
+  background: var(--color-black, #000);
+  color: var(--color-white, #fff);
+}
+
+/* ── Filter count bubble (toggle button) ── */
+.filter-count-bubble {
+  background: var(--color-yellow, #FFD700) !important;
+  color: var(--color-black, #000) !important;
+  font-weight: 700;
+}
+
+.filter-count-bubble__background {
+  background-color: var(--color-yellow, #FFD700) !important;
+}
+
+/* ── Sorting dropdown ── */
+.sorting-filter-component select,
+.facets .sorting select {
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  border: 2px solid var(--color-gray-200, #E5E7EB);
+  border-radius: var(--radius-lg, 0.5rem);
+  font-size: 0.875rem;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  color: var(--color-black, #000);
+  background: var(--color-white, #fff);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4L6 8L10 4' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  transition: border-color var(--duration-fast, 150ms) ease;
+}
+
+.sorting-filter-component select:focus,
+.facets .sorting select:focus {
+  border-color: var(--color-yellow, #FFD700);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.15);
+}
+
+/* ── Products count ── */
+.products-count-wrapper {
+  font-size: 0.8125rem;
+  color: var(--color-gray-500, #8D8D8D);
+  font-weight: 400;
+}
+
+/* ── Drawer filter panel ── */
+.facets--drawer {
+  border-right: none;
+  border-radius: var(--radius-xl, 0.75rem) 0 0 var(--radius-xl, 0.75rem);
+}
+
+.facets-drawer__title {
+  font-family: var(--font-heading, 'Playfair Display', serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-black, #000);
+}
+
+/* ── Show more button ── */
+.facets__inputs .show-more__button {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-gray-600, #4B5563);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  transition: color var(--duration-fast, 150ms) ease;
+}
+
+.facets__inputs .show-more__button:hover {
+  color: var(--color-black, #000);
+}
+
+/* End: Filter Panel — Sephora Visual Design */
+
+/* End Sephora-Style Collection Filters */
+/* You can paste future updates here without breaking anything */
+
+
+/* ============================================================================
+   Start Scroll Reveal Animation Utility
+   ============================================================================ */
+
+/* Start: Scroll Reveal */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-on-scroll {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+/* End: Scroll Reveal */
+
+/* End Scroll Reveal Animation Utility */
+/* You can paste future updates here without breaking anything */

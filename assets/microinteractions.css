@@ -1,0 +1,166 @@
+/* =========================================================
+   MICROINTERACCIONES GLOBALES — SOLEILBEAUTY
+   Sistema unificado de movimiento, feedback y accesibilidad
+   ---------------------------------------------------------
+   - Hover premium
+   - Focus accesible
+   - Transiciones globales
+   - Reveal on scroll
+   - Feedback de interacción
+   - Reduced motion
+========================================================= */
+
+
+/* =========================================================
+   1. TRANSICIONES GLOBALES
+   Suaviza cambios de color, fondo y borde en todo el sitio
+========================================================= */
+
+* {
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    color var(--motion-duration-fast) var(--motion-ease-standard),
+    border-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+
+/* =========================================================
+   2. HOVER PREMIUM (Elevación suave)
+   Aplicable a cards, botones, imágenes, items de menú
+========================================================= */
+
+.hover-elevate {
+  transition:
+    transform var(--motion-duration-fast) var(--motion-ease-standard),
+    box-shadow var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.hover-elevate:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+
+/* =========================================================
+   3. FOCUS ACCESIBLE
+   Enfoque visible, elegante y consistente
+========================================================= */
+
+:focus-visible {
+  outline: 2px solid var(--color-brand-primary);
+  outline-offset: 2px;
+}
+
+
+/* =========================================================
+   4. REVEAL ON SCROLL
+   Animación suave al entrar en viewport
+========================================================= */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(var(--motion-fade-distance));
+  transition:
+    opacity var(--motion-duration-medium) var(--motion-ease-decelerate),
+    transform var(--motion-duration-medium) var(--motion-ease-decelerate);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   5. FEEDBACK DE INTERACCIÓN
+   Pulsos, presiones y microfeedback
+========================================================= */
+
+.button:active,
+.product-card__add-to-cart:active,
+.mega-menu__summary:active {
+  transform: scale(0.97);
+}
+
+.feedback-pulse {
+  animation: pulse 0.4s var(--motion-ease-emphasized);
+}
+
+@keyframes pulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+
+/* =========================================================
+   6. MICROINTERACCIONES PARA IMÁGENES
+   Hover suave, zoom mínimo, sin romper layout
+========================================================= */
+
+.image-zoom {
+  overflow: hidden;
+}
+
+.image-zoom img {
+  transition: transform var(--motion-duration-medium) var(--motion-ease-standard);
+}
+
+.image-zoom:hover img {
+  transform: scale(1.03);
+}
+
+
+/* =========================================================
+   7. MICROINTERACCIONES PARA BOTONES
+   Hover elegante + sombra suave
+========================================================= */
+
+.button,
+.product-card__add-to-cart,
+.quick-add__button {
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    box-shadow var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.button:hover,
+.product-card__add-to-cart:hover,
+.quick-add__button:hover {
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   8. MICROINTERACCIONES PARA MENÚS
+   Fade + slide suave en paneles
+========================================================= */
+
+.mega-menu__panel {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity var(--motion-duration-medium) var(--motion-ease-standard),
+    transform var(--motion-duration-medium) var(--motion-ease-standard);
+}
+
+.mega-menu__details[open] > .mega-menu__panel {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   9. REDUCED MOTION
+   Accesibilidad total: desactiva animaciones si el usuario lo pide
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}

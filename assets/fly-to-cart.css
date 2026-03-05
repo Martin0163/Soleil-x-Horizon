@@ -1,0 +1,23 @@
+.fly-to-cart-clone {
+  position: fixed;
+  pointer-events: none;
+  z-index: var(--layer-fly-to-cart);
+  opacity: var(--start-opacity, 1);
+  transform: scale(var(--travel-scale, 0.25));
+  transition:
+    transform var(--motion-duration-medium) var(--motion-ease-emphasized),
+    opacity var(--motion-duration-medium) var(--motion-ease-standard);
+}
+
+.fly-to-cart-clone.is-flying {
+  transform: translate(var(--travel-x, 0), var(--travel-y, 0)) scale(0.25);
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fly-to-cart-clone {
+    transition: none;
+    transform: none !important;
+    opacity: 0 !important;
+  }
+}

@@ -1,0 +1,91 @@
+.announcement-bar {
+  position: relative;
+  z-index: var(--layer-announcement);
+  background-color: var(--announcement-bg);
+  color: var(--announcement-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.announcement-bar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-md);
+  min-height: 32px;
+}
+
+.announcement-bar__messages {
+  position: relative;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.announcement-bar__message {
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(100%);
+  transition:
+    opacity var(--motion-duration-medium) var(--motion-ease-standard),
+    transform var(--motion-duration-medium) var(--motion-ease-standard);
+}
+
+.announcement-bar__message.is-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.announcement-bar__close {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.announcement-bar__close:hover,
+.announcement-bar__close:focus-visible {
+  background-color: rgba(0, 0, 0, 0.08);
+  transform: scale(1.05);
+}
+
+/* Marquee opcional (solo si quieres estilo continuo) */
+/*
+.announcement-bar__messages {
+  white-space: nowrap;
+}
+
+.announcement-bar__message {
+  display: inline-block;
+  animation: announcement-marquee var(--announcement-speed) linear infinite;
+}
+
+@keyframes announcement-marquee {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+*/
+
+/* Reduced motion: sin animaciones de rotación/marquee */
+@media (prefers-reduced-motion: reduce) {
+  .announcement-bar__message {
+    transition: none;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
