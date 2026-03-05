@@ -77,6 +77,28 @@
     "variant_button_border_width": 1,
     "variant_button_radius": 14,
     "variant_button_width": "equal-width-buttons",
+    "sections": {
+      "announcement-bar": {
+        "type": "announcement-bar",
+        "blocks": {
+          "message_YQKgzM": {
+            "type": "message",
+            "settings": {
+              "text": "Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar."
+            }
+          }
+        },
+        "block_order": [
+          "message_YQKgzM"
+        ],
+        "settings": {
+          "enable_announcement": true,
+          "background_color": "#e3f7c8",
+          "text_color": "#110933",
+          "show_close_button": true
+        }
+      }
+    },
     "content_for_index": [],
     "color_schemes": {
       "scheme-1": {
