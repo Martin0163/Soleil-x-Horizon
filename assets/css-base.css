@@ -4,10 +4,10 @@
    ============================================================================ */
 
 /* Import all base style files */
-@import 'base.accessibility.css';
-@import 'base.focus.css';
-@import 'base.forms.css';
-@import 'base.links-buttons.css';
-@import 'base.media.css';
-@import 'base.reset.css';
-@import 'base.typography.css';
+@import 'base.accessibility.css.liquid';
+@import 'base.focus.css.liquid';
+@import 'base.forms.css.liquid';
+@import 'base.links-buttons.css.liquid';
+@import 'base.media.css.liquid';
+@import 'base.reset.css.liquid';
+@import 'base.typography.css.liquid';
