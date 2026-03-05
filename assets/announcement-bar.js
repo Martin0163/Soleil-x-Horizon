@@ -11,6 +11,13 @@ class AnnouncementBar extends HTMLElement {
     this.interval = null;
   }
 
+  this.animationStyle = this.dataset.animation || 'vertical';
+
+if (this.animationStyle === 'marquee') {
+  this.initMarquee();
+  return;
+}
+
   connectedCallback() {
     if (!this.messages.length) return;
 
