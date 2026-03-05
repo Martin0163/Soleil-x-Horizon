@@ -12,13 +12,9 @@
     <div class="announcement-bar__inner">
 
       <div class="announcement-bar__messages" data-announcement-messages>
-
-        <!-- TRACK 1 -->
         <div class="announcement-bar__track">
           {% for block in section.blocks %}
-            <div class="announcement-bar__message" {{ block.shopify_attributes }}>
-              {{ block.settings.text }}
-            </div>
+            <div class="announcement-bar__message" {{ block.settings.text }}</div>
           {% endfor %}
         </div>
 
@@ -36,4 +32,5 @@
     </div>
   </announcement-bar>
 {%- endif -%}
+
 
