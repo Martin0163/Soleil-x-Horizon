@@ -1,0 +1,258 @@
+/* ============================================================================
+   FILE: forms.css
+   Base Styles: Form Elements
+   ============================================================================ */
+
+/* Base Form Elements */
+input, button, textarea, select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+input, textarea, select {
+  background-color: transparent;
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  transition: border-color var(--transition-fast);
+}
+
+/* States */
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px rgba(242, 139, 99, 0.1);
+}
+
+input:hover {
+  background-color: var(--color-input-hover-background, var(--color-bg-secondary));
+}
+
+select {
+  background-color: var(--color-bg-primary);
+  color: currentcolor;
+}
+
+/* Placeholders */
+textarea::placeholder,
+input::placeholder {
+  color: var(--color-input-text, var(--color-text-muted));
+}
+
+textarea:not(:placeholder-shown)::placeholder,
+input:not(:placeholder-shown)::placeholder {
+  opacity: 0;
+}
+
+/* Form Field Structure */
+.form-field {
+  margin-bottom: var(--space-md);
+}
+
+.form-label {
+  display: block;
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-xs);
+  color: var(--color-text-primary);
+}
+
+.form-input {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  transition: border-color var(--transition-fast);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px rgba(242, 139, 99, 0.1);
+}
+
+.form-input.is-invalid {
+  border-color: var(--color-error);
+}
+
+.form-error {
+  display: block;
+  margin-top: var(--space-xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-error);
+}
+
+/* Horizon Form Fields */
+.field {
+  position: relative;
+  width: 100%;
+  display: flex;
+  transition: box-shadow var(--animation-speed) ease;
+}
+
+.field__input {
+  flex-grow: 1;
+  text-align: left;
+  border-radius: var(--style-border-radius-inputs, var(--radius-md));
+  transition: box-shadow var(--animation-speed) ease, background-color var(--animation-speed) ease;
+  padding: var(--input-padding);
+  box-shadow: var(--input-box-shadow);
+  background-color: var(--color-input-background, var(--color-bg-primary));
+  color: var(--color-input-text, var(--color-text-primary));
+  border: none;
+  outline: none;
+  font-size: var(--font-paragraph--size, var(--font-size-base));
+}
+
+.field__input:autofill {
+  background-color: var(--color-input-background, var(--color-bg-primary));
+  color: var(--color-input-text, var(--color-text-primary));
+}
+
+.field__input:is(:focus, :hover) {
+  box-shadow: var(--input-box-shadow-focus);
+  background-color: var(--color-input-hover-background, var(--color-bg-secondary));
+}
+
+.field__label {
+  color: rgb(var(--color-input-text-rgb, 107 114 128) / var(--opacity-80));
+  font-size: var(--font-paragraph--size, var(--font-size-base));
+  left: var(--input-padding-x);
+  top: 50%;
+  transform: translateY(-50%);
+  margin-bottom: 0;
+  pointer-events: none;
+  position: absolute;
+  transition: top var(--animation-speed) ease, font-size var(--animation-speed) ease;
+}
+
+/* Checkbox */
+.checkbox {
+  --checkbox-size: 22px;
+  --checkbox-top: 50%;
+  --checkbox-left: 1.5px;
+  --checkbox-offset: 3px;
+  --checkbox-border-radius: 7px;
+  --checkbox-label-padding: 8px;
+  --checkbox-path-opacity: 0;
+  --checkbox-cursor: pointer;
+  --checkbox-border: 1px solid rgb(var(--color-foreground-rgb, 107 114 128) / var(--opacity-35-55));
+
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (min-width: 750px) {
+  .checkbox {
+    --checkbox-size: 16px;
+    --checkbox-border-radius: 5px;
+    --checkbox-label-padding: 6px;
+  }
+}
+
+.checkbox:has(.checkbox__input:checked) {
+  --checkbox-path-opacity: 1;
+}
+
+.checkbox.checkbox--disabled {
+  --checkbox-cursor: not-allowed;
+}
+
+.checkbox__input {
+  position: absolute;
+  opacity: 0;
+  margin: 0;
+  width: var(--checkbox-size);
+  height: var(--checkbox-size);
+}
+
+.checkbox__input:focus-visible {
+  outline: none;
+}
+
+.checkbox__input:focus-visible + .checkbox__label .icon-checkmark {
+  outline: var(--focus-outline-width) solid currentcolor;
+  outline-offset: var(--focus-outline-offset);
+}
+
+.checkbox__input:checked + .checkbox__label .icon-checkmark {
+  background-color: var(--color-text-primary);
+  border-color: var(--color-text-primary);
+}
+
+.checkbox__input:disabled + .checkbox__label .icon-checkmark {
+  background-color: var(--input-disabled-background-color);
+  border-color: var(--input-disabled-border-color);
+}
+
+.checkbox__label {
+  position: relative;
+  display: inline-flex;
+  cursor: var(--checkbox-cursor);
+  line-height: var(--checkbox-size);
+  min-width: var(--minimum-touch-target);
+}
+
+.checkbox .icon-checkmark {
+  height: var(--checkbox-size);
+  width: var(--checkbox-size);
+  flex-shrink: 0;
+  border: var(--checkbox-border);
+  border-radius: var(--checkbox-border-radius);
+  background-color: var(--color-bg-primary);
+}
+
+.checkbox__label-text {
+  padding-inline-start: var(--checkbox-label-padding);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.checkbox .icon-checkmark path {
+  stroke: var(--color-bg-primary);
+  opacity: var(--checkbox-path-opacity);
+  transition: opacity var(--animation-speed) var(--animation-easing);
+}
+
+.checkbox__input:disabled + .checkbox__label {
+  color: var(--input-disabled-text-color);
+}
+
+/* iOS Zoom Prevention */
+@media screen and (max-width: 1200px) {
+  input,
+  textarea,
+  select,
+  .horizon-paragraph.horizon-paragraph input,
+  .horizon-paragraph.horizon-paragraph textarea,
+  .horizon-paragraph.horizon-paragraph select,
+  .horizon-h1.horizon-h1 input,
+  .horizon-h1.horizon-h1 textarea,
+  .horizon-h1.horizon-h1 select,
+  .horizon-h2.horizon-h2 input,
+  .horizon-h2.horizon-h2 textarea,
+  .horizon-h2.horizon-h2 select,
+  .horizon-h3.horizon-h3 input,
+  .horizon-h3.horizon-h3 textarea,
+  .horizon-h3.horizon-h3 select,
+  .horizon-h4.horizon-h4 input,
+  .horizon-h4.horizon-h4 textarea,
+  .horizon-h4.horizon-h4 select,
+  .horizon-h5.horizon-h5 input,
+  .horizon-h5.horizon-h5 textarea,
+  .horizon-h5.horizon-h5 select,
+  .horizon-h6.horizon-h6 input,
+  .horizon-h6.horizon-h6 textarea,
+  .horizon-h6.horizon-h6 select {
+    font-size: max(1rem, 100%);
+  }
+}
