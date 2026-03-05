@@ -1,8 +1,9 @@
 {%- if section.settings.enable_announcement and section.settings.messages != blank -%}
   {%- assign closed = false -%}
   <announcement-bar
-    class="announcement-bar"
+    class="announcement-bar announcement-bar--{{ section.settings.animation_style }}"
     data-storage-key="announcement_closed_v1"
+    data-animation-"{{ section.settings.animation_style }}"
   >
     <div class="announcement-bar__inner">
       <div class="announcement-bar__messages" data-announcement-messages>
@@ -31,4 +32,5 @@
       {%- endif -%}
     </div>
   </announcement-bar>
+
 {%- endif -%}
