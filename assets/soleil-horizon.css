@@ -1,0 +1,27 @@
+/* ============================================================================
+   FILE: soleil-horizon.css
+   Main CSS File for Soleil x Horizon Theme
+   ============================================================================ */
+
+/* Import Order:
+   1. Tokens (Design System Variables)
+   2. Base Styles (Reset, Typography, etc.)
+   3. Layout (Grid, Sections, etc.)
+   4. Components (Cards, Navigation, etc.)
+   5. Utilities (Spacing, Text, etc.)
+*/
+
+/* 1. Tokens */
+@import 'css-tokens.css';
+
+/* 2. Base Styles */
+@import 'css-base.css';
+
+/* 3. Layout */
+@import 'css-layout.css';
+
+/* 4. Components */
+@import 'css-components.css';
+
+/* 5. Utilities */
+@import 'css-utilities.css';

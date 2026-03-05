@@ -1,8 +1,22 @@
+/* ============================================================================
+   FILE: overflow-list.css
+   Component: Overflow List (Shadow DOM Web Component)
+   ============================================================================ */
+
+/* ============================================================================
+   BLOCK: Host Element
+   ============================================================================ */
+
 :host {
   display: grid;
   width: 100%;
 }
 
+/* ============================================================================
+   BLOCK: List Container
+   ============================================================================ */
+
+/* --- Base --- */
 [part='list'] {
   display: flex;
   flex-wrap: nowrap;
@@ -11,20 +25,25 @@
   column-gap: 1rem;
   padding-block: var(--overflow-list-padding-block, 0);
   padding-inline: var(--overflow-list-padding-inline, 0);
-
-  @media (max-width: 749px) {
-    justify-content: var(--overflow-list-alignment-mobile);
-  }
-
   overflow-x: auto;
   overflow-y: hidden;
   -ms-overflow-style: none;
   scrollbar-width: none;
 
+  /* --- Pseudo-elements (::-webkit-scrollbar) --- */
   &::-webkit-scrollbar {
     display: none;
   }
+
+  /* --- Media Queries --- */
+  @media (max-width: 749px) {
+    justify-content: var(--overflow-list-alignment-mobile);
+  }
 }
+
+/* ============================================================================
+   BLOCK: List Reset (Shared)
+   ============================================================================ */
 
 [part='list'],
 [part='overflow-list'],
@@ -34,7 +53,10 @@
   list-style: none;
 }
 
-/* Make sure the "more" slot can be measured */
+/* ============================================================================
+   BLOCK: More Slot
+   ============================================================================ */
+
 slot[name='more']:not([hidden]) {
   display: block;
 }
@@ -52,15 +74,27 @@ slot[name='more'] .button {
   text-align: start;
 }
 
+/* ============================================================================
+   BLOCK: Overflow Container (Hidden)
+   ============================================================================ */
+
 [part='overflow'] {
   display: none;
 }
+
+/* ============================================================================
+   BLOCK: Placeholder (Measurement)
+   ============================================================================ */
 
 [part='placeholder'] {
   visibility: hidden;
   width: 0;
   height: 0;
 }
+
+/* ============================================================================
+   BLOCK: Disabled State
+   ============================================================================ */
 
 :host([disabled]) {
   slot[name='more'] {

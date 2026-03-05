@@ -1,3 +1,13 @@
+/* ============================================================================
+   FILE: template-giftcard.css
+   Template: Gift Card Page
+   ============================================================================ */
+
+/* ============================================================================
+   BLOCK: Layout & Custom Properties
+   ============================================================================ */
+
+/* --- Base --- */
 .gift-card {
   --buttons-max-width: min(16rem, 100%);
   --gift-card-image-max-height: 35rem;
@@ -6,6 +16,7 @@
   padding-block: var(--padding-4xl);
   padding-inline: var(--padding-lg);
 
+  /* --- Media Queries --- */
   @media only screen and (min-width: 750px) {
     padding-block: var(--padding-6xl) var(--padding-5xl);
     padding-inline: var(--padding-6xl);
@@ -17,6 +28,11 @@
   flex-direction: column;
 }
 
+/* ============================================================================
+   BLOCK: Image
+   ============================================================================ */
+
+/* --- Base --- */
 .gift-card__image-wrapper {
   display: flex;
   align-items: center;
@@ -32,6 +48,7 @@
   overflow: hidden;
 }
 
+/* --- Variants (:has(.gift-card__image-generic)) --- */
 .gift-card__image-wrapper:has(.gift-card__image-generic) {
   padding: 0;
   border: none;
@@ -45,6 +62,10 @@
   padding: 0.5rem;
 }
 
+/* ============================================================================
+   BLOCK: Price
+   ============================================================================ */
+
 .gift-card__price {
   display: flex;
   flex-wrap: wrap;
@@ -52,6 +73,10 @@
   align-items: center;
   justify-content: center;
 }
+
+/* ============================================================================
+   BLOCK: Code & Headings
+   ============================================================================ */
 
 .gift-card__code,
 .gift-card__text-wrapper h1,
@@ -74,12 +99,21 @@
   margin-block-end: var(--padding-4xl);
 }
 
+/* ============================================================================
+   BLOCK: Text Wrapper
+   ============================================================================ */
+
 .gift-card__text-wrapper {
   text-align: center;
   max-width: var(--max-width--body-normal);
   margin: 0 auto;
 }
 
+/* ============================================================================
+   BLOCK: Badge
+   ============================================================================ */
+
+/* --- Base --- */
 .gift-card__badge {
   border: 1px solid var(--color-border);
   border-radius: var(--style-border-radius-buttons);
@@ -93,9 +127,14 @@
   margin-block: 0;
 }
 
+/* --- Variants (--expired) --- */
 .gift-card__badge--expired {
   opacity: var(--disabled-opacity);
 }
+
+/* ============================================================================
+   BLOCK: QR Code
+   ============================================================================ */
 
 .gift-card__qr-code {
   margin: var(--margin-4xl) 0;
@@ -105,6 +144,10 @@
   margin: 0 auto;
   width: auto;
 }
+
+/* ============================================================================
+   BLOCK: Buttons
+   ============================================================================ */
 
 .gift-card__buttons {
   display: flex;
@@ -124,10 +167,19 @@
   justify-content: center;
 }
 
+/* ============================================================================
+   BLOCK: Copy Button
+   ============================================================================ */
+
 .gift-card__copy-button {
   position: relative;
 }
 
+/* ============================================================================
+   BLOCK: Form Message (Copy Feedback)
+   ============================================================================ */
+
+/* --- Base --- */
 .form__message {
   display: flex;
   justify-content: center;
@@ -141,6 +193,7 @@
   transform: translateY(var(--padding-md));
 }
 
+/* --- States (:not(.visually-hidden)) --- */
 .form__message:not(.visually-hidden) {
   opacity: 1;
   transform: translateY(0);

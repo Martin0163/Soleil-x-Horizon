@@ -1,0 +1,98 @@
+/* ============================================================================
+   FILE: media.css
+   Base Styles: Media Elements (img, video, svg)
+   ============================================================================ */
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+img {
+  border-style: none;
+  width: 100%;
+}
+
+svg {
+  fill: currentColor;
+}
+
+/* Video Background */
+.video-background,
+.video-background * {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.video-background--cover * {
+  object-fit: cover;
+}
+
+.video-background--contain * {
+  object-fit: contain;
+}
+
+/* Video Placeholder */
+.video-placeholder-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: var(--size-style-aspect-ratio, auto);
+}
+
+:not(deferred-media) > .video-placeholder-wrapper {
+  width: var(--video-placeholder-width);
+}
+
+.video-placeholder-wrapper > * {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Background Images */
+.background-image-container {
+  overflow: hidden;
+  position: absolute;
+  inset: 0;
+  opacity: var(--image-opacity);
+}
+
+.background-image-container img,
+.background-image-container svg {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.background-image-fit img,
+.background-image-fit svg {
+  object-fit: contain;
+}
+
+.container-background-image {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+}
+
+/* Background Overlay */
+.background-overlay {
+  position: relative;
+}
+
+.background-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--background-overlay-color, rgb(0 0 0 / 15%));
+}

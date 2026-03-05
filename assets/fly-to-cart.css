@@ -1,3 +1,12 @@
+/* ============================================================================
+   FILE: fly-to-cart.css
+   Component: Fly-to-Cart Animation Clone
+   ============================================================================ */
+
+/* ============================================================================
+   BLOCK: Clone Element — Base State
+   ============================================================================ */
+
 .fly-to-cart-clone {
   position: fixed;
   pointer-events: none;
@@ -9,10 +18,18 @@
     opacity var(--motion-duration-medium) var(--motion-ease-standard);
 }
 
+/* ============================================================================
+   BLOCK: Clone Element — Flying State
+   ============================================================================ */
+
 .fly-to-cart-clone.is-flying {
   transform: translate(var(--travel-x, 0), var(--travel-y, 0)) scale(0.25);
   opacity: 0;
 }
+
+/* ============================================================================
+   BLOCK: Reduced Motion
+   ============================================================================ */
 
 @media (prefers-reduced-motion: reduce) {
   .fly-to-cart-clone {
