@@ -1,80 +1,99 @@
 /* ============================================================================
    FILE: announcement-bar.css
-   Components: Announcement Bar
+   Component: Announcement Bar (Top Banner)
    ============================================================================ */
 
-/* Base Announcement Bar */
-.announcement-bar-section {
-  --animation-speed: 30s;
-  border-color: transparent !important;
-  background-color: var(--announcement-bg-color, #e3f7c8);
+/* ============================================================================
+   BLOCK: Bar Container
+   ============================================================================ */
+
+.announcement-bar {
+  position: relative;
+  z-index: var(--layer-announcement);
+  background-color: var(--announcement-bg);
+  color: var(--announcement-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
 }
 
-.announcement-bar .localization-dropdown {
-  background-color: var(--announcement-bg-color, #e3f7c8);
-}
+/* ============================================================================
+   BLOCK: Inner Layout
+   ============================================================================ */
 
-/* Announcement Bar Text */
-.announcement-bar-section .announcement-bar .announcement-bar__message,
-.announcement-bar-section .announcement-bar .announcement-bar__message *,
-.announcement-bar-section .announcement-bar .announcement-bar__message ul li span,
-.announcement-bar-section .announcement-bar .announcement_icon,
-.announcement-bar-section .announcement-bar .announce_close,
-.announcement-bar-section .country-select-box .detail-summary span,
-.announcement-bar-section .country-select-box .detail-summary:after {
-  color: var(--announcement-text-color, #110933);
-}
-
-/* Announcement Bar Button */
-.announcement-bar-section .announcement-bar .announcement-bar__message .announce-btn {
-  color: var(--announcement-button-text-color, #fcfcfc);
-  background-color: var(--announcement-button-bg-color, #fcfcfc);
-  border-color: var(--announcement-button-border-color, #ffffff);
-}
-
-/* Announcement Bar Marquee */
-.announcement-bar__message-marquee {
-  display: inline-block;
-  animation: slideRight var(--animation-speed) linear infinite;
-}
-
-@keyframes slideRight {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
-}
-
-/* Announcement Bar Layout */
-.announcement-bar-main-wrapper {
+.announcement-bar__inner {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-md);
+  min-height: 32px;
 }
 
-.announcement-bar-wrapper {
+/* ============================================================================
+   BLOCK: Messages — Container & Transitions
+   ============================================================================ */
+
+.announcement-bar__messages {
+  position: relative;
   overflow: hidden;
-  white-space: nowrap;
+  max-width: 100%;
 }
 
+/* --- Base --- */
 .announcement-bar__message {
-  display: inline-block;
-  padding: 0 1rem;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(100%);
+  transition:
+    opacity var(--motion-duration-medium) var(--motion-ease-standard),
+    transform var(--motion-duration-medium) var(--motion-ease-standard);
 }
 
-/* Close Button */
-.announce_close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
+/* --- Variants (.is-active) --- */
+.announcement-bar__message.is-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================================
+   BLOCK: Close Button
+   ============================================================================ */
+
+/* --- Base --- */
+.announcement-bar__close {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
   border: none;
-  font-size: 1.5rem;
+  background: transparent;
+  color: inherit;
   cursor: pointer;
-  color: var(--announcement-text-color, #110933);
+  padding: 0;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
-/* Responsive Adjustments */
-@media (max-width: 749px) {
+/* --- States (:hover, :focus-visible) --- */
+.announcement-bar__close:hover,
+.announcement-bar__close:focus-visible {
+  background-color: rgba(0, 0, 0, 0.08);
+  transform: scale(1.05);
+}
+
+/* ============================================================================
+   BLOCK: Reduced Motion
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
   .announcement-bar__message {
-    font-size: 0.9rem;
+    transition: none;
+    transform: none !important;
+    opacity: 1 !important;
   }
+
 }
