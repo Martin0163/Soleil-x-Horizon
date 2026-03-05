@@ -97,3 +97,37 @@
   }
 
 }
+
+/* ============================================================================
+   VARIANT: Marquee Mode
+   ============================================================================ */
+
+.announcement-bar--marquee .announcement-bar__messages {
+  display: flex;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+
+.announcement-bar--marquee .announcement-bar__message {
+  display: inline-block;
+  padding-right: var(--space-xl);
+  opacity: 1 !important;
+  transform: none !important;
+  white-space: nowrap;
+}
+
+.announcement-bar--marquee .announcement-bar__track {
+  display: inline-flex;
+  animation: announcement-marquee var(--announcement-speed, 30s) linear infinite;
+}
+
+@keyframes announcement-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
