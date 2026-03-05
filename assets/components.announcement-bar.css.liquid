@@ -8,12 +8,14 @@
    ============================================================================ */
 
 .announcement-bar {
+  overflow: hidden;
   position: relative;
   z-index: var(--layer-announcement);
   background-color: var(--announcement-bg);
   color: var(--announcement-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
+  white-space: nowrap; /* 🔥 evita multilínea global */
 }
 
 /* ============================================================================
@@ -24,7 +26,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  white-space: nowrap;
+  white-space: nowrap; /* 🔥 evita multilínea */
   gap: var(--space-sm);
   padding: var(--space-xs) var(--space-md);
   min-height: 32px;
@@ -38,11 +40,13 @@
   position: relative;
   overflow: hidden;
   max-width: 100%;
+  display: flex;           /* 🔥 necesario para marquee */
+  white-space: nowrap;     /* 🔥 evita multilínea */
 }
 
 /* --- Base --- */
 .announcement-bar__message {
-  white-space: nowrap;
+  white-space: nowrap; /* 🔥 evita multilínea */
   opacity: 0;
   transform: translateY(100%);
   transition:
@@ -60,7 +64,6 @@
    BLOCK: Close Button
    ============================================================================ */
 
-/* --- Base --- */
 .announcement-bar__close {
   margin-left: auto;
   display: inline-flex;
@@ -79,7 +82,6 @@
     transform var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
-/* --- States (:hover, :focus-visible) --- */
 .announcement-bar__close:hover,
 .announcement-bar__close:focus-visible {
   background-color: rgba(0, 0, 0, 0.08);
@@ -96,7 +98,6 @@
     transform: none !important;
     opacity: 1 !important;
   }
-
 }
 
 /* ============================================================================
@@ -110,6 +111,12 @@
   position: relative;
 }
 
+.announcement-bar--marquee .announcement-bar__track {
+  display: inline-flex;
+  flex-shrink: 0; /* 🔥 evita que el track se comprima */
+  animation: announcement-marquee var(--announcement-speed, 30s) linear infinite;
+}
+
 .announcement-bar--marquee .announcement-bar__message {
   display: inline-block;
   padding-right: var(--space-xl);
@@ -118,17 +125,15 @@
   white-space: nowrap;
 }
 
-.announcement-bar--marquee .announcement-bar__track {
-  display: inline-flex;
-  animation: announcement-marquee var(--announcement-speed, 30s) linear infinite;
-}
+/* ============================================================================
+   KEYFRAMES
+   ============================================================================ */
 
 @keyframes announcement-marquee {
   0% {
     transform: translateX(0);
   }
   100% {
-    transform: translateX(-50%);
+    transform: translateX(-50%); /* 🔥 movimiento continuo */
   }
 }
-
