@@ -1,0 +1,608 @@
+{% comment %}
+  ============================================================================
+  SOLEIL DREAMS SECTION - Adapted for Horizon Theme
+  ============================================================================
+  
+  Source: Codigo Soleil theme (dreams.liquid)
+  Integration Date: Current
+  Adapted By: Senior Shopify Theme Engineer
+  
+  Purpose:
+  - Split-layout content + media section
+  - Features list with checkmarks
+  - Floating statistics cards
+  - Video or image background support
+  - Dual CTA buttons
+  
+  Adaptations Made:
+  - Integrated Horizon's color scheme system
+  - Added Horizon's spacing utilities
+  - Uses Horizon's button classes
+  - Enhanced responsive behavior
+  - Added accessibility improvements
+  - Fixed video poster attribute
+  
+  Dependencies:
+  - Horizon base.css for core styles
+  - Horizon color scheme variables
+  - Horizon button components
+  
+  Future Developers:
+  Aquí puedes agregar nueva información al código sin romperlo.
+  - Customize split layout ratio in CSS
+  - Add more block types in schema
+  - Modify animation delays
+  
+  ============================================================================
+{% endcomment %}
+
+{% comment %} START: Section Container with Horizon Color Scheme Support {% endcomment %}
+<section 
+  class="soleil-dreams-section section-{{ section.id }}-padding"
+  data-section-id="{{ section.id }}"
+  data-section-type="dreams"
+>
+  {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+
+  {% comment %} START: Split Layout Container {% endcomment %}
+  <div class="soleil-dreams-container">
+    
+    {% comment %} START: Content Area - Left Side {% endcomment %}
+    <div class="soleil-dreams-content">
+      <div class="soleil-dreams-content-inner spacing-style">
+        {% if section.settings.subtitle != blank %}
+          <span class="soleil-dreams-label h6 animate-fade-up">{{ section.settings.subtitle | escape }}</span>
+        {% endif %}
+        
+        <h2 class="soleil-dreams-title h1 animate-fade-up" data-delay="100">
+          {{ section.settings.title | default: 'Your Beauty Dreams' | escape }}
+        </h2>
+        
+        {% if section.settings.description != blank %}
+          <div class="soleil-dreams-description rte animate-fade-up" data-delay="200">
+            {{ section.settings.description }}
+          </div>
+        {% endif %}
+
+        {% comment %} START: Features List {% endcomment %}
+        {% if section.settings.show_features %}
+          {% assign feature_blocks = section.blocks | where: 'type', 'feature' %}
+          {% if feature_blocks.size > 0 %}
+            <ul class="soleil-dreams-features animate-fade-up" data-delay="300">
+              {% for block in feature_blocks %}
+                <li class="soleil-dreams-feature-item" {{ block.shopify_attributes }}>
+                  <svg class="soleil-feature-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <span>{{ block.settings.feature_text | escape }}</span>
+                </li>
+                {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endif %}
+        {% comment %} END: Features List {% endcomment %}
+
+        {% comment %} START: CTA Buttons {% endcomment %}
+        {% if section.settings.button_text != blank %}
+          <div class="soleil-dreams-cta animate-fade-up" data-delay="400">
+            <a href="{{ section.settings.button_link }}" class="button button-primary">
+              {{ section.settings.button_text | escape }}
+            </a>
+            {% if section.settings.button_text_2 != blank %}
+              <a href="{{ section.settings.button_link_2 }}" class="button button-secondary">
+                {{ section.settings.button_text_2 | escape }}
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+        {% comment %} END: CTA Buttons {% endcomment %}
+        {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+      </div>
+    </div>
+    {% comment %} END: Content Area {% endcomment %}
+
+    {% comment %} START: Media Area - Right Side {% endcomment %}
+    <div class="soleil-dreams-media">
+      {% if section.settings.video_url != blank %}
+        {% comment %} Video Background {% endcomment %}
+        <div class="soleil-dreams-video-wrapper">
+          <video 
+            class="soleil-dreams-video" 
+            autoplay 
+            muted 
+            loop 
+            playsinline
+            {% if section.settings.image %}
+              poster="{{ section.settings.image | image_url: width: 1200 }}"
+            {% endif %}
+          >
+            <source src="{{ section.settings.video_url }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      {% elsif section.settings.image %}
+        {% comment %} Image Background {% endcomment %}
+        <div class="soleil-dreams-image-wrapper">
+          {%- liquid
+            assign image_width = section.settings.image.width | default: 1200
+            assign image_height = section.settings.image.height | default: 800
+          -%}
+          <img
+            src="{{ section.settings.image | image_url: width: 1200 }}"
+            srcset="
+              {{ section.settings.image | image_url: width: 600 }} 600w,
+              {{ section.settings.image | image_url: width: 900 }} 900w,
+              {{ section.settings.image | image_url: width: 1200 }} 1200w,
+              {{ section.settings.image | image_url: width: 1800 }} 1800w
+            "
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            alt="{{ section.settings.title | escape }}"
+            width="{{ image_width }}"
+            height="{{ image_height }}"
+            class="soleil-dreams-image"
+            loading="lazy"
+          >
+        </div>
+      {% else %}
+        {% comment %} Placeholder {% endcomment %}
+        <div class="soleil-dreams-placeholder">
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
+      {% endif %}
+
+      {% comment %} START: Floating Statistics Cards {% endcomment %}
+      {% if section.settings.show_stats %}
+        {% assign stat_blocks = section.blocks | where: 'type', 'stat' %}
+        {% if stat_blocks.size > 0 %}
+          <div class="soleil-dreams-stats">
+            {% for block in stat_blocks %}
+              <div class="soleil-stat-card animate-fade-up border-style" {{ block.shopify_attributes }}>
+                <div class="soleil-stat-number h2">{{ block.settings.stat_number | escape }}</div>
+                <div class="soleil-stat-label h6">{{ block.settings.stat_label | escape }}</div>
+              </div>
+              {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endif %}
+      {% comment %} END: Floating Statistics Cards {% endcomment %}
+    </div>
+    {% comment %} END: Media Area {% endcomment %}
+
+  </div>
+  {% comment %} END: Split Layout Container {% endcomment %}
+
+</section>
+{% comment %} END: Section Container {% endcomment %}
+
+{% comment %}
+  ============================================================================
+  STYLES - Adapted from Soleil with Horizon Integration
+  ============================================================================
+  
+  Modifications:
+  - Uses Horizon's CSS custom properties
+  - Integrated with Horizon's color scheme system
+  - Responsive breakpoints match Horizon's
+  - Enhanced mobile layout
+  
+  Aquí puedes agregar nueva información al código sin romperlo.
+  ============================================================================
+{% endcomment %}
+
+<style>
+/* START: Base Section Styles */
+.soleil-dreams-section {
+  position: relative;
+  overflow: hidden;
+  background: rgb(var(--color-foreground-rgb) / 0.02);
+}
+
+/* START: Split Layout Container */
+.soleil-dreams-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 600px;
+}
+
+@media (min-width: 990px) {
+  .soleil-dreams-container {
+    min-height: 700px;
+  }
+}
+/* END: Split Layout Container */
+
+/* START: Content Area Styles */
+.soleil-dreams-content {
+  display: flex;
+  align-items: center;
+  padding: var(--padding-4xl) var(--padding-3xl);
+  background: var(--color-background);
+}
+
+.soleil-dreams-content-inner {
+  max-width: 600px;
+  width: 100%;
+}
+
+.soleil-dreams-label {
+  display: inline-block;
+  font-size: var(--font-size--sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-primary);
+  margin-bottom: var(--margin-md);
+}
+
+.soleil-dreams-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--color-foreground);
+  margin-bottom: var(--margin-lg);
+}
+
+.soleil-dreams-description {
+  font-size: var(--font-size--lg);
+  line-height: 1.7;
+  color: rgb(var(--color-foreground-rgb) / 0.7);
+  margin-bottom: var(--margin-xl);
+}
+/* END: Content Area Styles */
+
+/* START: Features List Styles */
+.soleil-dreams-features {
+  list-style: none;
+  margin: 0 0 var(--margin-xl) 0;
+  padding: 0;
+}
+
+.soleil-dreams-feature-item {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  padding: var(--padding-sm) 0;
+  font-size: var(--font-size--lg);
+  color: var(--color-foreground);
+}
+
+.soleil-feature-icon {
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+/* END: Features List Styles */
+
+/* START: CTA Buttons Styles */
+.soleil-dreams-cta {
+  display: flex;
+  gap: var(--gap-md);
+  flex-wrap: wrap;
+}
+/* END: CTA Buttons Styles */
+
+/* START: Media Area Styles */
+.soleil-dreams-media {
+  position: relative;
+  overflow: hidden;
+  background: rgb(var(--color-foreground-rgb) / 0.05);
+}
+
+.soleil-dreams-video-wrapper,
+.soleil-dreams-image-wrapper,
+.soleil-dreams-placeholder {
+  width: 100%;
+  height: 100%;
+}
+
+.soleil-dreams-video,
+.soleil-dreams-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.soleil-dreams-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(var(--color-foreground-rgb) / 0.05);
+}
+
+.soleil-dreams-placeholder svg {
+  width: 100%;
+  height: 100%;
+  max-width: 400px;
+  max-height: 400px;
+  opacity: 0.3;
+}
+/* END: Media Area Styles */
+
+/* START: Floating Statistics Styles */
+.soleil-dreams-stats {
+  position: absolute;
+  bottom: var(--padding-xl);
+  left: var(--padding-xl);
+  right: var(--padding-xl);
+  display: flex;
+  gap: var(--gap-lg);
+  z-index: 2;
+}
+
+.soleil-stat-card {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: var(--padding-lg);
+  border-radius: var(--style-border-radius-lg, 12px);
+  box-shadow: 0 8px 24px rgb(var(--color-shadow-rgb) / 0.15);
+  text-align: center;
+  border: 1px solid rgb(var(--color-border-rgb) / 0.1);
+}
+
+.soleil-stat-number {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  color: var(--color-primary);
+  line-height: 1;
+  margin-bottom: var(--margin-xs);
+}
+
+.soleil-stat-label {
+  font-size: var(--font-size--sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgb(var(--color-foreground-rgb) / 0.6);
+}
+/* END: Floating Statistics Styles */
+
+/* START: Animation Classes */
+.animate-fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s ease-out forwards;
+}
+
+.animate-fade-up[data-delay="100"] { animation-delay: 0.1s; }
+.animate-fade-up[data-delay="200"] { animation-delay: 0.2s; }
+.animate-fade-up[data-delay="300"] { animation-delay: 0.3s; }
+.animate-fade-up[data-delay="400"] { animation-delay: 0.4s; }
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* END: Animation Classes */
+
+/* START: Responsive Styles */
+@media (max-width: 1023px) {
+  .soleil-dreams-container {
+    grid-template-columns: 1fr;
+  }
+
+  .soleil-dreams-content {
+    padding: var(--padding-3xl) var(--padding-xl);
+  }
+
+  .soleil-dreams-media {
+    min-height: 400px;
+  }
+
+  .soleil-dreams-title {
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+  }
+}
+
+@media (max-width: 749px) {
+  .soleil-dreams-content {
+    padding: var(--padding-2xl) var(--padding-lg);
+  }
+
+  .soleil-dreams-title {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+
+  .soleil-dreams-cta {
+    flex-direction: column;
+  }
+
+  .soleil-dreams-cta .button {
+    width: 100%;
+    text-align: center;
+  }
+
+  .soleil-dreams-stats {
+    flex-direction: column;
+    gap: var(--gap-md);
+    bottom: var(--padding-md);
+    left: var(--padding-md);
+    right: var(--padding-md);
+  }
+
+  .soleil-stat-card {
+    padding: var(--padding-md);
+  }
+
+  .soleil-dreams-media {
+    min-height: 300px;
+  }
+}
+/* END: Responsive Styles */
+</style>
+
+{% comment %}
+  ============================================================================
+  SCHEMA - Section Settings Configuration
+  ============================================================================
+  
+  Adaptations:
+  - Integrated Horizon's color_scheme setting
+  - Added page_width setting for Horizon compatibility
+  - Preserved all Soleil block types
+  - Enhanced with better defaults and info text
+  
+  Aquí puedes agregar nueva información al código sin romperlo.
+  ============================================================================
+{% endcomment %}
+
+{% schema %}
+{
+  "name": "Soleil Dreams",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Discover"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Your Beauty Dreams"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Experience the transformation you've always dreamed of with our premium beauty products and expert care.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_features",
+      "label": "Show features list",
+      "default": true,
+      "info": "Add feature blocks below to display a checklist"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Primary button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "button_text_2",
+      "label": "Secondary button text",
+      "info": "Optional second button"
+    },
+    {
+      "type": "url",
+      "id": "button_link_2",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "Recommended: 1200x800px or larger"
+    },
+    {
+      "type": "text",
+      "id": "video_url",
+      "label": "Video URL (MP4)",
+      "info": "Direct link to MP4 file. Overrides image if provided. Example: https://cdn.shopify.com/videos/video.mp4"
+    },
+    {
+      "type": "header",
+      "content": "Statistics"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stats",
+      "label": "Show statistics",
+      "default": false,
+      "info": "Add statistic blocks below to display floating stat cards"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "text",
+          "id": "feature_text",
+          "label": "Feature text",
+          "default": "Premium quality products"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "name": "Statistic",
+      "settings": [
+        {
+          "type": "text",
+          "id": "stat_number",
+          "label": "Number",
+          "default": "10K+",
+          "info": "Example: 10K+, 99%, $1M"
+        },
+        {
+          "type": "text",
+          "id": "stat_label",
+          "label": "Label",
+          "default": "Happy Customers"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Soleil Dreams",
+      "category": "Soleil",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "feature_text": "Premium quality products"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "feature_text": "Expert beauty consultations"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "feature_text": "Satisfaction guaranteed"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

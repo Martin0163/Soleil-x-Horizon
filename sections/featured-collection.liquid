@@ -1,0 +1,1040 @@
+{% comment %}
+  ============================================================================
+  SOLEIL FEATURED COLLECTION SECTION - Adapted for Horizon Theme
+  ============================================================================
+  
+  Purpose:
+  - Display featured products from a selected collection
+  - Enhanced product grid with Soleil styling
+  - Quick add to cart functionality
+  - Responsive product carousel/grid
+  
+  Features:
+  - Collection selector
+  - Product grid/slider toggle
+  - Quick add functionality
+  - Product hover effects
+  - Responsive layout
+  - Color scheme support
+  
+  Adaptations Made:
+  - Integrated Horizon's color scheme system
+  - Added Horizon's spacing utilities
+  - Preserved Horizon's product card structure
+  - Enhanced with Soleil visual design
+  - Added AJAX cart integration
+  
+  Dependencies:
+  - Horizon base.css for core styles
+  - Soleil theme styles for enhancements
+  - Soleil AJAX cart for quick add
+  
+  Future Developers:
+  Aquí puedes agregar nueva información al código sin romperlo.
+  - Add new layout options in schema
+  - Customize product card design
+  - Add filtering options
+  - Implement advanced sorting
+  
+  ============================================================================
+{% endcomment %}
+
+{% comment %} START: Section Variables {% endcomment %}
+{%- liquid
+  assign collection = collections[section.settings.collection]
+  assign products_to_show = section.settings.products_to_show | default: 8
+  assign columns_desktop = section.settings.columns_desktop | default: 4
+  assign columns_mobile = section.settings.columns_mobile | default: 2
+  assign enable_slider = section.settings.enable_slider
+  assign show_quick_add = section.settings.show_quick_add
+  assign show_second_image = section.settings.show_second_image
+  assign show_vendor = section.settings.show_vendor
+  assign show_rating = section.settings.show_rating
+  assign image_ratio = section.settings.image_ratio | default: 'portrait'
+-%}
+{% comment %} END: Section Variables {% endcomment %}
+
+{% comment %} START: Section Container with Horizon Color Scheme Support {% endcomment %}
+<section 
+  class="soleil-featured-collection section-{{ section.id }}-padding"
+  data-section-id="{{ section.id }}"
+  style="
+    --section-bg: {{ section.settings.color_scheme.settings.background }};
+    --section-text: {{ section.settings.color_scheme.settings.foreground }};
+  "
+>
+  {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+
+  {% comment %} START: Section Header {% endcomment %}
+  {% comment %}
+  /* Start Fix: page-width class */
+  Fixed: 'page-width-normal/narrow/wide' classes don't exist in Horizon.
+  Replaced with Horizon's native 'page-width' class + custom modifier via data attribute.
+  /* End Fix: page-width class */
+  /* You can paste future updates here without breaking anything */
+  {% endcomment %}
+  <div class="page-width" data-width="{{ section.settings.page_width | default: 'normal' }}" style="{% if section.settings.page_width == 'narrow' %}max-width: 900px; margin-inline: auto;{% elsif section.settings.page_width == 'wide' %}max-width: 100%;{% endif %}">
+    {% if section.settings.section_label != blank or section.settings.section_title != blank or section.settings.section_description != blank %}
+    <div class="soleil-section-header text-center spacing-style">
+      {% if section.settings.section_label != blank %}
+        <span class="soleil-section-label h6">{{ section.settings.section_label | escape }}</span>
+      {% endif %}
+      
+      {% if section.settings.section_title != blank %}
+        <h2 class="soleil-section-title h2">{{ section.settings.section_title | escape }}</h2>
+      {% endif %}
+      
+      {% if section.settings.section_description != blank %}
+        <div class="soleil-section-description paragraph">
+          {{ section.settings.section_description }}
+        </div>
+      {% endif %}
+    </div>
+    {% endif %}
+    {% comment %} END: Section Header {% endcomment %}
+
+    {% comment %} START: Products Grid/Slider {% endcomment %}
+    {% if collection != blank and collection.products.size > 0 %}
+      <div 
+        class="soleil-products-container {% if enable_slider %}soleil-products-slider{% else %}soleil-products-grid{% endif %}"
+        data-products-container
+        style="
+          --columns-desktop: {{ columns_desktop }};
+          --columns-mobile: {{ columns_mobile }};
+        "
+      >
+        {% comment %} START: Product Loop {% endcomment %}
+        {% for product in collection.products limit: products_to_show %}
+          <div 
+            class="soleil-product-item animate-on-scroll"
+            data-product-id="{{ product.id }}"
+            style="animation-delay: {{ forloop.index | times: 0.1 }}s;"
+          >
+            {% comment %} START: Product Card {% endcomment %}
+            <div class="soleil-product-card border-style">
+              
+              {% comment %} START: Product Images {% endcomment %}
+              <div class="soleil-product-images">
+                <a href="{{ product.url }}" class="soleil-product-link">
+                  {% if product.featured_image %}
+                    {%- liquid
+                      assign image_width = product.featured_image.width | default: 800
+                      assign image_height = product.featured_image.height | default: 800
+                    -%}
+                    <img 
+                      src="{{ product.featured_image | image_url: width: 800 }}"
+                      srcset="
+                        {{ product.featured_image | image_url: width: 400 }} 400w,
+                        {{ product.featured_image | image_url: width: 600 }} 600w,
+                        {{ product.featured_image | image_url: width: 800 }} 800w
+                      "
+                      sizes="(min-width: 990px) calc(100vw / {{ columns_desktop }}), (min-width: 750px) 33vw, 50vw"
+                      alt="{{ product.featured_image.alt | escape }}"
+                      width="{{ image_width }}"
+                      height="{{ image_height }}"
+                      loading="lazy"
+                      class="soleil-product-image soleil-product-image-primary"
+                    >
+                    
+                    {% if show_second_image and product.images[1] %}
+                      {%- liquid
+                        assign second_image_width = product.images[1].width | default: 800
+                        assign second_image_height = product.images[1].height | default: 800
+                      -%}
+                      <img 
+                        src="{{ product.images[1] | image_url: width: 800 }}"
+                        srcset="
+                          {{ product.images[1] | image_url: width: 400 }} 400w,
+                          {{ product.images[1] | image_url: width: 600 }} 600w,
+                          {{ product.images[1] | image_url: width: 800 }} 800w
+                        "
+                        sizes="(min-width: 990px) calc(100vw / {{ columns_desktop }}), (min-width: 750px) 33vw, 50vw"
+                        alt="{{ product.images[1].alt | escape }}"
+                        width="{{ second_image_width }}"
+                        height="{{ second_image_height }}"
+                        loading="lazy"
+                        class="soleil-product-image soleil-product-image-secondary"
+                      >
+                    {% endif %}
+                  {% else %}
+                    {{ 'product-1' | placeholder_svg_tag: 'soleil-product-placeholder' }}
+                  {% endif %}
+                </a>
+
+                {% comment %} START: Product Badges {% endcomment %}
+                <div class="soleil-product-badges">
+                  {% if product.available == false %}
+                    <span class="soleil-badge soleil-badge-sold-out">
+                      {{ 'products.product.sold_out' | t }}
+                    </span>
+                  {% elsif product.compare_at_price > product.price %}
+                    <span class="soleil-badge soleil-badge-sale">
+                      {{ 'product.on_sale' | t }}
+                    </span>
+                  {% endif %}
+                  
+                  {% if product.tags contains 'new' %}
+                    <span class="soleil-badge soleil-badge-new">
+                      {{ 'product.new' | t }}
+                    </span>
+                  {% endif %}
+                </div>
+                {% comment %} END: Product Badges {% endcomment %}
+
+                {% comment %} START: Quick Add Button {% endcomment %}
+                {% if show_quick_add and product.available %}
+                  <div class="soleil-quick-add">
+                    {% if product.variants.size == 1 %}
+                      <button 
+                        type="button"
+                        class="soleil-button-primary soleil-quick-add-button"
+                        data-soleil-add-to-cart="{{ product.selected_or_first_available_variant.id }}"
+                        data-quantity="1"
+                        aria-label="{{ 'products.product.add_to_cart' | t }}"
+                      >
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M2 2h2l3.6 7.2m0 0L6 14h12m-10.4-6.8L9 14m0 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+                        </svg>
+                        <span>{{ 'products.product.add_to_cart' | t }}</span>
+                      </button>
+                    {% else %}
+                      <a 
+                        href="{{ product.url }}" 
+                        class="soleil-button-secondary soleil-quick-view-button"
+                        aria-label="{{ 'product.choose_options' | t }}"
+                      >
+                        <span>{{ 'product.choose_options' | t }}</span>
+                      </a>
+                    {% endif %}
+                  </div>
+                {% endif %}
+                {% comment %} END: Quick Add Button {% endcomment %}
+              </div>
+              {% comment %} END: Product Images {% endcomment %}
+
+              {% comment %} START: Product Info {% endcomment %}
+              <div class="soleil-product-info">
+                {% if show_vendor and product.vendor != blank %}
+                  <p class="soleil-product-vendor h6">{{ product.vendor }}</p>
+                {% endif %}
+
+                <h3 class="soleil-product-title h5">
+                  <a href="{{ product.url }}">{{ product.title | escape }}</a>
+                </h3>
+
+                {% comment %} START: Product Rating {% endcomment %}
+                {% if show_rating and product.metafields.reviews.rating.value != blank %}
+                  <div class="soleil-product-rating" role="img" aria-label="{{ product.metafields.reviews.rating.value }} out of 5 stars">
+                    {% assign rating_value = product.metafields.reviews.rating.value.rating | default: 0 %}
+                    {% assign rating_max = product.metafields.reviews.rating.value.scale_max | default: 5 %}
+                    {% assign rating_percentage = rating_value | divided_by: rating_max | times: 100 %}
+                    
+                    <div class="soleil-stars">
+                      <div class="soleil-stars-empty">
+                        {% for i in (1..5) %}
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                          </svg>
+                        {% endfor %}
+                      </div>
+                      <div class="soleil-stars-filled" style="width: {{ rating_percentage }}%;">
+                        {% for i in (1..5) %}
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                          </svg>
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <span class="soleil-rating-count">({{ product.metafields.reviews.rating_count }})</span>
+                  </div>
+                {% endif %}
+                {% comment %} END: Product Rating {% endcomment %}
+
+                {% comment %} START: Product Price {% endcomment %}
+                <div class="soleil-product-price">
+                  {% if product.compare_at_price > product.price %}
+                    <span class="soleil-price-compare">
+                      <s>{{ product.compare_at_price | money }}</s>
+                    </span>
+                    <span class="soleil-price-sale">
+                      {{ product.price | money }}
+                    </span>
+                    <span class="soleil-price-save">
+                      {{ 'product.save' | t }} {{ product.compare_at_price | minus: product.price | money }}
+                    </span>
+                  {% else %}
+                    <span class="soleil-price-regular">
+                      {{ product.price | money }}
+                    </span>
+                  {% endif %}
+                </div>
+                {% comment %} END: Product Price {% endcomment %}
+              </div>
+              {% comment %} END: Product Info {% endcomment %}
+
+            </div>
+            {% comment %} END: Product Card {% endcomment %}
+          </div>
+        {% endfor %}
+        {% comment %} END: Product Loop {% endcomment %}
+      </div>
+
+      {% comment %} START: Slider Controls {% endcomment %}
+      {% if enable_slider and collection.products.size > columns_desktop %}
+        <div class="soleil-slider-controls">
+          <button 
+            type="button" 
+            class="soleil-slider-button soleil-slider-prev"
+            aria-label="Previous products"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          <button 
+            type="button" 
+            class="soleil-slider-button soleil-slider-next"
+            aria-label="Next products"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+      {% endif %}
+      {% comment %} END: Slider Controls {% endcomment %}
+
+      {% comment %} START: View All Button {% endcomment %}
+      {% if section.settings.show_view_all and collection.products.size > products_to_show %}
+        <div class="soleil-view-all text-center spacing-style">
+          <a href="{{ collection.url }}" class="button button-secondary">
+            {{ section.settings.view_all_text | default: 'View All Products' | escape }}
+          </a>
+        </div>
+      {% endif %}
+      {% comment %} END: View All Button {% endcomment %}
+
+    {% else %}
+      {% comment %} START: Empty State {% endcomment %}
+      <div class="soleil-empty-state text-center spacing-style">
+        <p class="paragraph">{{ 'featured_collection.no_products' | t }}</p>
+        {% if section.settings.collection == blank %}
+          <p class="paragraph">{{ 'featured_collection.select' | t }}</p>
+        {% endif %}
+      </div>
+      {% comment %} END: Empty State {% endcomment %}
+    {% endif %}
+    {% comment %} END: Products Grid/Slider {% endcomment %}
+
+  </div>
+  {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+
+</section>
+{% comment %} END: Section Container {% endcomment %}
+
+{% comment %}
+  ============================================================================
+  STYLES - Adapted from Soleil with Horizon Integration
+  ============================================================================
+  
+  Modifications:
+  - Uses Horizon's CSS custom properties
+  - Integrated with Horizon's color scheme system
+  - Responsive breakpoints match Horizon's
+  - Product card compatible with Horizon
+  
+  Aquí puedes agregar nueva información al código sin romperlo.
+  ============================================================================
+{% endcomment %}
+
+{% comment %}
+/* Start Phase 3 Fix — Convert inline style to scoped stylesheet */
+Changed: <style> → {% stylesheet %} for Horizon-native scoped CSS delivery.
+/* End Phase 3 Fix */
+/* You can paste future updates here without breaking anything */
+{% endcomment %}
+{% stylesheet %}
+/* START: Section Base Styles */
+.soleil-featured-collection {
+  padding: var(--padding-4xl) 0;
+}
+
+/* START: Section Header */
+.soleil-section-header {
+  margin-bottom: var(--margin-4xl);
+}
+
+.soleil-section-label {
+  display: inline-block;
+  color: var(--color-primary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--margin-sm);
+}
+
+.soleil-section-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  margin-bottom: var(--margin-lg);
+}
+
+.soleil-section-description {
+  max-width: 600px;
+  margin: 0 auto;
+  color: rgb(var(--color-foreground-rgb) / 0.8);
+}
+/* END: Section Header */
+
+/* START: Products Grid */
+.soleil-products-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--columns-mobile), 1fr);
+  gap: var(--gap-xl);
+  margin-bottom: var(--margin-3xl);
+}
+
+@media (min-width: 750px) {
+  .soleil-products-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 990px) {
+  .soleil-products-grid {
+    grid-template-columns: repeat(var(--columns-desktop), 1fr);
+  }
+}
+/* END: Products Grid */
+
+/* START: Products Slider */
+.soleil-products-slider {
+  display: flex;
+  gap: var(--gap-xl);
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  margin-bottom: var(--margin-3xl);
+}
+
+.soleil-products-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.soleil-products-slider .soleil-product-item {
+  flex: 0 0 calc((100% - var(--gap-xl)) / var(--columns-mobile));
+  scroll-snap-align: start;
+}
+
+@media (min-width: 750px) {
+  .soleil-products-slider .soleil-product-item {
+    flex: 0 0 calc((100% - (var(--gap-xl) * 2)) / 3);
+  }
+}
+
+@media (min-width: 990px) {
+  .soleil-products-slider .soleil-product-item {
+    flex: 0 0 calc((100% - (var(--gap-xl) * (var(--columns-desktop) - 1))) / var(--columns-desktop));
+  }
+}
+/* END: Products Slider */
+
+/* START: Product Card */
+.soleil-product-card {
+  position: relative;
+  background: var(--color-background);
+  border-radius: var(--style-border-radius-lg, 12px);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.soleil-product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgb(var(--color-shadow-rgb) / 0.15);
+}
+
+/* START: Product Images */
+.soleil-product-images {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+}
+
+.soleil-product-link {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.soleil-product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.soleil-product-image-secondary {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.soleil-product-card:hover .soleil-product-image-primary {
+  transform: scale(1.05);
+}
+
+.soleil-product-card:hover .soleil-product-image-secondary {
+  opacity: 1;
+}
+
+.soleil-product-placeholder {
+  width: 100%;
+  height: 100%;
+  background: rgb(var(--color-foreground-rgb) / 0.05);
+}
+/* END: Product Images */
+
+/* START: Product Badges */
+.soleil-product-badges {
+  position: absolute;
+  top: var(--padding-sm);
+  left: var(--padding-sm);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-2xs);
+}
+
+.soleil-badge {
+  display: inline-block;
+  padding: var(--padding-2xs) var(--padding-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 20px;
+}
+
+.soleil-badge-sold-out {
+  background: rgb(var(--color-foreground-rgb) / 0.9);
+  color: var(--color-background);
+}
+
+.soleil-badge-sale {
+  background: #E74C3C;
+  color: white;
+}
+
+.soleil-badge-new {
+  background: var(--color-primary);
+  color: white;
+}
+/* END: Product Badges */
+
+/* START: Quick Add */
+.soleil-quick-add {
+  position: absolute;
+  bottom: var(--padding-md);
+  left: var(--padding-md);
+  right: var(--padding-md);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 3;
+}
+
+.soleil-product-card:hover .soleil-quick-add {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.soleil-quick-add-button,
+.soleil-quick-view-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-xs);
+  padding: var(--padding-sm) var(--padding-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.soleil-quick-add-button svg {
+  width: 18px;
+  height: 18px;
+}
+/* END: Quick Add */
+
+/* START: Product Info */
+.soleil-product-info {
+  padding: var(--padding-lg);
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.soleil-product-vendor {
+  color: rgb(var(--color-foreground-rgb) / 0.6);
+  font-size: 0.875rem;
+  margin-bottom: var(--margin-2xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.soleil-product-title {
+  margin-bottom: var(--margin-sm);
+  flex-grow: 1;
+}
+
+.soleil-product-title a {
+  color: var(--color-foreground);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.soleil-product-title a:hover {
+  color: var(--color-primary);
+}
+
+/* START: Product Rating */
+.soleil-product-rating {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  margin-bottom: var(--margin-sm);
+}
+
+.soleil-stars {
+  position: relative;
+  display: flex;
+  gap: 2px;
+}
+
+.soleil-stars-empty {
+  display: flex;
+  gap: 2px;
+  color: rgb(var(--color-foreground-rgb) / 0.2);
+}
+
+.soleil-stars-filled {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  gap: 2px;
+  overflow: hidden;
+  color: #FFB800;
+}
+
+.soleil-rating-count {
+  font-size: 0.875rem;
+  color: rgb(var(--color-foreground-rgb) / 0.6);
+}
+/* END: Product Rating */
+
+/* START: Product Price */
+.soleil-product-price {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  flex-wrap: wrap;
+  font-weight: 600;
+}
+
+.soleil-price-compare {
+  color: rgb(var(--color-foreground-rgb) / 0.5);
+  font-size: 0.875rem;
+}
+
+.soleil-price-sale {
+  color: #E74C3C;
+  font-size: 1.125rem;
+}
+
+.soleil-price-save {
+  font-size: 0.75rem;
+  color: #27AE60;
+  background: rgb(39, 174, 96, 0.1);
+  padding: var(--padding-2xs) var(--padding-xs);
+  border-radius: 4px;
+}
+
+.soleil-price-regular {
+  font-size: 1.125rem;
+  color: var(--color-foreground);
+}
+/* END: Product Price */
+/* END: Product Info */
+/* END: Product Card */
+
+/* START: Slider Controls */
+.soleil-slider-controls {
+  display: flex;
+  justify-content: center;
+  gap: var(--gap-md);
+  margin-bottom: var(--margin-xl);
+}
+
+.soleil-slider-button {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-background);
+  border: 2px solid rgb(var(--color-border-rgb) / 0.2);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.soleil-slider-button:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+  transform: scale(1.1);
+}
+
+.soleil-slider-button svg {
+  width: 24px;
+  height: 24px;
+}
+/* END: Slider Controls */
+
+/* START: View All Button */
+.soleil-view-all {
+  margin-top: var(--margin-3xl);
+}
+/* END: View All Button */
+
+/* START: Empty State */
+.soleil-empty-state {
+  padding: var(--padding-4xl) var(--padding-lg);
+  background: rgb(var(--color-foreground-rgb) / 0.03);
+  border-radius: var(--style-border-radius-lg, 12px);
+}
+/* END: Empty State */
+
+/* START: Responsive Styles */
+@media (max-width: 749px) {
+  .soleil-product-card:hover {
+    transform: none;
+  }
+  
+  .soleil-quick-add {
+    opacity: 1;
+    transform: translateY(0);
+    position: static;
+    margin-top: var(--margin-sm);
+  }
+  
+  .soleil-product-card:hover .soleil-product-image-secondary {
+    opacity: 0;
+  }
+}
+/* END: Responsive Styles */
+
+/* Aquí puedes agregar nueva información al código sin romperlo */
+{% endstylesheet %}
+
+{% comment %}
+  ============================================================================
+  JAVASCRIPT - Slider Functionality and AJAX Cart Integration
+  ============================================================================
+  
+  Features:
+  - Slider navigation
+  - AJAX add to cart
+  - Scroll animations
+  - Touch support
+  
+  Aquí puedes agregar nueva información al código sin romperlo.
+  ============================================================================
+{% endcomment %}
+
+<script>
+  // START: Featured Collection JavaScript
+  document.addEventListener('DOMContentLoaded', function() {
+    try {
+      const section = document.querySelector('[data-section-id="{{ section.id }}"]');
+      if (!section) return;
+
+      // START: Slider Functionality
+      const slider = section.querySelector('.soleil-products-slider');
+      const prevButton = section.querySelector('.soleil-slider-prev');
+      const nextButton = section.querySelector('.soleil-slider-next');
+
+      if (slider && prevButton && nextButton) {
+        const scrollAmount = slider.offsetWidth;
+
+        prevButton.addEventListener('click', () => {
+          slider.scrollBy({
+            left: -scrollAmount,
+            behavior: 'smooth'
+          });
+        });
+
+        nextButton.addEventListener('click', () => {
+          slider.scrollBy({
+            left: scrollAmount,
+            behavior: 'smooth'
+          });
+        });
+
+        // Update button states based on scroll position
+        function updateButtonStates() {
+          const isAtStart = slider.scrollLeft <= 0;
+          const isAtEnd = slider.scrollLeft >= slider.scrollWidth - slider.offsetWidth - 10;
+          
+          prevButton.disabled = isAtStart;
+          nextButton.disabled = isAtEnd;
+          
+          prevButton.style.opacity = isAtStart ? '0.5' : '1';
+          nextButton.style.opacity = isAtEnd ? '0.5' : '1';
+        }
+
+        slider.addEventListener('scroll', updateButtonStates);
+        updateButtonStates();
+      }
+      // END: Slider Functionality
+
+      // START: Scroll Animations
+      const animatedElements = section.querySelectorAll('.animate-on-scroll');
+      
+      if ('IntersectionObserver' in window && animatedElements.length > 0) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.1,
+          rootMargin: '0px 0px -50px 0px'
+        });
+
+        animatedElements.forEach(el => observer.observe(el));
+      } else {
+        animatedElements.forEach(el => el.classList.add('is-visible'));
+      }
+      // END: Scroll Animations
+
+      // Aquí puedes agregar nueva información al código sin romperlo
+
+    } catch (error) {
+      console.error('Featured collection initialization error:', error);
+    }
+  });
+  // END: Featured Collection JavaScript
+</script>
+
+{% comment %}
+  ============================================================================
+  SCHEMA - Section Settings Configuration
+  ============================================================================
+  
+  Adaptations:
+  - Integrated Horizon's color_scheme setting
+  - Added page_width setting for Horizon compatibility
+  - Collection selector
+  - Layout options
+  
+  Aquí puedes agregar nueva información al código sin romperlo.
+  ============================================================================
+{% endcomment %}
+
+{% schema %}
+{
+  "name": "Featured Collection",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "page_width",
+      "label": "Page width",
+      "options": [
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "section_label",
+      "label": "Section Label",
+      "default": "Featured"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "Featured Collection"
+    },
+    {
+      "type": "richtext",
+      "id": "section_description",
+      "label": "Section Description",
+      "default": "<p>Discover our handpicked selection of premium products</p>"
+    },
+    {
+      "type": "header",
+      "content": "Collection"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_slider",
+      "label": "Enable slider",
+      "default": false,
+      "info": "Show products in a horizontal slider instead of a grid"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns (desktop)",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns (mobile)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "square",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait (3:4)"
+        },
+        {
+          "value": "landscape",
+          "label": "Landscape (4:3)"
+        }
+      ],
+      "default": "portrait"
+    },
+    {
+      "type": "header",
+      "content": "Product Card"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_add",
+      "label": "Show quick add button",
+      "default": true,
+      "info": "Show add to cart button on hover"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_second_image",
+      "label": "Show second image on hover",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "Show product rating",
+      "default": false,
+      "info": "Requires product reviews app"
+    },
+    {
+      "type": "header",
+      "content": "View All"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View All' button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "'View All' button text",
+      "default": "View All Products"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Soleil Featured Collection",
+      "category": "Soleil"
+    }
+  ]
+}
+{% endschema %}

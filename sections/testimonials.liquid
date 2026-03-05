@@ -1,0 +1,344 @@
+{% comment %}
+  Testimonials Section - Premium Customer Reviews
+  Inspired by Duraznito and Sephora: Clean, elegant layout for displaying customer testimonials with optional star ratings and images.
+  Supports grid or carousel mode for flexible display.
+  Uses League Spartan for names/headings, clean body text via theme settings/CSS variables.
+  Preserves Horizon's modular structure with blocks and existing snippets.
+{% endcomment %}
+
+<div class="section section--testimonials color-{{ section.settings.color_scheme }}">
+  <div class="testimonials{% if section.settings.enable_carousel %} testimonials--carousel{% endif %}">
+    {% if section.settings.heading != blank %}
+      <h2 class="testimonials__heading testimonials__heading--{{ section.settings.alignment }}">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="testimonials__grid">
+      {% for block in section.blocks %}
+        <div class="testimonials__item" {{ block.shopify_attributes }}>
+          {% comment %}Optional avatar image{% endcomment %}
+          {% if block.settings.customer_image %}
+            <div class="testimonials__avatar">
+              {{ block.settings.customer_image | image_url: width: 100 | image_tag:
+                loading: 'lazy',
+                width: block.settings.customer_image.width,
+                height: block.settings.customer_image.height,
+                class: 'testimonials__avatar-image',
+                alt: block.settings.customer_name | escape
+              }}
+            </div>
+          {% endif %}
+
+          {% comment %}Testimonial content{% endcomment %}
+          <div class="testimonials__content">
+            {% comment %}Star rating using icon snippet{% endcomment %}
+            <div class="testimonials__rating">
+              {% for i in (1..5) %}
+                {% if i <= block.settings.rating %}
+                  {% render 'icon', icon: 'star-filled', class: 'testimonials__star testimonials__star--filled' %}
+                {% else %}
+                  {% render 'icon', icon: 'star-empty', class: 'testimonials__star testimonials__star--empty' %}
+                {% endif %}
+              {% endfor %}
+            </div>
+
+            {% comment %}Review text{% endcomment %}
+            <div class="testimonials__text">{{ block.settings.review_text }}</div>
+
+            {% comment %}Customer name{% endcomment %}
+            <div class="testimonials__name">{{ block.settings.customer_name }}</div>
+
+            {% comment %}Optional product link{% endcomment %}
+            {% if block.settings.product_link != blank %}
+              <a href="{{ block.settings.product_link }}" class="testimonials__link">View Product</a>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .testimonials {
+    padding: var(--padding-block-start) var(--padding-inline-start) var(--padding-block-end) var(--padding-inline-end);
+    max-width: var(--page-width);
+    margin: 0 auto;
+  }
+
+  .testimonials__heading {
+    text-align: center;
+    margin-bottom: var(--gap-lg);
+  }
+
+  .testimonials__heading--left {
+    text-align: left;
+  }
+
+  .testimonials__grid {
+    display: grid;
+    gap: var(--gap-lg);
+  }
+
+  .testimonials:not(.testimonials--carousel) .testimonials__grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+  .testimonials--carousel .testimonials__grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: var(--gap-md);
+    padding-bottom: var(--gap-sm); /* For scrollbar space */
+  }
+
+  .testimonials--carousel .testimonials__item {
+    flex: 0 0 300px;
+    scroll-snap-align: start;
+  }
+
+  @media (max-width: 749px) {
+    .testimonials:not(.testimonials--carousel) .testimonials__grid {
+      grid-template-columns: 1fr;
+    }
+    .testimonials--carousel .testimonials__item {
+      flex: 0 0 250px;
+    }
+  }
+
+  .testimonials__item {
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--padding-md);
+    box-shadow: var(--shadow-subtle);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .testimonials__item:hover {
+    box-shadow: var(--shadow-hover);
+  }
+
+  .testimonials__avatar {
+    text-align: center;
+    margin-bottom: var(--gap-sm);
+  }
+
+  .testimonials__avatar-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .testimonials__content {
+    text-align: center;
+  }
+
+  .testimonials__rating {
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    margin-bottom: var(--gap-sm);
+  }
+
+  .testimonials__star {
+    width: 16px;
+    height: 16px;
+  }
+
+  .testimonials__star--filled {
+    color: var(--color-accent);
+  }
+
+  .testimonials__star--empty {
+    color: var(--color-border);
+  }
+
+  .testimonials__text {
+    font-family: var(--font-paragraph--family);
+    font-size: var(--font-size--body);
+    line-height: 1.5;
+    color: var(--color-foreground);
+    margin-bottom: var(--gap-sm);
+  }
+
+  .testimonials__name {
+    font-family: 'League Spartan', sans-serif;
+    font-weight: 700;
+    font-size: var(--font-size--lg);
+    color: var(--color-foreground);
+    margin-bottom: var(--gap-xs);
+  }
+
+  .testimonials__link {
+    font-family: 'League Spartan', sans-serif;
+    font-weight: 500;
+    font-size: var(--font-size--sm);
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .testimonials__link:hover {
+    color: var(--color-accent-hover);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "tag": "section",
+  "class": "section section--testimonials",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "What Our Customers Say"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Heading Alignment",
+      "options": [
+        { "value": "center", "label": "Center" },
+        { "value": "left", "label": "Left" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_carousel",
+      "label": "Enable Carousel Mode",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top Padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom Padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Left Padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Right Padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "text",
+          "id": "customer_name",
+          "label": "Customer Name",
+          "default": "Jane Doe"
+        },
+        {
+          "type": "richtext",
+          "id": "review_text",
+          "label": "Review Text",
+          "default": "<p>This product is amazing! Highly recommend.</p>"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Star Rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "image_picker",
+          "id": "customer_image",
+          "label": "Customer Image"
+        },
+        {
+          "type": "url",
+          "id": "product_link",
+          "label": "Product Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "customer_name": "Alex Smith",
+            "review_text": "<p>Absolutely love this! The quality is top-notch.</p>",
+            "rating": 5
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "customer_name": "Maria Garcia",
+            "review_text": "<p>Great service and fast delivery. Will buy again.</p>",
+            "rating": 4
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% comment %}
+  CSS Additions for assets/base.css:
+  - Ensure CSS variables are defined (e.g., --color-accent for gold, --color-background for white, --color-foreground for black, --color-border for borders).
+  - Add League Spartan font import if not already present: @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap');
+  - The stylesheet above includes basic rules; copy them to assets/base.css for global application.
+  - For premium feel, add subtle animations and ensure responsive grid/carousel adapts cleanly.
+  Example additional rules:
+  .testimonials__item {
+    border: 1px solid var(--color-border);
+  }
+  .testimonials__name {
+    color: var(--color-foreground);
+  }
+  .testimonials__text {
+    color: var(--color-foreground);
+    opacity: 0.8;
+  }
+{% endcomment %}

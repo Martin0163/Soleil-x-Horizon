@@ -1,0 +1,139 @@
+{% comment %}
+  Collection Tabs Section
+  This section creates a navigation component with tabs for product categories.
+  Each tab links to a specific collection and can optionally display an image and description.
+  It follows Horizon's modular architecture, using blocks for dynamic content and data-attributes for potential JS interactions.
+{% endcomment %}
+
+<div class="section-collection-tabs" data-section-id="{{ section.id }}">
+  {% comment %}Section heading, configurable via schema{% endcomment %}
+  {% if section.settings.heading != blank %}
+    <h2 class="collection-tabs__heading" style="text-align: {{ section.settings.alignment }};">
+      {{ section.settings.heading }}
+    </h2>
+  {% endif %}
+
+  {% comment %}Container for the tabs, using a flex layout for responsiveness{% endcomment %}
+  <div class="collection-tabs">
+    {% for block in section.blocks %}
+      {% comment %}Each tab is a block, rendered as a link to the selected collection{% endcomment %}
+      <a href="{{ block.settings.collection.url }}" class="collection-tabs__tab" data-tab-id="{{ block.id }}">
+        {% comment %}Optional image, using standard Liquid image rendering (can be extended with image snippet if available){% endcomment %}
+        {% if block.settings.image != blank %}
+          <div class="collection-tabs__tab-image">
+            {{ block.settings.image | img_url: 'medium' | img_tag: block.settings.title }}
+          </div>
+        {% endif %}
+        {% comment %}Tab title{% endcomment %}
+        <h3 class="collection-tabs__tab-title">{{ block.settings.title }}</h3>
+        {% comment %}Optional description{% endcomment %}
+        {% if block.settings.description != blank %}
+          <p class="collection-tabs__tab-description">{{ block.settings.description }}</p>
+        {% endif %}
+      </a>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection tabs",
+  "tag": "section",
+  "class": "section-collection-tabs",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by Category"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Heading alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ],
+      "default": "center"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Tab title",
+          "default": "Makeup"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection tabs",
+      "blocks": [
+        {
+          "type": "tab",
+          "settings": {
+            "title": "Makeup",
+            "collection": "makeup"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "title": "Skincare",
+            "collection": "skincare"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "title": "Fragrances",
+            "collection": "fragrances"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "title": "Haircare",
+            "collection": "haircare"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "title": "Accessories",
+            "collection": "accessories"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

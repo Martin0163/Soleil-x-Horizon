@@ -1,0 +1,663 @@
+{% comment %}
+  ============================================================================
+  SOLEIL NEW ARRIVALS SECTION - Adapted for Horizon Theme
+  ============================================================================
+  
+  Source: Codigo Soleil theme (new_arrivals.liquid)
+  Integration Date: Current
+  Adapted By: Senior Shopify Theme Engineer
+  
+  Purpose:
+  - Display new arrival products from a collection
+  - Grid or slider layout options
+  - Product cards with quick view
+  - View all button
+  
+  Adaptations Made:
+  - Integrated Horizon's color scheme system
+  - Uses Horizon's product card snippet (will adapt in Phase 3)
+  - Added Horizon's spacing utilities
+  - Enhanced slider with better controls
+  - Improved accessibility
+  - Fixed JavaScript syntax errors
+  
+  Dependencies:
+  - Horizon base.css for core styles
+  - Horizon color scheme variables
+  - snippets/product-card.liquid (Horizon's existing snippet)
+  
+  Future Developers:
+  Aquí puedes agregar nueva información al código sin romperlo.
+  - Customize grid columns in settings
+  - Add more layout options
+  - Enhance slider functionality
+  
+  ============================================================================
+{% endcomment %}
+
+{% comment %} START: Section Container with Horizon Color Scheme Support {% endcomment %}
+<section 
+  class="soleil-new-arrivals-section section-{{ section.id }}-padding"
+  data-section-id="{{ section.id }}"
+>
+  {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+
+  {% comment %} START: Main Content Container {% endcomment %}
+  <div class="page-width-{{ section.settings.page_width | default: 'normal' }}">
+    
+    {% comment %} START: Section Header {% endcomment %}
+    <div class="soleil-section-header text-center spacing-style">
+      {% if section.settings.subtitle != blank %}
+        <span class="soleil-section-label h6">{{ section.settings.subtitle | escape }}</span>
+      {% endif %}
+      <h2 class="soleil-section-title h2">{{ section.settings.title | default: 'New Arrivals' | escape }}</h2>
+      {% if section.settings.description != blank %}
+        <p class="soleil-section-description paragraph">{{ section.settings.description | escape }}</p>
+      {% endif %}
+      {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+    </div>
+    {% comment %} END: Section Header {% endcomment %}
+
+    {% comment %} START: Collection Products Display {% endcomment %}
+    {% assign collection = collections[section.settings.collection] %}
+    
+    {% if collection and collection.products.size > 0 %}
+      
+      {% if section.settings.layout == 'slider' %}
+        {% comment %} START: Slider Layout {% endcomment %}
+        <div class="soleil-new-arrivals-slider" data-slider>
+          <div class="soleil-slider-wrapper">
+            <div class="soleil-slider-track">
+              {% for product in collection.products limit: section.settings.products_to_show %}
+                <div class="soleil-slider-item">
+                  {% comment %}
+                  /* Start Fix: product-card parameter — slider */
+                  Fixed: 'product_card_product:' → 'product:' (Horizon snippet expects 'product').
+                  /* End Fix: product-card parameter — slider */
+                  {% endcomment %}
+                  {% render 'product-card', product: product %}
+                </div>
+                {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+              {% endfor %}
+            </div>
+          </div>
+          
+          <button class="soleil-slider-btn soleil-slider-btn-prev" aria-label="Previous products">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 18L9 12L15 6"/>
+            </svg>
+          </button>
+          <button class="soleil-slider-btn soleil-slider-btn-next" aria-label="Next products">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18L15 12L9 6"/>
+            </svg>
+          </button>
+          
+          <div class="soleil-slider-dots" role="tablist" aria-label="Slide navigation"></div>
+        </div>
+        {% comment %} END: Slider Layout {% endcomment %}
+      {% else %}
+        {% comment %} START: Grid Layout {% endcomment %}
+        <div class="soleil-new-arrivals-grid">
+          {% for product in collection.products limit: section.settings.products_to_show %}
+            <div class="soleil-grid-item animate-on-scroll">
+              {% comment %}
+              /* Start Fix: product-card parameter — grid */
+              Fixed: 'product_card_product:' → 'product:' (Horizon snippet expects 'product').
+              /* End Fix: product-card parameter — grid */
+              /* You can paste future updates here without breaking anything */
+              {% endcomment %}
+              {% render 'product-card', product: product %}
+            </div>
+            {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+          {% endfor %}
+        </div>
+        {% comment %} END: Grid Layout {% endcomment %}
+      {% endif %}
+
+      {% comment %} START: View All Button {% endcomment %}
+      {% if section.settings.show_view_all and section.settings.button_text != blank %}
+        <div class="soleil-new-arrivals-cta text-center spacing-style">
+          <a href="{{ collection.url }}" class="button button-primary">
+            {{ section.settings.button_text | escape }}
+          </a>
+        </div>
+      {% endif %}
+      {% comment %} END: View All Button {% endcomment %}
+
+    {% else %}
+      {% comment %} START: Empty State {% endcomment %}
+      <div class="soleil-new-arrivals-empty text-center spacing-style">
+        <p class="paragraph">{{ 'sections.new_arrivals.empty_state' | t | default: 'No products found. Please select a collection in the theme editor.' }}</p>
+      </div>
+      {% comment %} END: Empty State {% endcomment %}
+    {% endif %}
+    {% comment %} END: Collection Products Display {% endcomment %}
+
+  </div>
+  {% comment %} END: Main Content Container {% endcomment %}
+
+</section>
+{% comment %} END: Section Container {% endcomment %}
+
+{% comment %}
+  ============================================================================
+  STYLES - Adapted from Soleil with Horizon Integration
+  ============================================================================
+  
+  Modifications:
+  - Uses Horizon's CSS custom properties
+  - Integrated with Horizon's product card styles
+  - Responsive breakpoints match Horizon's
+  - Enhanced slider controls
+  
+  Aquí puedes agregar nueva información al código sin romperlo.
+  ============================================================================
+{% endcomment %}
+
+{% comment %}
+/* Start Phase 3 Fix — Convert inline style to scoped stylesheet */
+Changed: <style> → {% stylesheet %} for Horizon-native scoped CSS delivery.
+/* End Phase 3 Fix */
+/* You can paste future updates here without breaking anything */
+{% endcomment %}
+{% stylesheet %}
+/* START: Base Section Styles */
+.soleil-new-arrivals-section {
+  padding: var(--padding-4xl) 0;
+}
+
+/* START: Section Header Styles */
+.soleil-section-header {
+  margin-bottom: var(--margin-4xl);
+}
+
+.soleil-section-label {
+  display: inline-block;
+  font-size: var(--font-size--sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-primary);
+  margin-bottom: var(--margin-sm);
+}
+
+.soleil-section-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  color: var(--color-foreground);
+  margin-bottom: var(--margin-md);
+}
+
+.soleil-section-description {
+  font-size: var(--font-size--lg);
+  color: rgb(var(--color-foreground-rgb) / 0.7);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+/* END: Section Header Styles */
+
+/* START: Grid Layout Styles */
+.soleil-new-arrivals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--gap-xl);
+  margin-bottom: var(--margin-3xl);
+}
+
+@media (min-width: 750px) {
+  .soleil-new-arrivals-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--gap-2xl);
+  }
+}
+
+.soleil-grid-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.soleil-grid-item.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* END: Grid Layout Styles */
+
+/* START: Slider Layout Styles */
+.soleil-new-arrivals-slider {
+  position: relative;
+  margin-bottom: var(--margin-3xl);
+}
+
+.soleil-slider-wrapper {
+  overflow: hidden;
+  margin: 0 calc(var(--margin-xl) * -1);
+  padding: 0 var(--padding-xl);
+}
+
+.soleil-slider-track {
+  display: flex;
+  gap: var(--gap-xl);
+  transition: transform 0.5s ease-out;
+}
+
+.soleil-slider-item {
+  flex: 0 0 calc(25% - var(--gap-xl));
+  min-width: 280px;
+}
+
+@media (max-width: 1199px) {
+  .soleil-slider-item {
+    flex: 0 0 calc(33.333% - var(--gap-xl));
+  }
+}
+
+@media (max-width: 749px) {
+  .soleil-slider-item {
+    flex: 0 0 calc(50% - var(--gap-lg));
+    min-width: 200px;
+  }
+  
+  .soleil-slider-track {
+    gap: var(--gap-lg);
+  }
+}
+/* END: Slider Layout Styles */
+
+/* START: Slider Controls Styles */
+.soleil-slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-background);
+  border: 2px solid rgb(var(--color-border-rgb) / 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  color: var(--color-foreground);
+}
+
+.soleil-slider-btn:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-background);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.soleil-slider-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.soleil-slider-btn:disabled:hover {
+  transform: translateY(-50%);
+  background: var(--color-background);
+  border-color: rgb(var(--color-border-rgb) / 0.2);
+  color: var(--color-foreground);
+}
+
+.soleil-slider-btn-prev {
+  left: 0;
+}
+
+.soleil-slider-btn-next {
+  right: 0;
+}
+
+@media (max-width: 749px) {
+  .soleil-slider-btn {
+    width: 40px;
+    height: 40px;
+  }
+}
+/* END: Slider Controls Styles */
+
+/* START: Slider Dots Styles */
+.soleil-slider-dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--gap-sm);
+  margin-top: var(--margin-xl);
+}
+
+.soleil-slider-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgb(var(--color-foreground-rgb) / 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  padding: 0;
+}
+
+.soleil-slider-dot:hover {
+  background: rgb(var(--color-foreground-rgb) / 0.4);
+}
+
+.soleil-slider-dot.is-active {
+  background: var(--color-primary);
+  width: 30px;
+  border-radius: 5px;
+}
+/* END: Slider Dots Styles */
+
+/* START: CTA and Empty State Styles */
+.soleil-new-arrivals-cta {
+  margin-top: var(--margin-3xl);
+}
+
+.soleil-new-arrivals-empty {
+  padding: var(--padding-4xl) 0;
+  color: rgb(var(--color-foreground-rgb) / 0.5);
+}
+/* END: CTA and Empty State Styles */
+
+/* START: Animation Classes */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.animate-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* END: Animation Classes */
+
+/* START: Responsive Adjustments */
+@media (max-width: 749px) {
+  .soleil-new-arrivals-section {
+    padding: var(--padding-3xl) 0;
+  }
+
+  .soleil-section-title {
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+  }
+
+  .soleil-new-arrivals-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: var(--gap-lg);
+  }
+}
+/* END: Responsive Adjustments */
+{% endstylesheet %}
+
+{% comment %}
+  ============================================================================
+  JAVASCRIPT - Slider Functionality and Scroll Animations
+  ============================================================================
+  
+  Adaptations:
+  - Fixed JavaScript syntax errors from original
+  - Enhanced slider with better controls
+  - Added keyboard navigation
+  - Improved accessibility
+  - Compatible with Horizon's existing JS
+  
+  Aquí puedes agregar nueva información al código sin romperlo.
+  ============================================================================
+{% endcomment %}
+
+<script>
+  // START: New Arrivals Section JavaScript - Adapted for Horizon
+  document.addEventListener('DOMContentLoaded', function() {
+    try {
+      // Slider functionality
+      const sliders = document.querySelectorAll('[data-slider]');
+      
+      sliders.forEach(slider => {
+        const track = slider.querySelector('.soleil-slider-track');
+        const items = slider.querySelectorAll('.soleil-slider-item');
+        const prevBtn = slider.querySelector('.soleil-slider-btn-prev');
+        const nextBtn = slider.querySelector('.soleil-slider-btn-next');
+        const dotsContainer = slider.querySelector('.soleil-slider-dots');
+        
+        if (!track || items.length === 0) return;
+        
+        let currentIndex = 0;
+        const itemsPerView = window.innerWidth > 1199 ? 4 : window.innerWidth > 749 ? 3 : 2;
+        const maxIndex = Math.max(0, items.length - itemsPerView);
+        
+        // Create dots
+        for (let i = 0; i <= maxIndex; i++) {
+          const dot = document.createElement('button');
+          dot.classList.add('soleil-slider-dot');
+          dot.setAttribute('role', 'tab');
+          dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+          if (i === 0) {
+            dot.classList.add('is-active');
+            dot.setAttribute('aria-selected', 'true');
+          }
+          dot.addEventListener('click', () => goToSlide(i));
+          dotsContainer.appendChild(dot);
+        }
+        
+        const dots = dotsContainer.querySelectorAll('.soleil-slider-dot');
+        
+        function updateSlider() {
+          const itemWidth = items[0].offsetWidth;
+          const gap = parseInt(getComputedStyle(track).gap) || 0;
+          const offset = -(currentIndex * (itemWidth + gap));
+          track.style.transform = `translateX(${offset}px)`;
+          
+          // Update dots
+          dots.forEach((dot, index) => {
+            const isActive = index === currentIndex;
+            dot.classList.toggle('is-active', isActive);
+            dot.setAttribute('aria-selected', isActive);
+          });
+          
+          // Update button states
+          prevBtn.disabled = currentIndex === 0;
+          nextBtn.disabled = currentIndex === maxIndex;
+        }
+        
+        function goToSlide(index) {
+          currentIndex = Math.max(0, Math.min(index, maxIndex));
+          updateSlider();
+        }
+        
+        prevBtn.addEventListener('click', () => goToSlide(currentIndex - 1));
+        nextBtn.addEventListener('click', () => goToSlide(currentIndex + 1));
+        
+        // Keyboard navigation
+        slider.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft') {
+            goToSlide(currentIndex - 1);
+          } else if (e.key === 'ArrowRight') {
+            goToSlide(currentIndex + 1);
+          }
+        });
+        
+        // Initial update
+        updateSlider();
+      });
+
+      // Animate grid items on scroll
+      const gridItems = document.querySelectorAll('.soleil-grid-item');
+      
+      if (gridItems.length > 0 && 'IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+              setTimeout(() => {
+                entry.target.classList.add('is-visible');
+              }, index * 100);
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1 });
+
+        gridItems.forEach(item => observer.observe(item));
+      } else {
+        // Fallback for browsers without IntersectionObserver
+        gridItems.forEach(item => item.classList.add('is-visible'));
+      }
+
+      // Aquí puedes agregar nueva información al código sin romperlo
+      // Add custom JavaScript functionality here
+
+    } catch (error) {
+      console.error('New Arrivals section initialization error:', error);
+    }
+  });
+  // END: New Arrivals Section JavaScript
+</script>
+
+{% comment %}
+  ============================================================================
+  SCHEMA - Section Settings Configuration
+  ============================================================================
+  
+  Adaptations:
+  - Integrated Horizon's color_scheme setting
+  - Added page_width setting for Horizon compatibility
+  - Enhanced with better defaults and info text
+  - Preserved all Soleil settings
+  
+  Aquí puedes agregar nueva información al código sin romperlo.
+  ============================================================================
+{% endcomment %}
+
+{% schema %}
+{
+  "name": "Soleil New Arrivals",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "page_width",
+      "label": "Page width",
+      "options": [
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Just In"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "New Arrivals"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Discover our latest beauty essentials"
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Select the collection to display new arrival products from"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 4,
+      "max": 20,
+      "step": 1,
+      "label": "Products to show",
+      "default": 8
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "slider",
+          "label": "Slider/Carousel"
+        }
+      ],
+      "default": "grid",
+      "info": "Choose between grid or slider layout"
+    },
+    {
+      "type": "header",
+      "content": "Product Card Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor/brand",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_view",
+      "label": "Show quick add button",
+      "default": true,
+      "info": "Enable quick add to cart functionality"
+    },
+    {
+      "type": "header",
+      "content": "Call to Action"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View All' button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "View All New Arrivals"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Soleil New Arrivals",
+      "category": "Soleil"
+    }
+  ]
+}
+{% endschema %}

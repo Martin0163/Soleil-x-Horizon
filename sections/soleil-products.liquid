@@ -1,0 +1,1021 @@
+{%- comment -%}
+  ============================================================
+  INTEGRATED FROM: Codigo Soleil (Sections/products.liquid)
+  INTEGRATION DATE: 2026-02-11
+  PURPOSE: Products listing section with filters, sorting, and pagination
+  
+  CHANGES MADE DURING INTEGRATION:
+  - Added soleil- prefix to avoid naming conflicts with Horizon sections
+  - Updated snippet references to use soleil- prefixed versions
+  - Custom CSS variables preserved (use soleil-design-tokens for support)
+  - Added fallback values for translation keys
+  
+  DEPENDENCIES:
+  - snippets/soleil-*.liquid (prefixed snippet dependencies)
+  - assets/soleil-theme.css (custom styling)
+  - assets/soleil-ajax-cart.js (cart functionality)
+  
+  FUTURE CONSIDERATIONS:
+  - Translation keys use fallback defaults; add proper keys to locales
+  - CSS uses custom variables; consider migrating to Horizon color scheme
+  - JavaScript uses global patterns; consider migrating to ES modules
+  ============================================================
+{%- endcomment -%}
+
+<section class="products-section" data-section-id="{{ section.id }}">
+
+  <div class="container">
+
+    
+
+    {% if section.settings.show_header %}
+
+    <div class="section-header">
+
+      {% if section.settings.subtitle %}
+
+        <span class="section-label">{{ section.settings.subtitle }}</span>
+
+      {% endif %}
+
+      <h2 class="section-title">{{ section.settings.title | default: 'Our Products' }}</h2>
+
+      {% if section.settings.description %}
+
+        <p class="section-description">{{ section.settings.description }}</p>
+
+      {% endif %}
+
+    </div>
+
+    {% endif %}
+
+
+
+    <div class="products-layout">
+
+      
+
+      {% comment %} Filters Sidebar (if enabled) {% endcomment %}
+
+      {% if section.settings.show_filters %}
+
+        <div class="products-sidebar">
+
+          {% render 'soleil-product-filters' %}
+
+        </div>
+
+      {% endif %}
+
+
+
+      <div class="products-main">
+
+        
+
+        {% comment %} Toolbar {% endcomment %}
+
+        <div class="products-toolbar">
+
+          <div class="products-count">
+
+            <span class="count-number">{{ collection.products_count }}</span>
+
+            <span class="count-text">Products</span>
+
+          </div>
+
+
+
+          {% if section.settings.show_filters %}
+
+            <button class="btn btn-secondary filters-toggle" data-filters-toggle>
+
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+
+                <path d="M2.5 5.83333H17.5M5 10H15M7.5 14.1667H12.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+
+              </svg>
+
+              Filters
+
+            </button>
+
+          {% endif %}
+
+
+
+          <div class="products-view-toggle">
+
+            <button class="view-btn view-btn-grid is-active" data-view="grid" aria-label="Grid view">
+
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+
+                <rect x="2" y="2" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+
+                <rect x="11" y="2" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+
+                <rect x="2" y="11" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+
+                <rect x="11" y="11" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+
+              </svg>
+
+            </button>
+
+            <button class="view-btn view-btn-list" data-view="list" aria-label="List view">
+
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+
+                <rect x="2" y="3" width="16" height="3" stroke="currentColor" stroke-width="2"/>
+
+                <rect x="2" y="8.5" width="16" height="3" stroke="currentColor" stroke-width="2"/>
+
+                <rect x="2" y="14" width="16" height="3" stroke="currentColor" stroke-width="2"/>
+
+              </svg>
+
+            </button>
+
+          </div>
+
+
+
+          <select class="products-sort" data-sort-select>
+
+            <option value="manual">Featured</option>
+
+            <option value="best-selling">Best Selling</option>
+
+            <option value="title-ascending">A-Z</option>
+
+            <option value="title-descending">Z-A</option>
+
+            <option value="price-ascending">Price: Low to High</option>
+
+            <option value="price-descending">Price: High to Low</option>
+
+            <option value="created-descending">Newest</option>
+
+          </select>
+
+        </div>
+
+
+
+        {% comment %} Products Grid {% endcomment %}
+
+        {% assign collection = collections[section.settings.collection] %}
+
+        
+
+        {% if collection and collection.products.size > 0 %}
+
+          <div class="products-grid" data-products-grid data-view="grid">
+
+            {% for product in collection.products %}
+
+              <div class="product-grid-item animate-on-scroll">
+
+                {% render 'soleil-product-card', 
+
+                  product: product,
+
+                  show_vendor: section.settings.show_vendor,
+
+                  show_quick_view: section.settings.show_quick_view
+
+                %}
+
+              </div>
+
+            {% endfor %}
+
+          </div>
+
+
+
+          {% comment %} Pagination {% endcomment %}
+
+          {% if section.settings.products != blank %}
+  <div class="products-grid">
+    {% for product in section.settings.products %}
+      <!-- Render your product card here -->
+    {% endfor %}
+  </div>
+
+
+          {% else %}
+
+            {% comment %} Load More Button {% endcomment %}
+
+            {% if collection.products.size >= section.settings.products_per_page %}
+
+              <div class="products-load-more">
+
+                <button class="btn btn-secondary btn-lg" data-load-more>
+
+                  Load More Products
+
+                </button>
+
+              </div>
+
+            {% endif %}
+
+          {% endif %}
+
+
+
+        {% else %}
+
+          <div class="products-empty">
+
+            <svg class="empty-icon" width="80" height="80" viewBox="0 0 80 80" fill="none">
+
+              <circle cx="40" cy="40" r="38" stroke="currentColor" stroke-width="2"/>
+
+              <path d="M40 25V45M40 55V55.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+
+            </svg>
+
+            <h3>No products found</h3>
+
+            <p>Try adjusting your filters or search terms</p>
+
+            <a href="{{ routes.all_products_collection_url }}" class="btn btn-primary">
+
+              View All Products
+
+            </a>
+
+          </div>
+
+        {% endif %}
+
+
+
+      </div>
+
+    </div>
+
+
+
+  </div>
+
+</section>
+
+
+
+<style>
+
+  .products-section {
+
+    padding: var(--space-4xl) 0;
+
+    background: var(--color-white);
+
+  }
+
+
+
+  .section-header {
+
+    text-align: center;
+
+    margin-bottom: var(--space-3xl);
+
+  }
+
+
+
+  .section-label {
+
+    display: inline-block;
+
+    font-size: var(--font-size-sm);
+
+    font-weight: var(--font-weight-semibold);
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.1em;
+
+    color: var(--color-yellow);
+
+    margin-bottom: var(--space-sm);
+
+  }
+
+
+
+  .section-title {
+
+    font-size: var(--font-size-4xl);
+
+    font-weight: var(--font-weight-bold);
+
+    color: var(--color-black);
+
+    margin-bottom: var(--space-md);
+
+  }
+
+
+
+  .section-description {
+
+    font-size: var(--font-size-lg);
+
+    color: var(--color-gray-600);
+
+    max-width: 600px;
+
+    margin: 0 auto;
+
+  }
+
+
+
+  .products-layout {
+
+    display: grid;
+
+    grid-template-columns: 280px 1fr;
+
+    gap: var(--space-3xl);
+
+  }
+
+
+
+  .products-sidebar {
+
+    position: sticky;
+
+    top: 100px;
+
+    height: fit-content;
+
+  }
+
+
+
+  .products-main {
+
+    min-width: 0;
+
+  }
+
+
+
+  .products-toolbar {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: var(--space-lg);
+
+    margin-bottom: var(--space-xl);
+
+    padding: var(--space-lg);
+
+    background: var(--color-gray-50);
+
+    border-radius: var(--radius-lg);
+
+  }
+
+
+
+  .products-count {
+
+    display: flex;
+
+    align-items: baseline;
+
+    gap: var(--space-xs);
+
+  }
+
+
+
+  .count-number {
+
+    font-size: var(--font-size-xl);
+
+    font-weight: var(--font-weight-bold);
+
+    color: var(--color-black);
+
+  }
+
+
+
+  .count-text {
+
+    font-size: var(--font-size-sm);
+
+    color: var(--color-gray-600);
+
+  }
+
+
+
+  .filters-toggle {
+
+    display: none;
+
+  }
+
+
+
+  .products-view-toggle {
+
+    display: flex;
+
+    gap: var(--space-xs);
+
+    margin-left: auto;
+
+  }
+
+
+
+  .view-btn {
+
+    padding: var(--space-sm);
+
+    background: var(--color-white);
+
+    border: 1px solid var(--color-gray-300);
+
+    border-radius: var(--radius-md);
+
+    cursor: pointer;
+
+    color: var(--color-gray-600);
+
+    transition: all var(--duration-base) var(--ease-out);
+
+  }
+
+
+
+  .view-btn:hover,
+
+  .view-btn.is-active {
+
+    background: var(--color-yellow);
+
+    border-color: var(--color-yellow);
+
+    color: var(--color-black);
+
+  }
+
+
+
+  .products-sort {
+
+    padding: var(--space-sm) var(--space-md);
+
+    border: 1px solid var(--color-gray-300);
+
+    border-radius: var(--radius-md);
+
+    background: var(--color-white);
+
+    font-size: var(--font-size-sm);
+
+    cursor: pointer;
+
+  }
+
+
+
+  .products-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+
+    gap: var(--space-xl);
+
+    margin-bottom: var(--space-3xl);
+
+  }
+
+
+
+  .products-grid[data-view="list"] {
+
+    grid-template-columns: 1fr;
+
+  }
+
+
+
+  .product-grid-item {
+
+    opacity: 0;
+
+    transform: translateY(20px);
+
+    transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+
+  }
+
+
+
+  .product-grid-item.is-visible {
+
+    opacity: 1;
+
+    transform: translateY(0);
+
+  }
+
+
+
+  .products-pagination {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: var(--space-md);
+
+  }
+
+
+
+  .pagination-btn {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: var(--space-xs);
+
+    padding: var(--space-sm) var(--space-lg);
+
+    background: var(--color-white);
+
+    border: 1px solid var(--color-gray-300);
+
+    border-radius: var(--radius-md);
+
+    font-weight: var(--font-weight-semibold);
+
+    color: var(--color-gray-700);
+
+    transition: all var(--duration-base) var(--ease-out);
+
+  }
+
+
+
+  .pagination-btn:hover {
+
+    background: var(--color-yellow);
+
+    border-color: var(--color-yellow);
+
+    color: var(--color-black);
+
+  }
+
+
+
+  .pagination-numbers {
+
+    display: flex;
+
+    gap: var(--space-xs);
+
+  }
+
+
+
+  .pagination-number {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 40px;
+
+    height: 40px;
+
+    border-radius: var(--radius-md);
+
+    font-weight: var(--font-weight-semibold);
+
+    color: var(--color-gray-700);
+
+    transition: all var(--duration-base) var(--ease-out);
+
+  }
+
+
+
+  .pagination-number:hover,
+
+  .pagination-number.is-active {
+
+    background: var(--color-yellow);
+
+    color: var(--color-black);
+
+  }
+
+
+
+  .products-load-more {
+
+    text-align: center;
+
+  }
+
+
+
+  .products-empty {
+
+    text-align: center;
+
+    padding: var(--space-5xl) var(--space-xl);
+
+  }
+
+
+
+  .empty-icon {
+
+    color: var(--color-gray-300);
+
+    margin-bottom: var(--space-xl);
+
+  }
+
+
+
+  .products-empty h3 {
+
+    font-size: var(--font-size-2xl);
+
+    font-weight: var(--font-weight-bold);
+
+    color: var(--color-black);
+
+    margin-bottom: var(--space-sm);
+
+  }
+
+
+
+  .products-empty p {
+
+    font-size: var(--font-size-lg);
+
+    color: var(--color-gray-600);
+
+    margin-bottom: var(--space-xl);
+
+  }
+
+
+
+  /* Responsive */
+
+  @media (max-width: 1024px) {
+
+    .products-layout {
+
+      grid-template-columns: 1fr;
+
+    }
+
+
+
+    .products-sidebar {
+
+      display: none;
+
+    }
+
+
+
+    .filters-toggle {
+
+      display: flex;
+
+    }
+
+
+
+    .products-toolbar {
+
+      flex-wrap: wrap;
+
+    }
+
+
+
+    .products-count {
+
+      order: 1;
+
+    }
+
+
+
+    .filters-toggle {
+
+      order: 2;
+
+    }
+
+
+
+    .products-sort {
+
+      order: 3;
+
+      flex: 1;
+
+    }
+
+
+
+    .products-view-toggle {
+
+      order: 4;
+
+      margin-left: 0;
+
+    }
+
+  }
+
+
+
+  @media (max-width: 768px) {
+
+    .products-section {
+
+      padding: var(--space-3xl) 0;
+
+    }
+
+
+
+    .section-title {
+
+      font-size: var(--font-size-3xl);
+
+    }
+
+
+
+    .products-grid {
+
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+
+      gap: var(--space-lg);
+
+    }
+
+
+
+    .products-view-toggle {
+
+      display: none;
+
+    }
+
+  }
+
+</style>
+
+
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+
+    // View toggle
+
+    const viewBtns = document.querySelectorAll('.view-btn');
+
+    const productsGrid = document.querySelector('[data-products-grid]');
+
+    
+
+    viewBtns.forEach(btn => {
+
+      btn.addEventListener('click', () => {
+
+        const view = btn.dataset.view;
+
+        viewBtns.forEach(b => b.classList.remove('is-active'));
+
+        btn.classList.add('is-active');
+
+        productsGrid.dataset.view = view;
+
+      });
+
+    });
+
+
+
+    // Animate products on scroll
+
+    const productItems = document.querySelectorAll('.product-grid-item');
+
+    const observer = new IntersectionObserver((entries) => {
+
+      entries.forEach((entry, index) => {
+
+        if (entry.isIntersecting) {
+
+          setTimeout(() => {
+
+            entry.target.classList.add('is-visible');
+
+          }, index * 50);
+
+          observer.unobserve(entry.target);
+
+        }
+
+      });
+
+    }, { threshold: 0.1 });
+
+
+
+    productItems.forEach(item => observer.observe(item));
+
+  });
+
+</script>
+
+
+
+{% schema %}
+
+{
+
+  "name": "Products",
+
+  "settings": [
+
+    {
+
+      "type": "checkbox",
+
+      "id": "show_header",
+
+      "label": "Show section header",
+
+      "default": true
+
+    },
+
+    {
+
+      "type": "text",
+
+      "id": "subtitle",
+
+      "label": "Subtitle",
+
+      "default": "Shop"
+
+    },
+
+    {
+
+      "type": "text",
+
+      "id": "title",
+
+      "label": "Title",
+
+      "default": "Our Products"
+
+    },
+
+    {
+
+      "type": "textarea",
+
+      "id": "description",
+
+      "label": "Description"
+
+    },
+
+    {
+
+      "type": "collection",
+
+      "id": "collection",
+
+      "label": "Collection"
+
+    },
+
+    {
+
+      "type": "checkbox",
+
+      "id": "show_filters",
+
+      "label": "Show filters",
+
+      "default": true
+
+    },
+
+    {
+
+      "type": "checkbox",
+
+      "id": "show_vendor",
+
+      "label": "Show vendor",
+
+      "default": true
+
+    },
+
+    {
+
+      "type": "checkbox",
+
+      "id": "show_quick_view",
+
+      "label": "Show quick view",
+
+      "default": true
+
+    },
+
+    {
+
+      "type": "range",
+
+      "id": "products_per_page",
+
+      "min": 12,
+
+      "max": 48,
+
+      "step": 4,
+
+      "label": "Products per page",
+
+      "default": 24
+
+    },
+
+    {
+
+      "type": "checkbox",
+
+      "id": "enable_pagination",
+
+      "label": "Enable pagination",
+
+      "default": true,
+
+      "info": "If disabled, shows 'Load More' button"
+
+    }
+
+  ],
+
+  "presets": [
+
+    {
+
+      "name": "Products",
+
+      "category": "Custom"
+
+    }
+
+  ]
+
+}
+
+{% endschema %}

@@ -1,0 +1,1183 @@
+{%- comment -%}
+  ============================================================
+  INTEGRATED FROM: Codigo Soleil (Sections/product_filters.liquid)
+  INTEGRATION DATE: 2026-02-11
+  PURPOSE: Product filters sidebar with price range, brand, color, size, and availability
+  
+  CHANGES MADE DURING INTEGRATION:
+  - Added soleil- prefix to avoid naming conflicts with Horizon sections
+  - Updated snippet references to use soleil- prefixed versions
+  - Custom CSS variables preserved (use soleil-design-tokens for support)
+  - Added fallback values for translation keys
+  
+  DEPENDENCIES:
+  - snippets/soleil-*.liquid (prefixed snippet dependencies)
+  - assets/soleil-theme.css (custom styling)
+  - assets/soleil-ajax-cart.js (cart functionality)
+  
+  FUTURE CONSIDERATIONS:
+  - Translation keys use fallback defaults; add proper keys to locales
+  - CSS uses custom variables; consider migrating to Horizon color scheme
+  - JavaScript uses global patterns; consider migrating to ES modules
+  ============================================================
+{%- endcomment -%}
+
+<aside class="product-filters" data-section-id="{{ section.id }}" data-filters>
+
+  
+
+  <div class="filters-header">
+
+    <h3 class="filters-title">{{ section.settings.title | default: 'Filters' }}</h3>
+
+    <button class="filters-close" data-filters-close aria-label="Close filters">
+
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+
+        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+
+      </svg>
+
+    </button>
+
+  </div>
+
+
+
+  <div class="filters-body">
+
+    
+
+    {% comment %} Active Filters {% endcomment %}
+
+    <div class="active-filters" data-active-filters>
+
+      <div class="active-filters-list"></div>
+
+      <button class="btn btn-text btn-sm" data-clear-all>Clear All</button>
+
+    </div>
+
+
+
+    {% comment %} Sort By {% endcomment %}
+
+    {% if section.settings.show_sort %}
+
+    <div class="filter-group">
+
+      <h4 class="filter-group-title">Sort By</h4>
+
+      <select class="filter-select" data-sort-by>
+
+        <option value="manual">Featured</option>
+
+        <option value="best-selling">Best Selling</option>
+
+        <option value="title-ascending">Alphabetically, A-Z</option>
+
+        <option value="title-descending">Alphabetically, Z-A</option>
+
+        <option value="price-ascending">Price, Low to High</option>
+
+        <option value="price-descending">Price, High to Low</option>
+
+        <option value="created-ascending">Date, Old to New</option>
+
+        <option value="created-descending">Date, New to Old</option>
+
+      </select>
+
+    </div>
+
+    {% endif %}
+
+
+
+    {% comment %} Price Range {% endcomment %}
+
+    {% if section.settings.show_price_filter %}
+
+    <div class="filter-group">
+
+      <h4 class="filter-group-title">Price Range</h4>
+
+      <div class="price-range-slider">
+
+        <input type="range" class="price-range-input" data-price-min min="0" max="500" value="0">
+
+        <input type="range" class="price-range-input" data-price-max min="0" max="500" value="500">
+
+        <div class="price-range-track"></div>
+
+      </div>
+
+      <div class="price-range-values">
+
+        <span data-price-min-value>$0</span>
+
+        <span data-price-max-value>$500</span>
+
+      </div>
+
+    </div>
+
+    {% endif %}
+
+
+
+    {% comment %} Category Filter {% endcomment %}
+
+    {% if section.settings.show_category_filter %}
+
+    <div class="filter-group">
+
+      <h4 class="filter-group-title">Category</h4>
+
+      <ul class="filter-list">
+
+        {% for link in linklists[section.settings.category_menu].links %}
+
+          <li class="filter-item">
+
+            <label class="filter-label">
+
+              <input type="checkbox" class="filter-checkbox" data-filter="category" value="{{ link.handle }}">
+
+              <span class="filter-text">{{ link.title }}</span>
+
+              <span class="filter-count">({{ link.object.products_count }})</span>
+
+            </label>
+
+          </li>
+
+        {% endfor %}
+
+      </ul>
+
+    </div>
+
+    {% endif %}
+
+
+
+    {% comment %} Brand Filter {% endcomment %}
+
+    {% if section.settings.show_brand_filter %}
+
+    <div class="filter-group">
+
+      <h4 class="filter-group-title">Brand</h4>
+
+      <div class="filter-search">
+
+        <input type="text" class="filter-search-input" placeholder="Search brands..." data-brand-search>
+
+      </div>
+
+      <ul class="filter-list" data-brand-list>
+
+        {% for block in section.blocks %}
+
+          {% if block.type == 'brand' %}
+
+            <li class="filter-item" {{ block.shopify_attributes }}>
+
+              <label class="filter-label">
+
+                <input type="checkbox" class="filter-checkbox" data-filter="brand" value="{{ block.settings.brand_handle }}">
+
+                <span class="filter-text">{{ block.settings.brand_name }}</span>
+
+              </label>
+
+            </li>
+
+          {% endif %}
+
+        {% endfor %}
+
+      </ul>
+
+    </div>
+
+    {% endif %}
+
+
+
+    {% comment %} Color Filter {% endcomment %}
+
+    {% if section.settings.show_color_filter %}
+
+    <div class="filter-group">
+
+      <h4 class="filter-group-title">Color</h4>
+
+      <div class="color-swatches">
+
+        {% for block in section.blocks %}
+
+          {% if block.type == 'color' %}
+
+            <label class="color-swatch" {{ block.shopify_attributes }}>
+
+              <input type="checkbox" class="color-checkbox" data-filter="color" value="{{ block.settings.color_name | handleize }}">
+
+              <span class="color-swatch-inner" style="background-color: {{ block.settings.color_value }};"></span>
+
+              <span class="color-swatch-tooltip">{{ block.settings.color_name }}</span>
+
+            </label>
+
+          {% endif %}
+
+        {% endfor %}
+
+      </div>
+
+    </div>
+
+    {% endif %}
+
+
+
+    {% comment %} Size Filter {% endcomment %}
+
+    {% if section.settings.show_size_filter %}
+
+    <div class="filter-group">
+
+      <h4 class="filter-group-title">Size</h4>
+
+      <div class="size-options">
+
+        {% for block in section.blocks %}
+
+          {% if block.type == 'size' %}
+
+            <label class="size-option" {{ block.shopify_attributes }}>
+
+              <input type="checkbox" class="size-checkbox" data-filter="size" value="{{ block.settings.size_value }}">
+
+              <span class="size-option-text">{{ block.settings.size_value }}</span>
+
+            </label>
+
+          {% endif %}
+
+        {% endfor %}
+
+      </div>
+
+    </div>
+
+    {% endif %}
+
+
+
+    {% comment %} Availability Filter {% endcomment %}
+
+    {% if section.settings.show_availability_filter %}
+
+    <div class="filter-group">
+
+      <h4 class="filter-group-title">Availability</h4>
+
+      <ul class="filter-list">
+
+        <li class="filter-item">
+
+          <label class="filter-label">
+
+            <input type="checkbox" class="filter-checkbox" data-filter="availability" value="in-stock">
+
+            <span class="filter-text">In Stock</span>
+
+          </label>
+
+        </li>
+
+        <li class="filter-item">
+
+          <label class="filter-label">
+
+            <input type="checkbox" class="filter-checkbox" data-filter="availability" value="on-sale">
+
+            <span class="filter-text">On Sale</span>
+
+          </label>
+
+        </li>
+
+      </ul>
+
+    </div>
+
+    {% endif %}
+
+
+
+  </div>
+
+
+
+  <div class="filters-footer">
+
+    <button class="btn btn-primary btn-full" data-apply-filters>
+
+      Apply Filters
+
+    </button>
+
+  </div>
+
+
+
+</aside>
+
+
+
+<style>
+
+  .product-filters {
+
+    background: var(--color-white);
+
+    border-right: 1px solid var(--color-gray-200);
+
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+  }
+
+
+
+  .filters-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: var(--space-lg);
+
+    border-bottom: 1px solid var(--color-gray-200);
+
+  }
+
+
+
+  .filters-title {
+
+    font-size: var(--font-size-xl);
+
+    font-weight: var(--font-weight-bold);
+
+    color: var(--color-black);
+
+  }
+
+
+
+  .filters-close {
+
+    display: none;
+
+    background: none;
+
+    border: none;
+
+    cursor: pointer;
+
+    padding: var(--space-xs);
+
+    color: var(--color-gray-600);
+
+    transition: color var(--duration-base) var(--ease-out);
+
+  }
+
+
+
+  .filters-close:hover {
+
+    color: var(--color-black);
+
+  }
+
+
+
+  .filters-body {
+
+    flex: 1;
+
+    overflow-y: auto;
+
+    padding: var(--space-lg);
+
+  }
+
+
+
+  .active-filters {
+
+    display: none;
+
+    margin-bottom: var(--space-lg);
+
+    padding-bottom: var(--space-lg);
+
+    border-bottom: 1px solid var(--color-gray-200);
+
+  }
+
+
+
+  .active-filters.has-filters {
+
+    display: block;
+
+  }
+
+
+
+  .active-filters-list {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: var(--space-sm);
+
+    margin-bottom: var(--space-sm);
+
+  }
+
+
+
+  .active-filter-tag {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: var(--space-xs);
+
+    padding: var(--space-xs) var(--space-sm);
+
+    background: var(--color-gray-100);
+
+    border-radius: var(--radius-full);
+
+    font-size: var(--font-size-sm);
+
+    color: var(--color-gray-700);
+
+  }
+
+
+
+  .active-filter-tag button {
+
+    background: none;
+
+    border: none;
+
+    cursor: pointer;
+
+    padding: 0;
+
+    color: var(--color-gray-500);
+
+  }
+
+
+
+  .filter-group {
+
+    margin-bottom: var(--space-xl);
+
+    padding-bottom: var(--space-xl);
+
+    border-bottom: 1px solid var(--color-gray-200);
+
+  }
+
+
+
+  .filter-group:last-child {
+
+    border-bottom: none;
+
+  }
+
+
+
+  .filter-group-title {
+
+    font-size: var(--font-size-base);
+
+    font-weight: var(--font-weight-semibold);
+
+    color: var(--color-black);
+
+    margin-bottom: var(--space-md);
+
+  }
+
+
+
+  .filter-select {
+
+    width: 100%;
+
+    padding: var(--space-sm) var(--space-md);
+
+    border: 1px solid var(--color-gray-300);
+
+    border-radius: var(--radius-md);
+
+    font-size: var(--font-size-base);
+
+    background: var(--color-white);
+
+    cursor: pointer;
+
+  }
+
+
+
+  .filter-list {
+
+    list-style: none;
+
+  }
+
+
+
+  .filter-item {
+
+    margin-bottom: var(--space-sm);
+
+  }
+
+
+
+  .filter-label {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: var(--space-sm);
+
+    cursor: pointer;
+
+    font-size: var(--font-size-sm);
+
+    color: var(--color-gray-700);
+
+    transition: color var(--duration-base) var(--ease-out);
+
+  }
+
+
+
+  .filter-label:hover {
+
+    color: var(--color-black);
+
+  }
+
+
+
+  .filter-checkbox {
+
+    width: 18px;
+
+    height: 18px;
+
+    cursor: pointer;
+
+  }
+
+
+
+  .filter-count {
+
+    margin-left: auto;
+
+    color: var(--color-gray-500);
+
+    font-size: var(--font-size-xs);
+
+  }
+
+
+
+  .filter-search {
+
+    margin-bottom: var(--space-md);
+
+  }
+
+
+
+  .filter-search-input {
+
+    width: 100%;
+
+    padding: var(--space-sm) var(--space-md);
+
+    border: 1px solid var(--color-gray-300);
+
+    border-radius: var(--radius-md);
+
+    font-size: var(--font-size-sm);
+
+  }
+
+
+
+  /* Price Range Slider */
+
+  .price-range-slider {
+
+    position: relative;
+
+    height: 40px;
+
+    margin-bottom: var(--space-sm);
+
+  }
+
+
+
+  .price-range-input {
+
+    position: absolute;
+
+    width: 100%;
+
+    pointer-events: none;
+
+    appearance: none;
+
+    background: none;
+
+  }
+
+
+
+  .price-range-input::-webkit-slider-thumb {
+
+    appearance: none;
+
+    width: 18px;
+
+    height: 18px;
+
+    border-radius: 50%;
+
+    background: var(--color-yellow);
+
+    cursor: pointer;
+
+    pointer-events: all;
+
+  }
+
+
+
+  .price-range-track {
+
+    position: absolute;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 100%;
+
+    height: 4px;
+
+    background: var(--color-gray-200);
+
+    border-radius: var(--radius-full);
+
+  }
+
+
+
+  .price-range-values {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    font-size: var(--font-size-sm);
+
+    font-weight: var(--font-weight-semibold);
+
+    color: var(--color-gray-700);
+
+  }
+
+
+
+  /* Color Swatches */
+
+  .color-swatches {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: var(--space-sm);
+
+  }
+
+
+
+  .color-swatch {
+
+    position: relative;
+
+    cursor: pointer;
+
+  }
+
+
+
+  .color-checkbox {
+
+    position: absolute;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+  }
+
+
+
+  .color-swatch-inner {
+
+    display: block;
+
+    width: 36px;
+
+    height: 36px;
+
+    border-radius: var(--radius-full);
+
+    border: 2px solid var(--color-gray-300);
+
+    transition: all var(--duration-base) var(--ease-out);
+
+  }
+
+
+
+  .color-checkbox:checked  .color-swatch-inner {
+
+    border-color: var(--color-yellow);
+
+    box-shadow: 0 0 0 2px var(--color-yellow);
+
+  }
+
+
+
+  .color-swatch-tooltip {
+
+    position: absolute;
+
+    bottom: 100%;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    padding: var(--space-xs) var(--space-sm);
+
+    background: var(--color-black);
+
+    color: var(--color-white);
+
+    font-size: var(--font-size-xs);
+
+    border-radius: var(--radius-sm);
+
+    white-space: nowrap;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: opacity var(--duration-base) var(--ease-out);
+
+  }
+
+
+
+  .color-swatch:hover .color-swatch-tooltip {
+
+    opacity: 1;
+
+  }
+
+
+
+  /* Size Options */
+
+  .size-options {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: var(--space-sm);
+
+  }
+
+
+
+  .size-option {
+
+    cursor: pointer;
+
+  }
+
+
+
+  .size-checkbox {
+
+    position: absolute;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+  }
+
+
+
+  .size-option-text {
+
+    display: block;
+
+    padding: var(--space-sm) var(--space-md);
+
+    border: 1px solid var(--color-gray-300);
+
+    border-radius: var(--radius-md);
+
+    font-size: var(--font-size-sm);
+
+    font-weight: var(--font-weight-semibold);
+
+    color: var(--color-gray-700);
+
+    transition: all var(--duration-base) var(--ease-out);
+
+  }
+
+
+
+  .size-checkbox:checked  .size-option-text {
+
+    background: var(--color-yellow);
+
+    border-color: var(--color-yellow);
+
+    color: var(--color-black);
+
+  }
+
+
+
+  .filters-footer {
+
+    padding: var(--space-lg);
+
+    border-top: 1px solid var(--color-gray-200);
+
+  }
+
+
+
+  /* Mobile Styles */
+
+  @media (max-width: 1024px) {
+
+    .product-filters {
+
+      position: fixed;
+
+      top: 0;
+
+      left: 0;
+
+      width: 100%;
+
+      max-width: 400px;
+
+      height: 100vh;
+
+      z-index: var(--z-modal);
+
+      transform: translateX(-100%);
+
+      transition: transform var(--duration-base) var(--ease-out);
+
+    }
+
+
+
+    .product-filters.is-open {
+
+      transform: translateX(0);
+
+    }
+
+
+
+    .filters-close {
+
+      display: block;
+
+    }
+
+  }
+
+</style>
+
+
+
+{% schema %}
+
+{
+
+  "name": "Product Filters",
+
+  "settings": [
+
+    {
+
+      "type": "text",
+
+      "id": "title",
+
+      "label": "Title",
+
+      "default": "Filters"
+
+    },
+
+    {
+
+      "type": "checkbox",
+
+      "id": "show_sort",
+
+      "label": "Show sort options",
+
+      "default": true
+
+    },
+
+    {
+
+      "type": "checkbox",
+
+      "id": "show_price_filter",
+
+      "label": "Show price filter",
+
+      "default": true
+
+    },
+
+    {
+
+      "type": "checkbox",
+
+      "id": "show_category_filter",
+
+      "label": "Show category filter",
+
+      "default": true
+
+    },
+
+    {
+
+      "type": "link_list",
+
+      "id": "category_menu",
+
+      "label": "Category menu"
+
+    },
+
+    {
+
+      "type": "checkbox",
+
+      "id": "show_brand_filter",
+
+      "label": "Show brand filter",
+
+      "default": true
+
+    },
+
+    {
+
+      "type": "checkbox",
+
+      "id": "show_color_filter",
+
+      "label": "Show color filter",
+
+      "default": true
+
+    },
+
+    {
+
+      "type": "checkbox",
+
+      "id": "show_size_filter",
+
+      "label": "Show size filter",
+
+      "default": true
+
+    },
+
+    {
+
+      "type": "checkbox",
+
+      "id": "show_availability_filter",
+
+      "label": "Show availability filter",
+
+      "default": true
+
+    }
+
+  ],
+
+  "blocks": [
+
+    {
+
+      "type": "brand",
+
+      "name": "Brand",
+
+      "settings": [
+
+        {
+
+          "type": "text",
+
+          "id": "brand_name",
+
+          "label": "Brand name"
+
+        },
+
+        {
+
+          "type": "text",
+
+          "id": "brand_handle",
+
+          "label": "Brand handle"
+
+        }
+
+      ]
+
+    },
+
+    {
+
+      "type": "color",
+
+      "name": "Color",
+
+      "settings": [
+
+        {
+
+          "type": "text",
+
+          "id": "color_name",
+
+          "label": "Color name"
+
+        },
+
+        {
+
+          "type": "color",
+
+          "id": "color_value",
+
+          "label": "Color value"
+
+        }
+
+      ]
+
+    },
+
+    {
+
+      "type": "size",
+
+      "name": "Size",
+
+      "settings": [
+
+        {
+
+          "type": "text",
+
+          "id": "size_value",
+
+          "label": "Size value"
+
+        }
+
+      ]
+
+    }
+
+  ],
+
+  "presets": [
+
+    {
+
+      "name": "Product Filters",
+
+      "category": "Custom"
+
+    }
+
+  ]
+
+}
+
+{% endschema %}

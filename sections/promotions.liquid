@@ -1,0 +1,348 @@
+{% comment %}
+  Promotions Section - Premium Promotional Banners
+  Inspired by Duraznito and Sephora: Clean, minimalist, luxurious design with large images, elegant spacing, and optional text overlays.
+  Displays 1-3 promotional banners in a grid or horizontal layout.
+  Uses League Spartan for titles/CTAs, clean body text via theme settings/CSS variables.
+  Preserves Horizon's modular structure with blocks and existing snippets.
+{% endcomment %}
+
+<div class="section section--promotions color-{{ section.settings.color_scheme }}">
+  <div class="promotions promotions--{{ section.blocks.size }}-items{% if section.settings.enable_overlay %} promotions--overlay{% endif %}">
+    {% if section.settings.heading != blank %}
+      <h2 class="promotions__heading promotions__heading--{{ section.settings.alignment }}">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="promotions__grid">
+      {% for block in section.blocks %}
+        <div class="promotions__item" {{ block.shopify_attributes }}>
+          {% comment %}Image wrapper with hover zoom effect{% endcomment %}
+          <div class="promotions__image-wrapper">
+            {% if block.settings.image %}
+              {{ block.settings.image | image_url: width: 1200 | image_tag:
+                loading: 'lazy',
+                width: block.settings.image.width,
+                height: block.settings.image.height,
+                class: 'promotions__image',
+                alt: block.settings.image.alt | escape
+              }}
+            {% endif %}
+
+            {% comment %}Optional overlay for text on image{% endcomment %}
+            {% if section.settings.enable_overlay %}
+              <div class="promotions__overlay"></div>
+              <div class="promotions__content promotions__content--overlay">
+                {% if block.settings.title != blank %}
+                  <h3 class="promotions__title">{{ block.settings.title }}</h3>
+                {% endif %}
+                {% if block.settings.description != blank %}
+                  <p class="promotions__description">{{ block.settings.description }}</p>
+                {% endif %}
+                {% if block.settings.cta_label != blank and block.settings.cta_link != blank %}
+                  <a href="{{ block.settings.cta_link }}" class="promotions__button button button--minimal">
+                    {{ block.settings.cta_label }}
+                  </a>
+                {% endif %}
+              </div>
+            {% endif %}
+          </div>
+
+          {% comment %}Content below image if overlay is disabled{% endcomment %}
+          {% unless section.settings.enable_overlay %}
+            <div class="promotions__content">
+              {% if block.settings.title != blank %}
+                <h3 class="promotions__title">{{ block.settings.title }}</h3>
+              {% endif %}
+              {% if block.settings.description != blank %}
+                <p class="promotions__description">{{ block.settings.description }}</p>
+              {% endif %}
+              {% if block.settings.cta_label != blank and block.settings.cta_link != blank %}
+                <a href="{{ block.settings.cta_link }}" class="promotions__button button button--minimal">
+                  {{ block.settings.cta_label }}
+                </a>
+              {% endif %}
+            </div>
+          {% endunless %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .promotions {
+    padding: var(--padding-block-start) var(--padding-inline-start) var(--padding-block-end) var(--padding-inline-end);
+    max-width: var(--page-width);
+    margin: 0 auto;
+  }
+
+  .promotions__heading {
+    text-align: center;
+    margin-bottom: var(--gap-lg);
+  }
+
+  .promotions__heading--left {
+    text-align: left;
+  }
+
+  .promotions__grid {
+    display: grid;
+    gap: var(--gap-lg);
+  }
+
+  .promotions--1-items .promotions__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .promotions--2-items .promotions__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .promotions--3-items .promotions__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 749px) {
+    .promotions--2-items .promotions__grid,
+    .promotions--3-items .promotions__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .promotions__item {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-subtle);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .promotions__item:hover {
+    box-shadow: var(--shadow-hover);
+  }
+
+  .promotions__image-wrapper {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .promotions__image {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+  }
+
+  .promotions__item:hover .promotions__image {
+    transform: scale(1.05);
+  }
+
+  .promotions--overlay .promotions__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .promotions--overlay .promotions__item:hover .promotions__overlay {
+    opacity: 1;
+  }
+
+  .promotions__content {
+    padding: var(--padding-md);
+  }
+
+  .promotions__content--overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--padding-md);
+    color: var(--color-background);
+    z-index: 1;
+  }
+
+  .promotions__title {
+    font-family: 'League Spartan', sans-serif;
+    font-weight: 700;
+    font-size: var(--font-size--lg);
+    margin: 0 0 var(--gap-sm) 0;
+    text-transform: uppercase;
+  }
+
+  .promotions__description {
+    font-family: var(--font-paragraph--family);
+    font-size: var(--font-size--body);
+    margin: 0 0 var(--gap-md) 0;
+    line-height: 1.5;
+  }
+
+  .promotions__button {
+    display: inline-block;
+    padding: var(--padding-sm) var(--padding-lg);
+    background: var(--color-accent);
+    color: var(--color-background);
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    transition: background 0.3s ease;
+  }
+
+  .promotions__button:hover {
+    background: var(--color-accent-hover);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Promotions",
+  "tag": "section",
+  "class": "section section--promotions",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "Exclusive Promotions"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Heading Alignment",
+      "options": [
+        { "value": "center", "label": "Center" },
+        { "value": "left", "label": "Left" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_overlay",
+      "label": "Enable Text Overlay on Images",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top Padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom Padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Left Padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Right Padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    }
+  ],
+  "blocks": [
+    {
+      "type": "promotion",
+      "name": "Promotion",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Premium Offer"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Discover luxury products at unbeatable prices."
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "CTA Label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "cta_link",
+          "label": "CTA Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Promotions",
+      "blocks": [
+        {
+          "type": "promotion",
+          "settings": {
+            "title": "New Arrivals",
+            "description": "Explore the latest in premium beauty.",
+            "cta_label": "Discover"
+          }
+        },
+        {
+          "type": "promotion",
+          "settings": {
+            "title": "Best Sellers",
+            "description": "Top-rated products loved by customers.",
+            "cta_label": "Shop"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% comment %}
+  CSS Additions for assets/base.css:
+  - Ensure CSS variables are defined (e.g., --color-accent for gold, --color-background for white, --color-foreground for black).
+  - Add League Spartan font import if not already present: @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap');
+  - The stylesheet above includes basic rules; copy them to assets/base.css for global application.
+  - For premium feel, add subtle animations and ensure responsive grid adapts cleanly.
+  Example additional rules:
+  .promotions__item {
+    border: 1px solid var(--color-border);
+  }
+  .promotions__title {
+    color: var(--color-foreground);
+  }
+  .promotions__description {
+    color: var(--color-foreground);
+    opacity: 0.8;
+  }
+{% endcomment %}

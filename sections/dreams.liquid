@@ -1,0 +1,832 @@
+{%- comment -%}
+  ============================================================
+  INTEGRATED FROM: Codigo Soleil (Sections/dreams.liquid)
+  INTEGRATION DATE: 2026-02-11
+  PURPOSE: Split-layout content+media section with features list and floating stats
+  
+  CHANGES MADE DURING INTEGRATION:
+  - Added soleil- prefix to avoid naming conflicts with Horizon sections
+  - Updated snippet references to use soleil- prefixed versions
+  - Custom CSS variables preserved (use soleil-design-tokens for support)
+  - Added fallback values for translation keys
+  
+  DEPENDENCIES:
+  - snippets/soleil-*.liquid (prefixed snippet dependencies)
+  - assets/soleil-theme.css (custom styling)
+  - assets/soleil-ajax-cart.js (cart functionality)
+  
+  FUTURE CONSIDERATIONS:
+  - Translation keys use fallback defaults; add proper keys to locales
+  - CSS uses custom variables; consider migrating to Horizon color scheme
+  - JavaScript uses global patterns; consider migrating to ES modules
+  ============================================================
+{%- endcomment -%}
+
+<section class="dreams-section" data-section-id="{{ section.id }}" data-section-type="dreams">
+
+  <div class="dreams-container">
+
+    
+
+    {% comment %} Main Content Area {% endcomment %}
+
+    <div class="dreams-content">
+
+      <div class="dreams-content-inner">
+
+        {% if section.settings.subtitle %}
+
+          <span class="dreams-label animate-fade-up">{{ section.settings.subtitle }}</span>
+
+        {% endif %}
+
+        
+
+        <h2 class="dreams-title animate-fade-up" data-delay="100">
+
+          {{ section.settings.title | default: 'Your Beauty Dreams' }}
+
+        </h2>
+
+        
+
+        {% if section.settings.description %}
+
+          <div class="dreams-description animate-fade-up" data-delay="200">
+
+            {{ section.settings.description }}
+
+          </div>
+
+        {% endif %}
+
+
+
+        {% if section.settings.show_features %}
+
+          <ul class="dreams-features animate-fade-up" data-delay="300">
+
+            {% for block in section.blocks %}
+
+              {% if block.type == 'feature' %}
+
+                <li class="dreams-feature-item" {{ block.shopify_attributes }}>
+
+                  <svg class="feature-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+
+                    <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+                  </svg>
+
+                  <span>{{ block.settings.feature_text }}</span>
+
+                </li>
+
+              {% endif %}
+
+            {% endfor %}
+
+          </ul>
+
+        {% endif %}
+
+
+
+        {% if section.settings.button_text %}
+
+          <div class="dreams-cta animate-fade-up" data-delay="400">
+
+            <a href="{{ section.settings.button_link }}" class="btn btn-primary btn-lg">
+
+              {{ section.settings.button_text }}
+
+            </a>
+
+            {% if section.settings.button_text_2 %}
+
+              <a href="{{ section.settings.button_link_2 }}" class="btn btn-secondary btn-lg">
+
+                {{ section.settings.button_text_2 }}
+
+              </a>
+
+            {% endif %}
+
+          </div>
+
+        {% endif %}
+
+      </div>
+
+    </div>
+
+
+
+    {% comment %} Media Area {% endcomment %}
+
+    <div class="dreams-media">
+
+      {% if section.settings.video_url != blank %}
+
+        <div class="dreams-video-wrapper">
+
+          <video 
+
+            class="dreams-video" 
+
+            autoplay 
+
+            muted 
+
+            loop 
+
+            playsinline
+
+            poster="{{ section.settings.image | image_url: width: 1200 }}"
+
+          >
+
+            poster="{{ section.settings.image | asset_img_url: '1200x' }}"
+
+          </video>
+
+        </div>
+
+      {% elsif section.settings.image %}
+
+        <div class="dreams-image-wrapper">
+
+          <img
+  src="{{ section.settings.image | image_url: width: 1200 }}"
+  srcset="
+    {{ section.settings.image | image_url: width: 600 }} 600w,
+    {{ section.settings.image | image_url: width: 900 }} 900w,
+    {{ section.settings.image | image_url: width: 1200 }} 1200w
+  "
+  sizes="(max-width: 768px) 100vw, 50vw"
+  alt="{{ section.settings.title }}"
+  width="1200"
+  height="800"  <!-- Use your actual image height -->
+  class="dreams-image"
+  loading="lazy"
+>
+
+        </div>
+
+      {% else %}
+
+        <div class="dreams-placeholder">
+
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+
+        </div>
+
+      {% endif %}
+
+
+
+      {% comment %} Floating Stats {% endcomment %}
+
+      {% if section.settings.show_stats %}
+
+        <div class="dreams-stats">
+
+          {% for block in section.blocks %}
+
+            {% if block.type == 'stat' %}
+
+              <div class="stat-card animate-fade-up" {{ block.shopify_attributes }}>
+
+                <div class="stat-number">{{ block.settings.stat_number }}</div>
+
+                <div class="stat-label">{{ block.settings.stat_label }}</div>
+
+              </div>
+
+            {% endif %}
+
+          {% endfor %}
+
+        </div>
+
+      {% endif %}
+
+    </div>
+
+
+
+  </div>
+
+</section>
+
+
+
+<style>
+
+  .dreams-section {
+
+    position: relative;
+
+    overflow: hidden;
+
+    background: var(--color-gray-50);
+
+  }
+
+
+
+  .dreams-container {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    min-height: 600px;
+
+  }
+
+
+
+  .dreams-content {
+
+    display: flex;
+
+    align-items: center;
+
+    padding: var(--space-4xl) var(--space-3xl);
+
+    background: var(--color-white);
+
+  }
+
+
+
+  .dreams-content-inner {
+
+    max-width: 600px;
+
+  }
+
+
+
+  .dreams-label {
+
+    display: inline-block;
+
+    font-size: var(--font-size-sm);
+
+    font-weight: var(--font-weight-semibold);
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.15em;
+
+    color: var(--color-yellow);
+
+    margin-bottom: var(--space-md);
+
+  }
+
+
+
+  .dreams-title {
+
+    font-size: var(--font-size-5xl);
+
+    font-weight: var(--font-weight-bold);
+
+    line-height: 1.1;
+
+    color: var(--color-black);
+
+    margin-bottom: var(--space-lg);
+
+  }
+
+
+
+  .dreams-description {
+
+    font-size: var(--font-size-lg);
+
+    line-height: var(--line-height-relaxed);
+
+    color: var(--color-gray-600);
+
+    margin-bottom: var(--space-xl);
+
+  }
+
+
+
+  .dreams-features {
+
+    list-style: none;
+
+    margin-bottom: var(--space-xl);
+
+  }
+
+
+
+  .dreams-feature-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: var(--space-md);
+
+    padding: var(--space-sm) 0;
+
+    font-size: var(--font-size-lg);
+
+    color: var(--color-gray-700);
+
+  }
+
+
+
+  .feature-icon {
+
+    flex-shrink: 0;
+
+    color: var(--color-yellow);
+
+  }
+
+
+
+  .dreams-cta {
+
+    display: flex;
+
+    gap: var(--space-md);
+
+    flex-wrap: wrap;
+
+  }
+
+
+
+  .dreams-media {
+
+    position: relative;
+
+    overflow: hidden;
+
+  }
+
+
+
+  .dreams-video-wrapper,
+
+  .dreams-image-wrapper,
+
+  .dreams-placeholder {
+
+    width: 100%;
+
+    height: 100%;
+
+  }
+
+
+
+  .dreams-video,
+
+  .dreams-image {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+  }
+
+
+
+  .dreams-placeholder {
+
+    background: var(--color-gray-200);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+  }
+
+
+
+  .dreams-stats {
+
+    position: absolute;
+
+    bottom: var(--space-xl);
+
+    left: var(--space-xl);
+
+    right: var(--space-xl);
+
+    display: flex;
+
+    gap: var(--space-lg);
+
+    z-index: 2;
+
+  }
+
+
+
+  .stat-card {
+
+    flex: 1;
+
+    background: rgba(255, 255, 255, 0.95);
+
+    backdrop-filter: blur(10px);
+
+    padding: var(--space-lg);
+
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow-lg);
+
+    text-align: center;
+
+  }
+
+
+
+  .stat-number {
+
+    font-size: var(--font-size-4xl);
+
+    font-weight: var(--font-weight-bold);
+
+    color: var(--color-yellow);
+
+    line-height: 1;
+
+    margin-bottom: var(--space-xs);
+
+  }
+
+
+
+  .stat-label {
+
+    font-size: var(--font-size-sm);
+
+    font-weight: var(--font-weight-semibold);
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
+
+    color: var(--color-gray-600);
+
+  }
+
+
+
+  /* Animations */
+
+  .animate-fade-up {
+
+    opacity: 0;
+
+    transform: translateY(30px);
+
+    animation: fadeUp 0.8s var(--ease-out) forwards;
+
+  }
+
+
+
+  .animate-fade-up[data-delay="100"] { animation-delay: 0.1s; }
+
+  .animate-fade-up[data-delay="200"] { animation-delay: 0.2s; }
+
+  .animate-fade-up[data-delay="300"] { animation-delay: 0.3s; }
+
+  .animate-fade-up[data-delay="400"] { animation-delay: 0.4s; }
+
+
+
+  @keyframes fadeUp {
+
+    to {
+
+      opacity: 1;
+
+      transform: translateY(0);
+
+    }
+
+  }
+
+
+
+  /* Responsive */
+
+  @media (max-width: 1024px) {
+
+    .dreams-container {
+
+      grid-template-columns: 1fr;
+
+    }
+
+
+
+    .dreams-content {
+
+      padding: var(--space-3xl) var(--space-xl);
+
+    }
+
+
+
+    .dreams-media {
+
+      min-height: 400px;
+
+    }
+
+
+
+    .dreams-title {
+
+      font-size: var(--font-size-4xl);
+
+    }
+
+  }
+
+
+
+  @media (max-width: 768px) {
+
+    .dreams-content {
+
+      padding: var(--space-2xl) var(--space-lg);
+
+    }
+
+
+
+    .dreams-title {
+
+      font-size: var(--font-size-3xl);
+
+    }
+
+
+
+    .dreams-cta {
+
+      flex-direction: column;
+
+    }
+
+
+
+    .dreams-cta .btn {
+
+      width: 100%;
+
+    }
+
+
+
+    .dreams-stats {
+
+      flex-direction: column;
+
+      gap: var(--space-md);
+
+    }
+
+  }
+
+</style>
+
+
+
+{% schema %}
+
+{
+
+  "name": "Dreams",
+
+  "settings": [
+
+    {
+
+      "type": "text",
+
+      "id": "subtitle",
+
+      "label": "Subtitle",
+
+      "default": "Discover"
+
+    },
+
+    {
+
+      "type": "text",
+
+      "id": "title",
+
+      "label": "Title",
+
+      "default": "Your Beauty Dreams"
+
+    },
+
+    {
+
+      "type": "richtext",
+
+      "id": "description",
+
+      "label": "Description",
+
+      "default": "<p>Experience the transformation you've always dreamed of with our premium beauty products and expert care.</p>"
+
+    },
+
+    {
+
+      "type": "checkbox",
+
+      "id": "show_features",
+
+      "label": "Show features list",
+
+      "default": true
+
+    },
+
+    {
+
+      "type": "text",
+
+      "id": "button_text",
+
+      "label": "Button text",
+
+      "default": "Shop Now"
+
+    },
+
+    {
+
+      "type": "url",
+
+      "id": "button_link",
+
+      "label": "Button link"
+
+    },
+
+    {
+
+      "type": "text",
+
+      "id": "button_text_2",
+
+      "label": "Secondary button text"
+
+    },
+
+    {
+
+      "type": "url",
+
+      "id": "button_link_2",
+
+      "label": "Secondary button link"
+
+    },
+
+    {
+
+      "type": "image_picker",
+
+      "id": "image",
+
+      "label": "Image"
+
+    },
+
+    {
+
+      "type": "text",
+
+      "id": "video_url",
+
+      "label": "Video URL (MP4)",
+
+      "info": "Overrides image if provided"
+
+    },
+
+    {
+
+      "type": "checkbox",
+
+      "id": "show_stats",
+
+      "label": "Show statistics",
+
+      "default": false
+
+    }
+
+  ],
+
+  "blocks": [
+
+    {
+
+      "type": "feature",
+
+      "name": "Feature",
+
+      "settings": [
+
+        {
+
+          "type": "text",
+
+          "id": "feature_text",
+
+          "label": "Feature text",
+
+          "default": "Premium quality products"
+
+        }
+
+      ]
+
+    },
+
+    {
+
+      "type": "stat",
+
+      "name": "Statistic",
+
+      "settings": [
+
+        {
+
+          "type": "text",
+
+          "id": "stat_number",
+
+          "label": "Number",
+
+          "default": "10K"
+
+        },
+
+        {
+
+          "type": "text",
+
+          "id": "stat_label",
+
+          "label": "Label",
+
+          "default": "Happy Customers"
+
+        }
+
+      ]
+
+    }
+
+  ],
+
+  "presets": [
+
+    {
+
+      "name": "Dreams",
+
+      "category": "Custom"
+
+    }
+
+  ]
+
+}
+
+{% endschema %}

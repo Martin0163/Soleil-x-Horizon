@@ -1,0 +1,335 @@
+{% comment %}
+/* Start New Arrivals Section */
+  Inspired by: lunahernandez.com.mx — "Recién llegados"
+  Purpose: Display new arrival products from a selectable collection.
+           Supports grid and carousel layouts using Horizon's native product-card snippet.
+  Compatible with: Horizon OS 2.0 color schemes, product-card snippet, spacing utilities.
+/* End New Arrivals Section */
+/* You can paste future updates here without breaking anything */
+{% endcomment %}
+
+{% comment %} /* Start: Variable Assignment */ {% endcomment %}
+{%- liquid
+  assign collection      = collections[section.settings.collection]
+  assign products_limit  = section.settings.products_to_show | default: 8
+  assign cols_desktop    = section.settings.columns_desktop | default: 4
+  assign cols_tablet     = section.settings.columns_tablet  | default: 3
+  assign cols_mobile     = section.settings.columns_mobile  | default: 2
+  assign layout          = section.settings.layout | default: 'grid'
+  assign show_cta        = section.settings.show_cta
+  assign cta_label       = section.settings.cta_label | default: 'View All'
+  assign gap             = section.settings.gap | default: 16
+  assign gap_desktop     = section.settings.gap_desktop | default: 24
+-%}
+{% comment %} /* End: Variable Assignment */ {% endcomment %}
+
+{% comment %} /* Start: Section Background */ {% endcomment %}
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+{% comment %} /* End: Section Background */ {% endcomment %}
+
+{% comment %} /* Start: Section Wrapper */ {% endcomment %}
+<section
+  id="new-arrivals-{{ section.id }}"
+  class="new-arrivals-section section spacing-style color-{{ section.settings.color_scheme }}"
+  style="
+    {% render 'spacing-style', settings: section.settings %}
+    --na-cols-desktop: {{ cols_desktop }};
+    --na-cols-tablet: {{ cols_tablet }};
+    --na-cols-mobile: {{ cols_mobile }};
+    --na-gap: {{ gap }}px;
+    --na-gap-desktop: {{ gap_desktop }}px;
+  "
+  data-section-id="{{ section.id }}"
+>
+  <div class="page-width">
+
+    {% comment %} /* Start: Section Header */ {% endcomment %}
+    {%- if section.settings.eyebrow != blank or section.settings.title != blank or section.settings.description != blank -%}
+      <div class="new-arrivals__header reveal-on-scroll">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="new-arrivals__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="new-arrivals__title">{{ section.settings.title | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.description != blank -%}
+          <p class="new-arrivals__description">{{ section.settings.description | escape }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+    {% comment %} /* End: Section Header */ {% endcomment %}
+
+    {% comment %} /* Start: Products Display */ {% endcomment %}
+    {%- if collection != blank and collection.products.size > 0 -%}
+
+      {%- if layout == 'carousel' -%}
+        {% comment %} /* Start: Carousel Layout */ {% endcomment %}
+        <div class="new-arrivals__carousel-wrapper" data-new-arrivals-carousel>
+          <div class="new-arrivals__carousel" role="list" aria-label="{{ section.settings.title | default: 'New Arrivals' | escape }}">
+            {%- for product in collection.products limit: products_limit -%}
+              <div class="new-arrivals__carousel-item reveal-on-scroll" role="listitem">
+                {% comment %}
+                /* Start: Product Card — Carousel Item */
+                Uses Horizon's native product-card snippet for full compatibility.
+                /* End: Product Card — Carousel Item */
+                {% endcomment %}
+                {% render 'product-card', product: product %}
+              </div>
+            {%- endfor -%}
+          </div>
+
+          {% comment %} /* Start: Carousel Navigation Buttons */ {% endcomment %}
+          <button
+            class="new-arrivals__carousel-btn new-arrivals__carousel-btn--prev"
+            aria-label="{{ 'accessibility.previous' | t | default: 'Previous' }}"
+            type="button"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+              <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button
+            class="new-arrivals__carousel-btn new-arrivals__carousel-btn--next"
+            aria-label="{{ 'accessibility.next' | t | default: 'Next' }}"
+            type="button"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+              <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          {% comment %} /* End: Carousel Navigation Buttons */ {% endcomment %}
+        </div>
+        {% comment %} /* End: Carousel Layout */ {% endcomment %}
+
+      {%- else -%}
+        {% comment %} /* Start: Grid Layout */ {% endcomment %}
+        <ul class="new-arrivals__grid list-unstyled" role="list">
+          {%- for product in collection.products limit: products_limit -%}
+            <li class="reveal-on-scroll">
+              {% comment %}
+              /* Start: Product Card — Grid Item */
+              Uses Horizon's native product-card snippet for full compatibility.
+              /* End: Product Card — Grid Item */
+              {% endcomment %}
+              {% render 'product-card', product: product %}
+            </li>
+          {%- endfor -%}
+        </ul>
+        {% comment %} /* End: Grid Layout */ {% endcomment %}
+      {%- endif -%}
+
+      {% comment %} /* Start: CTA Button */ {% endcomment %}
+      {%- if show_cta and cta_label != blank -%}
+        <div class="new-arrivals__cta reveal-on-scroll">
+          <a
+            href="{{ collection.url }}"
+            class="new-arrivals__cta-link"
+            aria-label="{{ cta_label | escape }} — {{ collection.title | escape }}"
+          >
+            {{- cta_label | escape -}}
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+              <path d="M3 8H13M9 4L13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      {%- endif -%}
+      {% comment %} /* End: CTA Button */ {% endcomment %}
+
+    {%- else -%}
+      {% comment %} /* Start: Empty State */ {% endcomment %}
+      <div class="new-arrivals__empty" style="text-align:center; padding: 48px 0; opacity: 0.5;">
+        <p>{{ 'sections.featured_collection.empty' | t | default: 'No products found. Select a collection in the theme editor.' }}</p>
+      </div>
+      {% comment %} /* End: Empty State */ {% endcomment %}
+    {%- endif -%}
+    {% comment %} /* End: Products Display */ {% endcomment %}
+
+  </div>
+</section>
+{% comment %} /* End: Section Wrapper */ {% endcomment %}
+
+{% comment %} /* Start: Schema */ {% endcomment %}
+{% schema %}
+{
+  "name": "New Arrivals",
+  "tag": "section",
+  "class": "section-wrapper",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "Just In"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "New Arrivals"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Description",
+      "default": "Discover our latest beauty essentials"
+    },
+    {
+      "type": "header",
+      "content": "Collection"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Select the collection to display as new arrivals"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 2,
+      "max": 20,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "grid",     "label": "Grid"     },
+        { "value": "carousel", "label": "Carousel" }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns — Desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns_tablet",
+      "label": "Columns — Tablet",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns — Mobile",
+      "options": [
+        { "value": "1", "label": "1 column"  },
+        { "value": "2", "label": "2 columns" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap — Mobile",
+      "min": 8,
+      "max": 40,
+      "step": 4,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "gap_desktop",
+      "label": "Gap — Desktop",
+      "min": 8,
+      "max": 60,
+      "step": 4,
+      "default": 24,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Call to Action"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Show 'View All' button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label",
+      "default": "View All New Arrivals"
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 60,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 60,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "New Arrivals",
+      "category": "Products",
+      "settings": {
+        "eyebrow": "Just In",
+        "title": "New Arrivals",
+        "description": "Discover our latest beauty essentials",
+        "products_to_show": 8,
+        "layout": "grid",
+        "columns_desktop": 4,
+        "columns_tablet": 3,
+        "columns_mobile": "2",
+        "show_cta": true,
+        "cta_label": "View All New Arrivals"
+      }
+    }
+  ]
+}
+{% endschema %}
+{% comment %} /* End: Schema */ {% endcomment %}

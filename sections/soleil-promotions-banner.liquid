@@ -1,0 +1,540 @@
+{% comment %}
+  ============================================================================
+  SOLEIL PROMOTIONS BANNER SECTION - Adapted for Horizon Theme
+  ============================================================================
+  
+  Source: Codigo Soleil theme (promotions_banner.liquid)
+  Integration Date: Current
+  Adapted By: Senior Shopify Theme Engineer
+  
+  Purpose:
+  - Eye-catching promotional banner
+  - Countdown timer for urgency
+  - Dismissible with localStorage
+  - Sticky positioning option
+  - Custom colors and icon
+  
+  Adaptations Made:
+  - Integrated Horizon's color scheme system
+  - Enhanced accessibility (ARIA labels)
+  - Improved countdown timer logic
+  - Better mobile responsiveness
+  - Fixed localStorage key naming
+  
+  Dependencies:
+  - Horizon base.css for core styles
+  - Horizon color scheme variables
+  
+  Future Developers:
+  Aquí puedes agregar nueva información al código sin romperlo.
+  - Add animation effects
+  - Customize countdown format
+  - Add multiple banner rotation
+  
+  ============================================================================
+{% endcomment %}
+
+{% comment %} START: Promotions Banner Container {% endcomment %}
+<div 
+  class="soleil-promo-banner section-{{ section.id }}-padding" 
+  data-section-id="{{ section.id }}"
+  data-promo-banner
+  data-sticky="{{ section.settings.sticky }}"
+  data-dismissible="{{ section.settings.dismissible }}"
+  style="
+    background-color: {{ section.settings.background_color | default: '#000000' }};
+    color: {{ section.settings.text_color | default: '#FFFFFF' }};
+  "
+  role="region"
+  aria-label="Promotional banner"
+>
+  {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+
+  {% comment %} START: Banner Content Container {% endcomment %}
+  <div class="page-width-{{ section.settings.page_width | default: 'wide' }}">
+    <div class="soleil-promo-banner-content">
+      
+      {% comment %} START: Optional Icon {% endcomment %}
+      {% if section.settings.icon != blank %}
+        <div class="soleil-promo-icon" aria-hidden="true">
+          {{ section.settings.icon }}
+        </div>
+      {% endif %}
+      {% comment %} END: Optional Icon {% endcomment %}
+
+      {% comment %} START: Banner Text and Countdown {% endcomment %}
+      <div class="soleil-promo-text">
+        {% if section.settings.text != blank %}
+          <span class="soleil-promo-message h6">{{ section.settings.text | escape }}</span>
+        {% endif %}
+
+        {% if section.settings.show_countdown and section.settings.countdown_date != blank %}
+          <div class="soleil-promo-countdown" data-countdown="{{ section.settings.countdown_date }}">
+            <span class="soleil-countdown-label paragraph">{{ section.settings.countdown_label | default: 'Ends in:' | escape }}</span>
+            <span class="soleil-countdown-timer" role="timer" aria-live="polite">
+              <span data-days>00</span>d
+              <span data-hours>00</span>h
+              <span data-minutes>00</span>m
+              <span data-seconds>00</span>s
+            </span>
+          </div>
+        {% endif %}
+      </div>
+      {% comment %} END: Banner Text and Countdown {% endcomment %}
+
+      {% comment %} START: Optional CTA Button {% endcomment %}
+      {% if section.settings.button_text != blank %}
+        <a href="{{ section.settings.button_link }}" class="soleil-promo-button">
+          {{ section.settings.button_text | escape }}
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      {% endif %}
+      {% comment %} END: Optional CTA Button {% endcomment %}
+
+      {% comment %} START: Dismiss Button {% endcomment %}
+      {% if section.settings.dismissible %}
+        <button class="soleil-promo-close button-unstyled" data-promo-close aria-label="Close promotional banner">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 5L5 15M5 5L15 15"/>
+          </svg>
+        </button>
+      {% endif %}
+      {% comment %} END: Dismiss Button {% endcomment %}
+      {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+
+    </div>
+  </div>
+  {% comment %} END: Banner Content Container {% endcomment %}
+
+</div>
+{% comment %} END: Promotions Banner Container {% endcomment %}
+
+{% comment %}
+  ============================================================================
+  STYLES - Adapted from Soleil with Horizon Integration
+  ============================================================================
+  
+  Modifications:
+  - Uses Horizon's CSS custom properties
+  - Enhanced responsive behavior
+  - Improved animation transitions
+  
+  Aquí puedes agregar nueva información al código sin romperlo.
+  ============================================================================
+{% endcomment %}
+
+<style>
+/* START: Base Banner Styles */
+.soleil-promo-banner {
+  position: relative;
+  padding: var(--padding-md) 0;
+  z-index: var(--layer-sticky, 100);
+  transition: transform 0.3s ease-out;
+}
+
+.soleil-promo-banner[data-sticky="true"] {
+  position: sticky;
+  top: 0;
+}
+
+.soleil-promo-banner.is-hidden {
+  transform: translateY(-100%);
+}
+/* END: Base Banner Styles */
+
+/* START: Content Layout */
+.soleil-promo-banner-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-lg);
+  flex-wrap: wrap;
+  position: relative;
+}
+/* END: Content Layout */
+
+/* START: Icon Styles */
+.soleil-promo-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.soleil-promo-icon svg {
+  width: 24px;
+  height: 24px;
+}
+/* END: Icon Styles */
+
+/* START: Text Content Styles */
+.soleil-promo-text {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.soleil-promo-message {
+  font-size: var(--font-size--base);
+  font-weight: 600;
+  text-align: center;
+}
+/* END: Text Content Styles */
+
+/* START: Countdown Timer Styles */
+.soleil-promo-countdown {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  font-size: var(--font-size--sm);
+}
+
+.soleil-countdown-label {
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+.soleil-countdown-timer {
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.05em;
+}
+
+.soleil-countdown-timer span {
+  display: inline-block;
+  min-width: 20px;
+  text-align: center;
+}
+
+.countdown-expired {
+  font-weight: 600;
+  opacity: 0.8;
+}
+/* END: Countdown Timer Styles */
+
+/* START: CTA Button Styles */
+.soleil-promo-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  padding: var(--padding-sm) var(--padding-lg);
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid currentColor;
+  border-radius: 100px;
+  font-size: var(--font-size--sm);
+  font-weight: 600;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+}
+
+.soleil-promo-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateX(4px);
+}
+/* END: CTA Button Styles */
+
+/* START: Close Button Styles */
+.soleil-promo-close {
+  position: absolute;
+  right: var(--padding-md);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: var(--padding-xs);
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+  color: inherit;
+}
+
+.soleil-promo-close:hover {
+  opacity: 1;
+  background: transparent;
+}
+/* END: Close Button Styles */
+
+/* START: Responsive Styles */
+@media (max-width: 749px) {
+  .soleil-promo-banner {
+    padding: var(--padding-sm) 0;
+  }
+
+  .soleil-promo-banner-content {
+    gap: var(--gap-sm);
+    padding: 0 var(--padding-2xl);
+  }
+
+  .soleil-promo-message {
+    font-size: var(--font-size--sm);
+  }
+
+  .soleil-promo-countdown {
+    font-size: var(--font-size--xs);
+  }
+
+  .soleil-promo-button {
+    padding: var(--padding-xs) var(--padding-md);
+    font-size: var(--font-size--xs);
+  }
+
+  .soleil-promo-close {
+    right: var(--padding-sm);
+  }
+}
+/* END: Responsive Styles */
+</style>
+
+{% comment %}
+  ============================================================================
+  JAVASCRIPT - Countdown Timer and Dismiss Functionality
+  ============================================================================
+  
+  Adaptations:
+  - Enhanced countdown with better date handling
+  - localStorage for dismiss state
+  - Improved error handling
+  - Accessibility announcements
+  
+  Aquí puedes agregar nueva información al código sin romperlo.
+  ============================================================================
+{% endcomment %}
+
+<script>
+  // START: Promotions Banner JavaScript - Adapted for Horizon
+  document.addEventListener('DOMContentLoaded', function() {
+    try {
+      const promoBanner = document.querySelector('[data-promo-banner]');
+      if (!promoBanner) return;
+
+      const isDismissible = promoBanner.dataset.dismissible === 'true';
+      const sectionId = promoBanner.dataset.sectionId;
+      const storageKey = `soleil-promo-banner-${sectionId}-dismissed`;
+
+      // Check if banner was previously dismissed
+      if (isDismissible && localStorage.getItem(storageKey)) {
+        promoBanner.style.display = 'none';
+        return;
+      }
+
+      // Countdown functionality
+      const countdown = promoBanner.querySelector('[data-countdown]');
+      if (countdown) {
+        const countdownDate = countdown.dataset.countdown;
+        
+        if (countdownDate) {
+          const endDate = new Date(countdownDate).getTime();
+          
+          const updateCountdown = () => {
+            const now = new Date().getTime();
+            const distance = endDate - now;
+            
+            if (distance < 0) {
+              const timer = countdown.querySelector('.soleil-countdown-timer');
+              if (timer) {
+                timer.innerHTML = '<span class="countdown-expired">Offer Expired</span>';
+              }
+              return;
+            }
+            
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            const timer = countdown.querySelector('.soleil-countdown-timer');
+            if (timer) {
+              const daysEl = timer.querySelector('[data-days]');
+              const hoursEl = timer.querySelector('[data-hours]');
+              const minutesEl = timer.querySelector('[data-minutes]');
+              const secondsEl = timer.querySelector('[data-seconds]');
+              
+              if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+              if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+              if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+              if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
+            }
+          };
+          
+          updateCountdown();
+          const countdownInterval = setInterval(updateCountdown, 1000);
+          
+          // Clear interval when banner is hidden
+          promoBanner.addEventListener('hidden', () => clearInterval(countdownInterval));
+        }
+      }
+
+      // Close/Dismiss functionality
+      const closeBtn = promoBanner.querySelector('[data-promo-close]');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          promoBanner.classList.add('is-hidden');
+          
+          setTimeout(() => {
+            promoBanner.style.display = 'none';
+            promoBanner.dispatchEvent(new Event('hidden'));
+          }, 300);
+          
+          if (isDismissible) {
+            localStorage.setItem(storageKey, 'true');
+          }
+        });
+      }
+
+      // Aquí puedes agregar nueva información al código sin romperlo
+      // Add custom banner functionality here
+
+    } catch (error) {
+      console.error('Promotions banner initialization error:', error);
+    }
+  });
+  // END: Promotions Banner JavaScript
+</script>
+
+{% comment %}
+  ============================================================================
+  SCHEMA - Section Settings Configuration
+  ============================================================================
+  
+  Adaptations:
+  - Integrated Horizon's color_scheme setting
+  - Added page_width setting
+  - Enhanced with better defaults and info text
+  - Preserved all Soleil settings
+  
+  Aquí puedes agregar nueva información al código sin romperlo.
+  ============================================================================
+{% endcomment %}
+
+{% schema %}
+{
+  "name": "Soleil Promotions Banner",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1",
+      "info": "Note: Custom background and text colors below will override the color scheme"
+    },
+    {
+      "type": "select",
+      "id": "page_width",
+      "label": "Page width",
+      "options": [
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "wide"
+    },
+    {
+      "type": "header",
+      "content": "Banner Content"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Banner text",
+      "default": "Free shipping on orders over $50!"
+    },
+    {
+      "type": "html",
+      "id": "icon",
+      "label": "Icon (SVG)",
+      "info": "Optional icon to display before text. Paste SVG code here."
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Behavior"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky",
+      "label": "Make banner sticky",
+      "default": false,
+      "info": "Banner will stay at top when scrolling"
+    },
+    {
+      "type": "checkbox",
+      "id": "dismissible",
+      "label": "Allow users to dismiss",
+      "default": true,
+      "info": "Users can close the banner. It won't show again for that browser."
+    },
+    {
+      "type": "header",
+      "content": "Countdown Timer"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_countdown",
+      "label": "Show countdown timer",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "countdown_label",
+      "label": "Countdown label",
+      "default": "Ends in:"
+    },
+    {
+      "type": "text",
+      "id": "countdown_date",
+      "label": "Countdown end date",
+      "info": "Format: YYYY-MM-DD HH:MM:SS (e.g., 2026-12-31 23:59:59)",
+      "placeholder": "2026-12-31 23:59:59"
+    },
+    {
+      "type": "header",
+      "content": "Call to Action"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "placeholder": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Soleil Promotions Banner",
+      "category": "Soleil"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,34 @@
+{% comment %}
+  Text Section
+  Simple section to output rich text content.
+{% endcomment %}
+<div class="rich-text-section section color-{{ section.settings.color_scheme }}">
+  <div class="rich-text-content">
+    {{ section.settings.content }}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Text",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content",
+      "default": "<p>Add your text here.</p>"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Text"
+    }
+  ]
+}
+{% endschema %}

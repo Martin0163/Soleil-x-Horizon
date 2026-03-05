@@ -1,0 +1,1223 @@
+{% comment %}
+  ============================================================================
+  SOLEIL ABOUT US SECTION - Adapted for Horizon Theme
+  ============================================================================
+  
+  Source: Codigo Soleil theme (about_us.liquid)
+  Integration Date: Current
+  Adapted By: Senior Shopify Theme Engineer
+  
+  Purpose:
+  - Comprehensive About Us page with multiple content blocks
+  - Hero section, story, timeline, values, team, video, testimonials, CTA
+  - Fully responsive and accessible
+  
+  Adaptations Made:
+  - Integrated Horizon's color scheme system
+  - Added Horizon's spacing utilities
+  - Preserved Horizon's container structure
+  - Added accessibility improvements
+  - Enhanced with Horizon's animation system
+  
+  Dependencies:
+  - Horizon base.css for core styles
+  - Horizon color scheme variables
+  - Horizon spacing scale
+  
+  Future Developers:
+  Aquí puedes agregar nueva información al código sin romperlo.
+  - Add new block types in the schema section
+  - Customize animations in the JavaScript section
+  - Modify grid layouts in the CSS section
+  
+  ============================================================================
+{% endcomment %}
+
+{% comment %} START: Section Container with Horizon Color Scheme Support {% endcomment %}
+<section 
+  class="soleil-about-section section-{{ section.id }}-padding"
+  data-section-id="{{ section.id }}"
+  style="
+    --section-bg: {{ section.settings.color_scheme.settings.background }};
+    --section-text: {{ section.settings.color_scheme.settings.foreground }};
+  "
+>
+  {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+
+  {% comment %} START: Hero Section - Adapted from Soleil with Horizon Enhancements {% endcomment %}
+  {% if section.settings.show_hero %}
+  <div class="soleil-about-hero">
+    <div class="soleil-about-hero-content">
+      <h1 class="soleil-about-hero-title h1 animate-fade-in-up">
+        {{ section.settings.hero_title | escape }}
+      </h1>
+      <p class="soleil-about-hero-subtitle paragraph animate-fade-in-up" style="animation-delay: 0.2s;">
+        {{ section.settings.hero_subtitle | escape }}
+      </p>
+    </div>
+    {% if section.settings.hero_image %}
+      <div class="soleil-about-hero-image animate-fade-in" style="animation-delay: 0.4s;">
+        {%- liquid
+          assign hero_image_width = section.settings.hero_image.width | default: 1200
+          assign hero_image_height = section.settings.hero_image.height | default: 800
+        -%}
+        <img 
+          src="{{ section.settings.hero_image | image_url: width: 1200 }}" 
+          srcset="
+            {{ section.settings.hero_image | image_url: width: 600 }} 600w,
+            {{ section.settings.hero_image | image_url: width: 900 }} 900w,
+            {{ section.settings.hero_image | image_url: width: 1200 }} 1200w,
+            {{ section.settings.hero_image | image_url: width: 1800 }} 1800w
+          "
+          sizes="100vw"
+          alt="{{ section.settings.hero_title | escape }}"
+          width="{{ hero_image_width }}"
+          height="{{ hero_image_height }}"
+          loading="eager"
+        >
+      </div>
+    {% endif %}
+  </div>
+  {% endif %}
+  {% comment %} END: Hero Section {% endcomment %}
+
+  {% comment %} START: Main Content Container - Using Horizon's Page Width System {% endcomment %}
+  <div class="page-width-{{ section.settings.page_width }}">
+    
+    {% comment %} START: Our Story Section - Merged Soleil Design with Horizon Structure {% endcomment %}
+    {% if section.settings.show_story %}
+    <div class="soleil-about-story spacing-style">
+      <div class="soleil-about-story-grid">
+        <div class="soleil-about-story-content animate-on-scroll">
+          {% if section.settings.story_label != blank %}
+            <span class="section-label h6">{{ section.settings.story_label | escape }}</span>
+          {% endif %}
+          <h2 class="section-title h2">{{ section.settings.story_title | escape }}</h2>
+          <div class="soleil-about-story-text rte">
+            {{ section.settings.story_content }}
+          </div>
+          {% if section.settings.story_cta_text != blank %}
+            <a href="{{ section.settings.story_cta_link }}" class="button button-primary">
+              {{ section.settings.story_cta_text | escape }}
+            </a>
+          {% endif %}
+          {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+        </div>
+        {% if section.settings.story_image %}
+        <div class="soleil-about-story-image animate-on-scroll" style="animation-delay: 0.2s;">
+          <div class="image-reveal border-style">
+            {%- liquid
+              assign story_image_width = section.settings.story_image.width | default: 1200
+              assign story_image_height = section.settings.story_image.height | default: 800
+            -%}
+            <img 
+              src="{{ section.settings.story_image | image_url: width: 1200 }}" 
+              srcset="
+                {{ section.settings.story_image | image_url: width: 400 }} 400w,
+                {{ section.settings.story_image | image_url: width: 600 }} 600w,
+                {{ section.settings.story_image | image_url: width: 800 }} 800w,
+                {{ section.settings.story_image | image_url: width: 1200 }} 1200w
+              "
+              sizes="(min-width: 750px) 50vw, 100vw"
+              alt="{{ section.settings.story_title | escape }}"
+              width="{{ story_image_width }}"
+              height="{{ story_image_height }}"
+              loading="lazy"
+            >
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+    {% comment %} END: Our Story Section {% endcomment %}
+
+    {% comment %} START: Timeline Section - Preserved Soleil Design {% endcomment %}
+    {% if section.settings.show_timeline and section.blocks.size > 0 %}
+    <div class="soleil-about-timeline spacing-style">
+      <h2 class="section-title h2 text-center">{{ section.settings.timeline_title | escape }}</h2>
+      <div class="soleil-timeline">
+        {% for block in section.blocks %}
+          {% if block.type == 'timeline_item' %}
+          <div class="soleil-timeline-item animate-on-scroll" {{ block.shopify_attributes }}>
+            <div class="soleil-timeline-marker"></div>
+            <div class="soleil-timeline-content">
+              <span class="soleil-timeline-year">{{ block.settings.year | escape }}</span>
+              <h3 class="soleil-timeline-title h4">{{ block.settings.title | escape }}</h3>
+              <p class="soleil-timeline-description paragraph">{{ block.settings.description | escape }}</p>
+            </div>
+          </div>
+          {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    {% comment %} END: Timeline Section {% endcomment %}
+
+    {% comment %} START: Values Section - Grid Layout with Horizon Responsive System {% endcomment %}
+    {% if section.settings.show_values %}
+    <div class="soleil-about-values spacing-style">
+      <h2 class="section-title h2 text-center">{{ section.settings.values_title | escape }}</h2>
+      <div class="soleil-values-grid">
+        {% for block in section.blocks %}
+          {% if block.type == 'value' %}
+          <div class="soleil-value-card animate-on-scroll border-style" {{ block.shopify_attributes }}>
+            {% if block.settings.icon != blank %}
+              <div class="soleil-value-icon">
+                {{ block.settings.icon }}
+              </div>
+            {% endif %}
+            <h3 class="soleil-value-title h5">{{ block.settings.title | escape }}</h3>
+            <p class="soleil-value-description paragraph">{{ block.settings.description | escape }}</p>
+          </div>
+          {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    {% comment %} END: Values Section {% endcomment %}
+
+    {% comment %} START: Team Section - Enhanced with Horizon Accessibility {% endcomment %}
+    {% if section.settings.show_team %}
+    <div class="soleil-about-team spacing-style">
+      <h2 class="section-title h2 text-center">{{ section.settings.team_title | escape }}</h2>
+      {% if section.settings.team_subtitle != blank %}
+        <p class="section-subtitle paragraph text-center">{{ section.settings.team_subtitle | escape }}</p>
+      {% endif %}
+      <div class="soleil-team-grid">
+        {% for block in section.blocks %}
+          {% if block.type == 'team_member' %}
+          <div class="soleil-team-member animate-on-scroll" {{ block.shopify_attributes }}>
+            {% if block.settings.image %}
+            <div class="soleil-team-member-image border-style">
+              {%- liquid
+                assign member_image_width = block.settings.image.width | default: 800
+                assign member_image_height = block.settings.image.height | default: 800
+              -%}
+              <img 
+                src="{{ block.settings.image | image_url: width: 800 }}" 
+                srcset="
+                  {{ block.settings.image | image_url: width: 400 }} 400w,
+                  {{ block.settings.image | image_url: width: 600 }} 600w,
+                  {{ block.settings.image | image_url: width: 800 }} 800w
+                "
+                sizes="(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw"
+                alt="{{ block.settings.name | escape }}"
+                width="{{ member_image_width }}"
+                height="{{ member_image_height }}"
+                loading="lazy"
+              >
+              <div class="soleil-team-member-overlay">
+                <div class="soleil-team-member-social">
+                  {% if block.settings.instagram != blank %}
+                    <a href="{{ block.settings.instagram }}" target="_blank" rel="noopener noreferrer" aria-label="{{ block.settings.name | escape }} Instagram">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                      </svg>
+                    </a>
+                  {% endif %}
+                  {% if block.settings.linkedin != blank %}
+                    <a href="{{ block.settings.linkedin }}" target="_blank" rel="noopener noreferrer" aria-label="{{ block.settings.name | escape }} LinkedIn">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                        <rect x="2" y="9" width="4" height="12"></rect>
+                        <circle cx="4" cy="4" r="2"></circle>
+                      </svg>
+                    </a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            {% endif %}
+            <div class="soleil-team-member-info">
+              <h3 class="soleil-team-member-name h5">{{ block.settings.name | escape }}</h3>
+              <p class="soleil-team-member-role h6">{{ block.settings.role | escape }}</p>
+              {% if block.settings.bio != blank %}
+                <p class="soleil-team-member-bio paragraph">{{ block.settings.bio | escape }}</p>
+              {% endif %}
+            </div>
+            {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    {% comment %} END: Team Section {% endcomment %}
+
+    {% comment %} START: Video Section - Enhanced with Error Handling {% endcomment %}
+    {% if section.settings.show_video and section.settings.video_url != blank %}
+    <div class="soleil-about-video spacing-style">
+      <h2 class="section-title h2 text-center">{{ section.settings.video_title | escape }}</h2>
+      <div class="soleil-video-container animate-on-scroll">
+        <div class="soleil-video-wrapper">
+          {% if section.settings.video_url contains 'youtube.com' or section.settings.video_url contains 'youtu.be' %}
+            <iframe 
+              src="{{ section.settings.video_url }}" 
+              frameborder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowfullscreen
+              loading="lazy"
+              title="{{ section.settings.video_title | escape }}"
+            ></iframe>
+          {% elsif section.settings.video_url contains 'vimeo.com' %}
+            <iframe 
+              src="{{ section.settings.video_url }}" 
+              frameborder="0" 
+              allow="autoplay; fullscreen; picture-in-picture" 
+              allowfullscreen
+              loading="lazy"
+              title="{{ section.settings.video_title | escape }}"
+            ></iframe>
+          {% endif %}
+        </div>
+      </div>
+      {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+    </div>
+    {% endif %}
+    {% comment %} END: Video Section {% endcomment %}
+
+    {% comment %} START: Testimonials Section - Grid Layout {% endcomment %}
+    {% if section.settings.show_testimonials %}
+    <div class="soleil-about-testimonials spacing-style">
+      <h2 class="section-title h2 text-center">{{ section.settings.testimonials_title | escape }}</h2>
+      <div class="soleil-testimonials-grid">
+        {% for block in section.blocks %}
+          {% if block.type == 'testimonial' %}
+          <div class="soleil-testimonial-card border-style" {{ block.shopify_attributes }}>
+            <div class="soleil-testimonial-stars" role="img" aria-label="5 out of 5 stars">
+              {% for i in (1..5) %}
+                <svg class="soleil-star-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              {% endfor %}
+            </div>
+            <p class="soleil-testimonial-text paragraph">"{{ block.settings.text | escape }}"</p>
+            <div class="soleil-testimonial-author">
+              {% if block.settings.author_image %}
+                <img 
+                  src="{{ block.settings.author_image | image_url: width: 80, height: 80, crop: 'center' }}" 
+                  alt="{{ block.settings.author_name | escape }}"
+                  width="80"
+                  height="80"
+                  class="soleil-testimonial-author-image"
+                  loading="lazy"
+                >
+              {% endif %}
+              <div>
+                <p class="soleil-testimonial-author-name h6">{{ block.settings.author_name | escape }}</p>
+                {% if block.settings.author_title != blank %}
+                  <p class="soleil-testimonial-author-title paragraph">{{ block.settings.author_title | escape }}</p>
+                {% endif %}
+              </div>
+            </div>
+            {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    {% comment %} END: Testimonials Section {% endcomment %}
+
+    {% comment %} START: CTA Section - Final Call to Action {% endcomment %}
+    {% if section.settings.show_cta %}
+    <div class="soleil-about-cta spacing-style">
+      <div class="soleil-about-cta-content animate-on-scroll">
+        <h2 class="soleil-about-cta-title h2">{{ section.settings.cta_title | escape }}</h2>
+        {% if section.settings.cta_text != blank %}
+          <p class="soleil-about-cta-text paragraph">{{ section.settings.cta_text | escape }}</p>
+        {% endif %}
+        <div class="soleil-about-cta-buttons">
+          {% if section.settings.cta_primary_text != blank %}
+            <a href="{{ section.settings.cta_primary_link }}" class="button button-primary">
+              {{ section.settings.cta_primary_text | escape }}
+            </a>
+          {% endif %}
+          {% if section.settings.cta_secondary_text != blank %}
+            <a href="{{ section.settings.cta_secondary_link }}" class="button button-secondary">
+              {{ section.settings.cta_secondary_text | escape }}
+            </a>
+          {% endif %}
+        </div>
+        {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+      </div>
+    </div>
+    {% endif %}
+    {% comment %} END: CTA Section {% endcomment %}
+
+  </div>
+  {% comment %} END: Main Content Container {% endcomment %}
+
+</section>
+{% comment %} END: Section Container {% endcomment %}
+
+{% comment %}
+  ============================================================================
+  STYLES - Adapted from Soleil with Horizon Integration
+  ============================================================================
+  
+  Modifications:
+  - Uses Horizon's CSS custom properties
+  - Integrated with Horizon's color scheme system
+  - Responsive breakpoints match Horizon's
+  - Animation classes compatible with Horizon
+  
+  Aquí puedes agregar nueva información al código sin romperlo.
+  ============================================================================
+{% endcomment %}
+
+<style>
+/* START: Base Section Styles */
+.soleil-about-section {
+  padding: var(--padding-4xl) 0;
+}
+
+/* START: Hero Section Styles - Adapted from Soleil */
+.soleil-about-hero {
+  position: relative;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: clamp(60px, 10vw, 120px) var(--padding-lg);
+  background: linear-gradient(135deg, var(--color-foreground) 0%, rgb(var(--color-foreground-rgb) / 0.9) 100%);
+  color: var(--color-background);
+  overflow: hidden;
+  margin-bottom: var(--margin-4xl);
+}
+
+.soleil-about-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+}
+
+.soleil-about-hero-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  margin-bottom: var(--margin-lg);
+  color: var(--color-background);
+}
+
+.soleil-about-hero-subtitle {
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  color: rgb(var(--color-background-rgb) / 0.9);
+  line-height: 1.6;
+}
+/* END: Hero Section Styles */
+
+/* START: Story Section Styles */
+.soleil-about-story-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--gap-4xl);
+  align-items: center;
+  margin: var(--margin-4xl) 0;
+}
+
+.soleil-about-story-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: rgb(var(--color-foreground-rgb) / 0.8);
+  margin: var(--margin-xl) 0;
+}
+
+.image-reveal {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--style-border-radius-lg, 12px);
+}
+
+.image-reveal img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.image-reveal:hover img {
+  transform: scale(1.05);
+}
+/* END: Story Section Styles */
+
+/* START: Timeline Styles - Preserved from Soleil */
+.soleil-timeline {
+  position: relative;
+  max-width: 800px;
+  margin: var(--margin-4xl) auto;
+  padding-left: var(--padding-3xl);
+}
+
+.soleil-timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--color-primary);
+}
+
+.soleil-timeline-item {
+  position: relative;
+  margin-bottom: var(--margin-3xl);
+}
+
+.soleil-timeline-marker {
+  position: absolute;
+  left: calc(-1 * var(--padding-3xl) - 6px);
+  top: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  border: 3px solid var(--color-background);
+  box-shadow: 0 0 0 3px rgb(var(--color-primary-rgb) / 0.2);
+}
+
+.soleil-timeline-year {
+  display: inline-block;
+  padding: var(--padding-2xs) var(--padding-sm);
+  background: var(--color-primary);
+  color: var(--color-background);
+  font-weight: 700;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  margin-bottom: var(--margin-xs);
+}
+
+.soleil-timeline-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: var(--margin-sm) 0;
+}
+/* END: Timeline Styles */
+
+/* START: Values Grid Styles */
+.soleil-values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--gap-3xl);
+  margin-top: var(--margin-4xl);
+}
+
+.soleil-value-card {
+  text-align: center;
+  padding: var(--padding-3xl) var(--padding-xl);
+  border-radius: var(--style-border-radius-lg, 12px);
+  background: var(--color-background);
+  box-shadow: 0 4px 20px rgb(var(--color-shadow-rgb) / 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.soleil-value-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 30px rgb(var(--color-shadow-rgb) / 0.12);
+}
+
+.soleil-value-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto var(--margin-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(var(--color-primary-rgb) / 0.1);
+  border-radius: 50%;
+  color: var(--color-primary);
+}
+/* END: Values Grid Styles */
+
+/* START: Team Grid Styles */
+.soleil-team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--gap-3xl);
+  margin-top: var(--margin-4xl);
+}
+
+.soleil-team-member {
+  text-align: center;
+}
+
+.soleil-team-member-image {
+  position: relative;
+  border-radius: var(--style-border-radius-lg, 12px);
+  overflow: hidden;
+  margin-bottom: var(--margin-lg);
+}
+
+.soleil-team-member-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.soleil-team-member-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgb(var(--color-foreground-rgb) / 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.soleil-team-member:hover .soleil-team-member-overlay {
+  opacity: 1;
+}
+
+.soleil-team-member:hover img {
+  transform: scale(1.1);
+}
+
+.soleil-team-member-social {
+  display: flex;
+  gap: var(--gap-md);
+}
+
+.soleil-team-member-social a {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  color: var(--color-background);
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.soleil-team-member-social a:hover {
+  transform: scale(1.1);
+}
+
+.soleil-team-member-name {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: var(--margin-2xs);
+}
+
+.soleil-team-member-role {
+  color: var(--color-primary);
+  font-weight: 500;
+  margin-bottom: var(--margin-sm);
+}
+/* END: Team Grid Styles */
+
+/* START: Video Styles */
+.soleil-video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: var(--style-border-radius-lg, 12px);
+  margin-top: var(--margin-3xl);
+}
+
+.soleil-video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+/* END: Video Styles */
+
+/* START: Testimonials Styles */
+.soleil-testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--gap-xl);
+  margin-top: var(--margin-4xl);
+}
+
+.soleil-testimonial-card {
+  padding: var(--padding-3xl);
+  background: var(--color-background);
+  border-radius: var(--style-border-radius-lg, 12px);
+  box-shadow: 0 4px 20px rgb(var(--color-shadow-rgb) / 0.08);
+}
+
+.soleil-testimonial-stars {
+  display: flex;
+  gap: var(--gap-2xs);
+  margin-bottom: var(--margin-lg);
+  color: var(--color-primary);
+}
+
+.soleil-testimonial-text {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  font-style: italic;
+  margin-bottom: var(--margin-lg);
+  color: rgb(var(--color-foreground-rgb) / 0.8);
+}
+
+.soleil-testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+}
+
+.soleil-testimonial-author-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+/* END: Testimonials Styles */
+
+/* START: CTA Styles */
+.soleil-about-cta {
+  text-align: center;
+  padding: var(--padding-4xl) var(--padding-lg);
+  background: linear-gradient(135deg, rgb(var(--color-primary-rgb) / 0.1) 0%, rgb(var(--color-primary-rgb) / 0.2) 100%);
+  border-radius: var(--style-border-radius-xl, 20px);
+  margin-top: var(--margin-4xl);
+}
+
+.soleil-about-cta-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  margin-bottom: var(--margin-lg);
+}
+
+.soleil-about-cta-buttons {
+  display: flex;
+  gap: var(--gap-lg);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: var(--margin-xl);
+}
+/* END: CTA Styles */
+
+/* START: Animation Classes - Compatible with Horizon */
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.animate-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* END: Animation Classes */
+
+/* START: Responsive Styles - Mobile Optimization */
+@media (max-width: 749px) {
+  .soleil-about-story-grid {
+    grid-template-columns: 1fr;
+    gap: var(--gap-xl);
+  }
+  
+  .soleil-timeline {
+    padding-left: var(--padding-xl);
+  }
+  
+  .soleil-values-grid,
+  .soleil-team-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .soleil-about-cta-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+/* END: Responsive Styles */
+</style>
+
+{% comment %}
+  ============================================================================
+  JAVASCRIPT - Enhanced Scroll Animations and Video Loading
+  ============================================================================
+  
+  Adaptations:
+  - Uses Intersection Observer API for performance
+  - Fallback for older browsers
+  - Enhanced error handling
+  - Compatible with Horizon's existing JS
+  
+  Aquí puedes agregar nueva información al código sin romperlo.
+  ============================================================================
+{% endcomment %}
+
+<script>
+  // START: About Section JavaScript - Adapted for Horizon
+  document.addEventListener('DOMContentLoaded', function() {
+    try {
+      // Animate elements on scroll using Intersection Observer
+      const animatedElements = document.querySelectorAll('.animate-on-scroll');
+      
+      if ('IntersectionObserver' in window) {
+        const observerOptions = {
+          threshold: 0.1,
+          rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+              // Stagger animation for multiple elements
+              setTimeout(() => {
+                entry.target.classList.add('is-visible');
+              }, index * 100);
+              observer.unobserve(entry.target);
+            }
+          });
+        }, observerOptions);
+
+        animatedElements.forEach(el => observer.observe(el));
+      } else {
+        // Fallback for browsers without IntersectionObserver
+        animatedElements.forEach(el => el.classList.add('is-visible'));
+      }
+
+      // Enhanced video loading with error handling
+      const videoIframes = document.querySelectorAll('.soleil-video-wrapper iframe');
+      videoIframes.forEach(iframe => {
+        iframe.addEventListener('load', function() {
+          this.style.opacity = '1';
+          console.log('Video loaded successfully');
+        });
+        
+        iframe.addEventListener('error', function() {
+          console.error('Failed to load video:', this.src);
+          const errorMessage = document.createElement('p');
+          errorMessage.textContent = 'Video temporarily unavailable';
+          errorMessage.style.padding = '2rem';
+          errorMessage.style.textAlign = 'center';
+          this.parentElement.innerHTML = '';
+          this.parentElement.appendChild(errorMessage);
+        });
+      });
+
+      // Aquí puedes agregar nueva información al código sin romperlo
+      // Add custom JavaScript functionality here
+
+    } catch (error) {
+      console.error('About section initialization error:', error);
+    }
+  });
+  // END: About Section JavaScript
+</script>
+
+{% comment %}
+  ============================================================================
+  SCHEMA - Section Settings Configuration
+  ============================================================================
+  
+  Adaptations:
+  - Integrated Horizon's color_scheme setting
+  - Added page_width setting for Horizon compatibility
+  - Preserved all Soleil block types
+  - Enhanced with Horizon's translation system
+  
+  Aquí puedes agregar nueva información al código sin romperlo.
+  ============================================================================
+{% endcomment %}
+
+{% schema %}
+{
+  "name": "Soleil About Us",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "page_width",
+      "label": "Page width",
+      "options": [
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "header",
+      "content": "Hero Section"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_hero",
+      "label": "Show Hero Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Hero Title",
+      "default": "About Soleil Beauty"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_subtitle",
+      "label": "Hero Subtitle",
+      "default": "Empowering beauty through quality products and exceptional service"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Background Image"
+    },
+    {
+      "type": "header",
+      "content": "Story Section"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_story",
+      "label": "Show Story Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "story_label",
+      "label": "Story Label",
+      "default": "Our Story"
+    },
+    {
+      "type": "text",
+      "id": "story_title",
+      "label": "Story Title",
+      "default": "Beauty Begins Here"
+    },
+    {
+      "type": "richtext",
+      "id": "story_content",
+      "label": "Story Content",
+      "default": "<p>Share your brand story here. Tell customers about your journey, values, and what makes your beauty brand unique.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "story_image",
+      "label": "Story Image"
+    },
+    {
+      "type": "text",
+      "id": "story_cta_text",
+      "label": "CTA Button Text",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "story_cta_link",
+      "label": "CTA Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Timeline"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_timeline",
+      "label": "Show Timeline",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "timeline_title",
+      "label": "Timeline Title",
+      "default": "Our Journey"
+    },
+    {
+      "type": "header",
+      "content": "Values"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_values",
+      "label": "Show Values",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "values_title",
+      "label": "Values Title",
+      "default": "Our Values"
+    },
+    {
+      "type": "header",
+      "content": "Team"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_team",
+      "label": "Show Team",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "team_title",
+      "label": "Team Title",
+      "default": "Meet Our Team"
+    },
+    {
+      "type": "text",
+      "id": "team_subtitle",
+      "label": "Team Subtitle",
+      "default": "The passionate people behind our brand"
+    },
+    {
+      "type": "header",
+      "content": "Video"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_video",
+      "label": "Show Video",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "video_title",
+      "label": "Video Title",
+      "default": "Watch Our Story"
+    },
+    {
+      "type": "url",
+      "id": "video_url",
+      "label": "Video URL (YouTube or Vimeo)",
+      "info": "Paste the full video URL from YouTube or Vimeo"
+    },
+    {
+      "type": "header",
+      "content": "Testimonials"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_testimonials",
+      "label": "Show Testimonials",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "testimonials_title",
+      "label": "Testimonials Title",
+      "default": "What Our Customers Say"
+    },
+    {
+      "type": "header",
+      "content": "Call to Action"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Show CTA",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_title",
+      "label": "CTA Title",
+      "default": "Ready to Start Your Beauty Journey?"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_text",
+      "label": "CTA Text",
+      "default": "Discover our curated collection of premium beauty products"
+    },
+    {
+      "type": "text",
+      "id": "cta_primary_text",
+      "label": "Primary Button Text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "cta_primary_link",
+      "label": "Primary Button Link"
+    },
+    {
+      "type": "text",
+      "id": "cta_secondary_text",
+      "label": "Secondary Button Text",
+      "default": "Contact Us"
+    },
+    {
+      "type": "url",
+      "id": "cta_secondary_link",
+      "label": "Secondary Button Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "timeline_item",
+      "name": "Timeline Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "year",
+          "label": "Year",
+          "default": "2020"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Our Beginning"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Describe this milestone in your company's journey"
+        }
+      ]
+    },
+    {
+      "type": "value",
+      "name": "Value",
+      "settings": [
+        {
+          "type": "html",
+          "id": "icon",
+          "label": "Icon SVG",
+          "info": "Paste SVG code for the icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Quality"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "We are committed to providing the highest quality products"
+        }
+      ]
+    },
+    {
+      "type": "team_member",
+      "name": "Team Member",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Team Member Name"
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "Role",
+          "default": "Position"
+        },
+        {
+          "type": "textarea",
+          "id": "bio",
+          "label": "Bio",
+          "default": "Brief bio about this team member"
+        },
+        {
+          "type": "url",
+          "id": "instagram",
+          "label": "Instagram URL"
+        },
+        {
+          "type": "url",
+          "id": "linkedin",
+          "label": "LinkedIn URL"
+        }
+      ]
+    },
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Testimonial Text",
+          "default": "This is an amazing product! Highly recommended."
+        },
+        {
+          "type": "text",
+          "id": "author_name",
+          "label": "Author Name",
+          "default": "Customer Name"
+        },
+        {
+          "type": "text",
+          "id": "author_title",
+          "label": "Author Title",
+          "default": "Verified Customer"
+        },
+        {
+          "type": "image_picker",
+          "id": "author_image",
+          "label": "Author Photo"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Soleil About Us",
+      "category": "Soleil"
+    }
+  ]
+}
+{% endschema %}

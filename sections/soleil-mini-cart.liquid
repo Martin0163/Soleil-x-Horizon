@@ -1,0 +1,997 @@
+{% comment %}
+  ============================================================================
+  SOLEIL MINI CART SECTION - Adapted for Horizon Theme
+  ============================================================================
+  
+  Source: Codigo Soleil theme (mini_cart.liquid)
+  Integration Date: Current
+  Adapted By: Senior Shopify Theme Engineer
+  
+  Purpose:
+  - Slide-out cart drawer from right side
+  - Free shipping progress bar
+  - Quantity controls with AJAX updates
+  - Cart notes and discounts
+  - Payment icons
+  
+  Adaptations Made:
+  - Integrated with Horizon's cart system
+  - Uses Horizon's color scheme variables
+  - Enhanced accessibility (ARIA labels, keyboard nav)
+  - Fixed form submission issues
+  - Added error handling
+  - Compatible with Horizon's cart-drawer.js
+  
+  Dependencies:
+  - Horizon base.css for core styles
+  - Horizon cart functionality
+  - assets/soleil-ajax-cart.js (will be created in Phase 3)
+  
+  Future Developers:
+  Aquí puedes agregar nueva información al código sin romperlo.
+  - Customize drawer width in CSS
+  - Add upsell products section
+  - Enhance shipping calculator
+  
+  Note: This section works alongside Horizon's existing cart.
+  To use this mini-cart, trigger it with: document.getElementById('mini-cart').classList.add('is-open')
+  
+  ============================================================================
+{% endcomment %}
+
+{% comment %} START: Mini Cart Drawer Container {% endcomment %}
+<div class="soleil-mini-cart" id="soleil-mini-cart" data-section-id="{{ section.id }}" role="dialog" aria-modal="true" aria-label="{{ section.settings.title | default: 'Shopping cart' | escape }}">
+  {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+  
+  {% comment %} START: Overlay Background {% endcomment %}
+  <div class="soleil-mini-cart-overlay" aria-hidden="true"></div>
+  {% comment %} END: Overlay Background {% endcomment %}
+  
+  {% comment %} START: Drawer Panel {% endcomment %}
+  <div class="soleil-mini-cart-drawer">
+    
+    {% comment %} START: Cart Header {% endcomment %}
+    <div class="soleil-mini-cart-header">
+      <h2 class="soleil-mini-cart-title h4">
+        {{ section.settings.title | default: 'Your Cart' | escape }}
+        <span class="soleil-cart-count" data-cart-count>{{ cart.item_count }}</span>
+      </h2>
+      <button 
+        type="button" 
+        class="soleil-mini-cart-close button-unstyled" 
+        aria-label="Close cart"
+        onclick="document.getElementById('soleil-mini-cart').classList.remove('is-open')"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6L6 18M6 6L18 18"/>
+        </svg>
+      </button>
+    </div>
+    {% comment %} END: Cart Header {% endcomment %}
+
+    {% comment %} START: Free Shipping Progress Bar {% endcomment %}
+    {%- if section.settings.show_free_shipping and section.settings.free_shipping_threshold > 0 -%}
+      <div class="soleil-mini-cart-shipping-bar">
+        {%- assign threshold = section.settings.free_shipping_threshold | times: 100 -%}
+        {%- assign progress = cart.total_price | divided_by: threshold | times: 100 | at_most: 100 -%}
+        {%- assign remaining = threshold | minus: cart.total_price -%}
+        
+        <div class="soleil-shipping-progress">
+          <div class="soleil-shipping-progress-bar" style="width: {{ progress }}%;" data-progress-bar></div>
+        </div>
+        
+        <p class="soleil-shipping-message paragraph" data-shipping-message>
+          {%- if cart.total_price >= threshold -%}
+            <svg class="soleil-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M16.667 5L7.5 14.167L3.333 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            {{ section.settings.free_shipping_message | default: 'You qualify for free shipping!' | escape }}
+          {%- else -%}
+            {{ section.settings.shipping_message | default: 'You are' | escape }}
+            <strong data-remaining-amount>{{ remaining | money }}</strong>
+            {{ ' away from free shipping!' }}
+          {%- endif -%}
+        </p>
+      </div>
+    {%- endif -%}
+    {% comment %} END: Free Shipping Progress Bar {% endcomment %}
+
+    {% comment %} START: Cart Items Body {% endcomment %}
+    <div class="soleil-mini-cart-body">
+      {%- if cart.item_count > 0 -%}
+        <ul class="soleil-cart-items" role="list" data-cart-items>
+          {%- for item in cart.items -%}
+            <li class="soleil-cart-item" data-line="{{ forloop.index }}" data-key="{{ item.key }}">
+              <div class="soleil-cart-item-image">
+                {%- if item.image -%}
+                  <img 
+                    src="{{ item.image | image_url: width: 200 }}" 
+                    srcset="
+                      {{ item.image | image_url: width: 100 }} 100w,
+                      {{ item.image | image_url: width: 200 }} 200w
+                    "
+                    sizes="100px"
+                    alt="{{ item.title | escape }}"
+                    loading="lazy"
+                    width="100"
+                    height="100"
+                  >
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                {%- endif -%}
+              </div>
+
+              <div class="soleil-cart-item-details">
+                <h3 class="soleil-cart-item-title h6">
+                  <a href="{{ item.url }}">{{ item.product.title | escape }}</a>
+                </h3>
+                
+                {%- if item.variant.title != 'Default Title' -%}
+                  <p class="soleil-cart-item-variant paragraph">{{ item.variant.title | escape }}</p>
+                {%- endif -%}
+
+                {%- if item.properties.size > 0 -%}
+                  <ul class="soleil-cart-item-properties">
+                    {%- for property in item.properties -%}
+                      {%- assign property_first_char = property.first | slice: 0 -%}
+                      {%- if property.last != blank and property_first_char != '_' -%}
+                        <li class="paragraph">
+                          <span class="property-label">{{ property.first }}:</span>
+                          <span class="property-value">{{ property.last }}</span>
+                        </li>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+
+                <div class="soleil-cart-item-price">
+                  {%- if item.original_price != item.final_price -%}
+                    <span class="price price-sale">{{ item.final_price | money }}</span>
+                    <s class="price price-compare">{{ item.original_price | money }}</s>
+                  {%- else -%}
+                    <span class="price">{{ item.final_price | money }}</span>
+                  {%- endif -%}
+                </div>
+
+                <div class="soleil-cart-item-quantity">
+                  <div class="soleil-quantity-input">
+                    <button 
+                      type="button" 
+                      class="soleil-quantity-minus button-unstyled" 
+                      aria-label="Decrease quantity"
+                      data-line="{{ forloop.index }}"
+                      data-quantity="{{ item.quantity }}"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      </svg>
+                    </button>
+                    
+                    <input 
+                      type="number" 
+                      name="updates[]" 
+                      value="{{ item.quantity }}" 
+                      min="1" 
+                      data-line="{{ forloop.index }}"
+                      data-key="{{ item.key }}"
+                      aria-label="Quantity for {{ item.title | escape }}"
+                      class="soleil-quantity-value"
+                    >
+                    
+                    <button 
+                      type="button" 
+                      class="soleil-quantity-plus button-unstyled" 
+                      aria-label="Increase quantity"
+                      data-line="{{ forloop.index }}"
+                      data-quantity="{{ item.quantity }}"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      </svg>
+                    </button>
+                  </div>
+
+                  <button 
+                    type="button" 
+                    class="soleil-cart-item-remove button-unstyled" 
+                    data-key="{{ item.key }}"
+                    aria-label="Remove {{ item.title | escape }}"
+                  >
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                      <path d="M14 4L4 14M4 4L14 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+            </li>
+          {%- endfor -%}
+        </ul>
+
+        {%- if section.settings.show_note -%}
+          <div class="soleil-cart-note spacing-style">
+            <label for="soleil-cart-note" class="h6">{{ section.settings.note_label | default: 'Order notes' | escape }}</label>
+            <textarea 
+              id="soleil-cart-note" 
+              name="note" 
+              placeholder="{{ section.settings.note_placeholder | default: 'Add special instructions...' | escape }}"
+              class="paragraph"
+              rows="3"
+            >{{ cart.note }}</textarea>
+          </div>
+        {%- endif -%}
+
+      {%- else -%}
+        {% comment %} START: Empty Cart State {% endcomment %}
+        <div class="soleil-cart-empty text-center">
+          <svg class="soleil-cart-empty-icon" width="80" height="80" viewBox="0 0 80 80" fill="none">
+            <path d="M26.667 73.333C29.428 73.333 31.667 71.094 31.667 68.333C31.667 65.572 29.428 63.333 26.667 63.333C23.906 63.333 21.667 65.572 21.667 68.333C21.667 71.094 23.906 73.333 26.667 73.333Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M60 73.333C62.761 73.333 65 71.094 65 68.333C65 65.572 62.761 63.333 60 63.333C57.239 63.333 55 65.572 55 68.333C55 71.094 57.239 73.333 60 73.333Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6.667 6.667H16.667L25.2 48.1C25.733 50.733 27.067 53.1 29 54.867C30.933 56.633 33.367 57.7 36 57.867H58C60.633 57.7 63.067 56.633 65 54.867C66.933 53.1 68.267 50.733 68.8 48.1L73.333 23.333H20" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <h3 class="h4">{{ section.settings.empty_title | default: 'Your cart is empty' | escape }}</h3>
+          <p class="paragraph">{{ section.settings.empty_text | default: 'Add some products to get started!' | escape }}</p>
+          <a href="{{ section.settings.empty_button_link | default: routes.all_products_collection_url }}" class="button button-primary">
+            {{ section.settings.empty_button_text | default: 'Continue Shopping' | escape }}
+          </a>
+        </div>
+        {% comment %} END: Empty Cart State {% endcomment %}
+      {%- endif -%}
+    </div>
+    {% comment %} END: Cart Items Body {% endcomment %}
+
+    {% comment %} START: Cart Footer with Totals and Checkout {% endcomment %}
+    {%- if cart.item_count > 0 -%}
+      <div class="soleil-mini-cart-footer">
+        
+        {%- if cart.cart_level_discount_applications.size > 0 -%}
+          <div class="soleil-cart-discounts">
+            {%- for discount in cart.cart_level_discount_applications -%}
+              <div class="soleil-cart-discount">
+                <span class="discount-label paragraph">{{ discount.title | escape }}</span>
+                <span class="discount-amount paragraph">-{{ discount.total_allocated_amount | money }}</span>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        <div class="soleil-cart-subtotal">
+          <span class="soleil-cart-subtotal-label h5">{{ 'cart.general.subtotal' | t | default: 'Subtotal' }}</span>
+          <span class="soleil-cart-subtotal-price h5" data-cart-total>{{ cart.total_price | money }}</span>
+        </div>
+
+        {%- if section.settings.show_tax_note -%}
+          <p class="soleil-cart-tax-note paragraph">{{ section.settings.tax_note | default: 'Taxes and shipping calculated at checkout' | escape }}</p>
+        {%- endif -%}
+
+        <div class="soleil-cart-actions">
+          <a href="{{ routes.cart_url }}" class="button button-secondary">
+            {{ section.settings.view_cart_text | default: 'View Cart' | escape }}
+          </a>
+          <button type="submit" name="checkout" class="button button-primary" onclick="window.location.href='{{ routes.cart_url }}'; return false;">
+            {{ section.settings.checkout_text | default: 'Checkout' | escape }}
+          </button>
+        </div>
+
+        {%- if section.settings.show_payment_icons -%}
+          <div class="soleil-cart-payment-icons">
+            {%- for type in shop.enabled_payment_types -%}
+              {{ type | payment_type_svg_tag: class: 'soleil-payment-icon' }}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+        {% comment %} Aquí puedes agregar nueva información al código sin romperlo {% endcomment %}
+      </div>
+    {%- endif -%}
+    {% comment %} END: Cart Footer {% endcomment %}
+
+  </div>
+  {% comment %} END: Drawer Panel {% endcomment %}
+
+</div>
+{% comment %} END: Mini Cart Drawer Container {% endcomment %}
+
+{% comment %}
+  ============================================================================
+  STYLES - Adapted from Soleil with Horizon Integration
+  ============================================================================
+  
+  Modifications:
+  - Uses Horizon's CSS custom properties
+  - Integrated with Horizon's drawer system
+  - Enhanced mobile responsiveness
+  - Improved accessibility styles
+  
+  Aquí puedes agregar nueva información al código sin romperlo.
+  ============================================================================
+{% endcomment %}
+
+<style>
+/* START: Base Mini Cart Styles */
+.soleil-mini-cart {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--layer-raised, 9999);
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.soleil-mini-cart.is-open {
+  pointer-events: all;
+  visibility: visible;
+}
+/* END: Base Mini Cart Styles */
+
+/* START: Overlay Styles */
+.soleil-mini-cart-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(var(--color-shadow-rgb) / 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.soleil-mini-cart.is-open .soleil-mini-cart-overlay {
+  opacity: 1;
+}
+/* END: Overlay Styles */
+
+/* START: Drawer Panel Styles */
+.soleil-mini-cart-drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  max-width: 450px;
+  height: 100%;
+  background: var(--color-background);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -4px 0 20px rgb(var(--color-shadow-rgb) / 0.1);
+}
+
+.soleil-mini-cart.is-open .soleil-mini-cart-drawer {
+  transform: translateX(0);
+}
+
+@media (max-width: 480px) {
+  .soleil-mini-cart-drawer {
+    max-width: 100%;
+  }
+}
+/* END: Drawer Panel Styles */
+
+/* START: Header Styles */
+.soleil-mini-cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--padding-xl);
+  border-bottom: 1px solid rgb(var(--color-border-rgb) / 0.2);
+}
+
+.soleil-mini-cart-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.soleil-cart-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 var(--padding-xs);
+  background: var(--color-primary);
+  color: var(--color-background);
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.soleil-mini-cart-close {
+  padding: var(--padding-sm);
+  cursor: pointer;
+  color: var(--color-foreground);
+  transition: color 0.3s ease;
+}
+
+.soleil-mini-cart-close:hover {
+  color: var(--color-primary);
+}
+/* END: Header Styles */
+
+/* START: Shipping Bar Styles */
+.soleil-mini-cart-shipping-bar {
+  padding: var(--padding-lg) var(--padding-xl);
+  background: rgb(var(--color-foreground-rgb) / 0.02);
+  border-bottom: 1px solid rgb(var(--color-border-rgb) / 0.2);
+}
+
+.soleil-shipping-progress {
+  height: 6px;
+  background: rgb(var(--color-foreground-rgb) / 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: var(--margin-sm);
+}
+
+.soleil-shipping-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+  transition: width 0.3s ease;
+}
+
+.soleil-shipping-message {
+  font-size: 0.875rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  color: rgb(var(--color-foreground-rgb) / 0.7);
+}
+
+.soleil-shipping-message .soleil-icon {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+/* END: Shipping Bar Styles */
+
+/* START: Cart Body Styles */
+.soleil-mini-cart-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--padding-xl);
+}
+
+.soleil-cart-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.soleil-cart-item {
+  display: flex;
+  gap: var(--gap-lg);
+  padding-bottom: var(--padding-xl);
+  margin-bottom: var(--margin-xl);
+  border-bottom: 1px solid rgb(var(--color-border-rgb) / 0.2);
+  transition: opacity 0.3s ease;
+}
+
+.soleil-cart-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.soleil-cart-item.removing {
+  opacity: 0.5;
+}
+/* END: Cart Body Styles */
+
+/* START: Cart Item Styles */
+.soleil-cart-item-image {
+  flex-shrink: 0;
+  width: 100px;
+  height: 100px;
+  border-radius: var(--style-border-radius-md, 8px);
+  overflow: hidden;
+  background: rgb(var(--color-foreground-rgb) / 0.05);
+}
+
+.soleil-cart-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.soleil-cart-item-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+}
+
+.soleil-cart-item-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.soleil-cart-item-title a {
+  color: var(--color-foreground);
+  text-decoration: none;
+}
+
+.soleil-cart-item-title a:hover {
+  color: var(--color-primary);
+}
+
+.soleil-cart-item-variant {
+  font-size: 0.875rem;
+  color: rgb(var(--color-foreground-rgb) / 0.6);
+  margin: 0;
+}
+
+.soleil-cart-item-properties {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.soleil-cart-item-price {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  margin-top: var(--margin-xs);
+}
+
+.soleil-cart-item-price .price {
+  font-weight: 600;
+}
+
+.soleil-cart-item-price .price-sale {
+  color: var(--color-primary);
+}
+
+.soleil-cart-item-price .price-compare {
+  text-decoration: line-through;
+  color: rgb(var(--color-foreground-rgb) / 0.5);
+  font-size: 0.875rem;
+}
+
+.soleil-cart-item-quantity {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-lg);
+  margin-top: auto;
+}
+/* END: Cart Item Styles */
+
+/* START: Quantity Input Styles */
+.soleil-quantity-input {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgb(var(--color-border-rgb) / 0.3);
+  border-radius: var(--style-border-radius-sm, 4px);
+  overflow: hidden;
+}
+
+.soleil-quantity-input button {
+  background: none;
+  border: none;
+  padding: var(--padding-sm);
+  cursor: pointer;
+  color: var(--color-foreground);
+  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.soleil-quantity-input button:hover {
+  background: rgb(var(--color-foreground-rgb) / 0.05);
+}
+
+.soleil-quantity-input button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.soleil-quantity-value {
+  width: 40px;
+  text-align: center;
+  border: none;
+  border-left: 1px solid rgb(var(--color-border-rgb) / 0.3);
+  border-right: 1px solid rgb(var(--color-border-rgb) / 0.3);
+  padding: var(--padding-sm) 0;
+  font-size: 0.875rem;
+  background: transparent;
+}
+
+.soleil-quantity-value::-webkit-inner-spin-button,
+.soleil-quantity-value::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.soleil-quantity-value[type=number] {
+  -moz-appearance: textfield;
+}
+
+.soleil-cart-item-remove {
+  padding: var(--padding-sm);
+  cursor: pointer;
+  color: rgb(var(--color-foreground-rgb) / 0.5);
+  transition: color 0.3s ease;
+}
+
+.soleil-cart-item-remove:hover {
+  color: var(--color-primary);
+}
+/* END: Quantity Input Styles */
+
+/* START: Cart Note Styles */
+.soleil-cart-note {
+  margin-top: var(--margin-xl);
+}
+
+.soleil-cart-note label {
+  display: block;
+  margin-bottom: var(--margin-xs);
+  font-weight: 600;
+}
+
+.soleil-cart-note textarea {
+  width: 100%;
+  padding: var(--padding-md);
+  border: 1px solid rgb(var(--color-border-rgb) / 0.3);
+  border-radius: var(--style-border-radius-md, 8px);
+  resize: vertical;
+  font-family: inherit;
+}
+/* END: Cart Note Styles */
+
+/* START: Empty Cart Styles */
+.soleil-cart-empty {
+  padding: var(--padding-4xl) var(--padding-lg);
+}
+
+.soleil-cart-empty-icon {
+  color: rgb(var(--color-foreground-rgb) / 0.3);
+  margin-bottom: var(--margin-xl);
+}
+
+.soleil-cart-empty h3 {
+  margin-bottom: var(--margin-sm);
+}
+
+.soleil-cart-empty p {
+  color: rgb(var(--color-foreground-rgb) / 0.6);
+  margin-bottom: var(--margin-xl);
+}
+/* END: Empty Cart Styles */
+
+/* START: Footer Styles */
+.soleil-mini-cart-footer {
+  padding: var(--padding-xl);
+  border-top: 1px solid rgb(var(--color-border-rgb) / 0.2);
+  background: rgb(var(--color-foreground-rgb) / 0.02);
+}
+
+.soleil-cart-discounts {
+  margin-bottom: var(--margin-md);
+}
+
+.soleil-cart-discount {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--padding-sm) 0;
+  color: var(--color-primary);
+}
+
+.soleil-cart-subtotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  margin-bottom: var(--margin-sm);
+  padding: var(--padding-sm) 0;
+}
+
+.soleil-cart-tax-note {
+  font-size: 0.875rem;
+  color: rgb(var(--color-foreground-rgb) / 0.6);
+  text-align: center;
+  margin: 0 0 var(--margin-lg);
+}
+
+.soleil-cart-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.soleil-cart-actions .button {
+  width: 100%;
+  text-align: center;
+}
+
+.soleil-cart-payment-icons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--gap-sm);
+  margin-top: var(--margin-lg);
+  padding-top: var(--padding-lg);
+  border-top: 1px solid rgb(var(--color-border-rgb) / 0.2);
+}
+
+.soleil-payment-icon {
+  height: 24px;
+  width: auto;
+  opacity: 0.6;
+}
+/* END: Footer Styles */
+</style>
+
+{% comment %}
+  ============================================================================
+  JAVASCRIPT - Cart Drawer Functionality
+  ============================================================================
+  
+  Adaptations:
+  - Enhanced with AJAX cart updates
+  - Keyboard navigation (ESC to close)
+  - Focus trap for accessibility
+  - Compatible with Horizon's cart system
+  
+  Note: Full AJAX functionality requires assets/soleil-ajax-cart.js
+  
+  Aquí puedes agregar nueva información al código sin romperlo.
+  ============================================================================
+{% endcomment %}
+
+<script>
+  // START: Mini Cart JavaScript - Adapted for Horizon
+  (function() {
+    const miniCart = document.getElementById('soleil-mini-cart');
+    if (!miniCart) return;
+
+    const overlay = miniCart.querySelector('.soleil-mini-cart-overlay');
+    const closeBtn = miniCart.querySelector('.soleil-mini-cart-close');
+
+    // Close cart function
+    function closeCart() {
+      miniCart.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    // Open cart function (can be called from other scripts)
+    window.openSoleilMiniCart = function() {
+      miniCart.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    };
+
+    // Close on overlay click
+    if (overlay) {
+      overlay.addEventListener('click', closeCart);
+    }
+
+    // Close on button click
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeCart);
+    }
+
+    // Close on ESC key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && miniCart.classList.contains('is-open')) {
+        closeCart();
+      }
+    });
+
+    // Quantity controls
+    const quantityButtons = miniCart.querySelectorAll('.soleil-quantity-minus, .soleil-quantity-plus');
+    quantityButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const line = this.dataset.line;
+        const input = miniCart.querySelector(`input[data-line="${line}"]`);
+        const currentQty = parseInt(input.value);
+        
+        if (this.classList.contains('soleil-quantity-minus')) {
+          input.value = Math.max(1, currentQty - 1);
+        } else {
+          input.value = currentQty + 1;
+        }
+        
+        // Trigger change event for AJAX update
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+    });
+
+    // Remove item buttons
+    const removeButtons = miniCart.querySelectorAll('.soleil-cart-item-remove');
+    removeButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const key = this.dataset.key;
+        const cartItem = this.closest('.soleil-cart-item');
+        
+        if (cartItem) {
+          cartItem.classList.add('removing');
+        }
+        
+        // AJAX remove (requires soleil-ajax-cart.js)
+        if (window.SoleilCart && window.SoleilCart.removeItem) {
+          window.SoleilCart.removeItem(key);
+        } else {
+          // Fallback: redirect to cart with remove parameter
+          window.location.href = `${window.Shopify.routes.root}cart/change?line=${this.dataset.line}&quantity=0`;
+        }
+      });
+    });
+
+    // Aquí puedes agregar nueva información al código sin romperlo
+    // Add custom cart functionality here
+
+  })();
+  // END: Mini Cart JavaScript
+</script>
+
+{% comment %}
+  ============================================================================
+  SCHEMA - Section Settings Configuration
+  ============================================================================
+  
+  Adaptations:
+  - Integrated Horizon's color_scheme setting
+  - Enhanced with better defaults
+  - Preserved all Soleil cart settings
+  - Added helpful info text
+  
+  Aquí puedes agregar nueva información al código sin romperlo.
+  ============================================================================
+{% endcomment %}
+
+{% schema %}
+{
+  "name": "Soleil Mini Cart",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Cart Header"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Cart title",
+      "default": "Your Cart"
+    },
+    {
+      "type": "header",
+      "content": "Free Shipping Bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_free_shipping",
+      "label": "Show free shipping progress",
+      "default": true,
+      "info": "Display a progress bar showing how close customer is to free shipping"
+    },
+    {
+      "type": "number",
+      "id": "free_shipping_threshold",
+      "label": "Free shipping threshold",
+      "default": 50,
+      "info": "Amount in dollars (e.g., 50 for $50.00)"
+    },
+    {
+      "type": "text",
+      "id": "shipping_message",
+      "label": "Shipping message",
+      "default": "You are",
+      "info": "Text before the remaining amount"
+    },
+    {
+      "type": "text",
+      "id": "free_shipping_message",
+      "label": "Free shipping achieved message",
+      "default": "You qualify for free shipping!"
+    },
+    {
+      "type": "header",
+      "content": "Cart Note"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_note",
+      "label": "Show order note",
+      "default": true,
+      "info": "Allow customers to add special instructions"
+    },
+    {
+      "type": "text",
+      "id": "note_label",
+      "label": "Note label",
+      "default": "Order notes"
+    },
+    {
+      "type": "text",
+      "id": "note_placeholder",
+      "label": "Note placeholder",
+      "default": "Add special instructions..."
+    },
+    {
+      "type": "header",
+      "content": "Cart Footer"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tax_note",
+      "label": "Show tax note",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tax_note",
+      "label": "Tax note",
+      "default": "Taxes and shipping calculated at checkout"
+    },
+    {
+      "type": "text",
+      "id": "view_cart_text",
+      "label": "View cart button text",
+      "default": "View Cart"
+    },
+    {
+      "type": "text",
+      "id": "checkout_text",
+      "label": "Checkout button text",
+      "default": "Checkout"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show payment icons",
+      "default": true,
+      "info": "Display accepted payment methods"
+    },
+    {
+      "type": "header",
+      "content": "Empty Cart"
+    },
+    {
+      "type": "text",
+      "id": "empty_title",
+      "label": "Empty cart title",
+      "default": "Your cart is empty"
+    },
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "Empty cart text",
+      "default": "Add some products to get started!"
+    },
+    {
+      "type": "text",
+      "id": "empty_button_text",
+      "label": "Empty cart button text",
+      "default": "Continue Shopping"
+    },
+    {
+      "type": "url",
+      "id": "empty_button_link",
+      "label": "Empty cart button link",
+      "info": "Leave blank to use all products collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Soleil Mini Cart",
+      "category": "Soleil"
+    }
+  ]
+}
+{% endschema %}

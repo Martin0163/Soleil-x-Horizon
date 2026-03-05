@@ -1,0 +1,290 @@
+{% comment %}
+  Brands Grid Section - Premium Brand Logos Grid
+  Inspired by Sephora’s “Shop by Brand” section: Minimalist, premium grid of brand logos with optional names and descriptions.
+  Displays a responsive grid of brand logos, each optionally linking to collections/products/pages.
+  Uses League Spartan for names, clean body text via theme settings/CSS variables.
+  Preserves Horizon's modular structure with blocks.
+{% endcomment %}
+
+<div class="section section--brands-grid color-{{ section.settings.color_scheme }}">
+  <div class="brands-grid">
+    {% if section.settings.heading != blank %}
+      <h2 class="brands-grid__heading brands-grid__heading--{{ section.settings.alignment }}">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="brands-grid__grid">
+      {% for block in section.blocks %}
+        <div class="brands-grid__item" {{ block.shopify_attributes }}>
+          {% comment %}Brand logo with hover scale effect{% endcomment %}
+          <div class="brands-grid__logo-wrapper">
+            {% if block.settings.brand_logo %}
+              {% if block.settings.link != blank %}
+                <a href="{{ block.settings.link }}" class="brands-grid__link">
+              {% endif %}
+              {{ block.settings.brand_logo | image_url: width: 200 | image_tag:
+                loading: 'lazy',
+                width: block.settings.brand_logo.width,
+                height: block.settings.brand_logo.height,
+                class: 'brands-grid__logo',
+                alt: block.settings.brand_name | escape
+              }}
+              {% if block.settings.link != blank %}
+                </a>
+              {% endif %}
+            {% endif %}
+          </div>
+
+          {% comment %}Brand name - shown if toggle enabled{% endcomment %}
+          {% if section.settings.show_brand_names and block.settings.brand_name != blank %}
+            <h3 class="brands-grid__name">{{ block.settings.brand_name }}</h3>
+          {% endif %}
+
+          {% comment %}Brand description - shown if toggle enabled{% endcomment %}
+          {% if section.settings.show_descriptions and block.settings.description != blank %}
+            <p class="brands-grid__description">{{ block.settings.description }}</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .brands-grid {
+    padding: var(--padding-block-start) var(--padding-inline-start) var(--padding-block-end) var(--padding-inline-end);
+    max-width: var(--page-width);
+    margin: 0 auto;
+  }
+
+  .brands-grid__heading {
+    text-align: center;
+    margin-bottom: var(--gap-lg);
+  }
+
+  .brands-grid__heading--left {
+    text-align: left;
+  }
+
+  .brands-grid__grid {
+    display: grid;
+    gap: var(--gap-md);
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+
+  @media (min-width: 750px) {
+    .brands-grid__grid {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+  }
+
+  .brands-grid__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--gap-sm);
+    border-radius: var(--border-radius);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .brands-grid__item:hover {
+    box-shadow: var(--shadow-hover);
+  }
+
+  .brands-grid__logo-wrapper {
+    margin-bottom: var(--gap-sm);
+    overflow: hidden;
+    border-radius: var(--border-radius);
+  }
+
+  .brands-grid__logo {
+    width: 100%;
+    height: auto;
+    max-width: 120px;
+    filter: grayscale(100%); /* Monochrome style */
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+
+  .brands-grid__item:hover .brands-grid__logo {
+    transform: scale(1.05);
+    filter: grayscale(0%); /* Optional color on hover */
+  }
+
+  .brands-grid__link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .brands-grid__name {
+    font-family: 'League Spartan', sans-serif;
+    font-weight: 700;
+    font-size: var(--font-size--lg);
+    color: var(--color-foreground);
+    margin: var(--gap-xs) 0;
+    text-transform: uppercase;
+  }
+
+  .brands-grid__description {
+    font-family: var(--font-paragraph--family);
+    font-size: var(--font-size--body);
+    color: var(--color-foreground);
+    opacity: 0.8;
+    line-height: 1.5;
+    margin: 0;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Brands Grid",
+  "tag": "section",
+  "class": "section section--brands-grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "Shop by Brand"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Heading Alignment",
+      "options": [
+        { "value": "center", "label": "Center" },
+        { "value": "left", "label": "Left" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_brand_names",
+      "label": "Show Brand Names",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_descriptions",
+      "label": "Show Descriptions",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top Padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom Padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Left Padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Right Padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    }
+  ],
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Brand",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "brand_logo",
+          "label": "Brand Logo"
+        },
+        {
+          "type": "text",
+          "id": "brand_name",
+          "label": "Brand Name",
+          "default": "Brand Name"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Premium products from this brand."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brands Grid",
+      "blocks": [
+        {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Brand A",
+            "description": "Luxury skincare essentials."
+          }
+        },
+        {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Brand B",
+            "description": "High-end makeup collection."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% comment %}
+  CSS Additions for assets/base.css:
+  - Ensure CSS variables are defined (e.g., --color-foreground for black, --color-background for white, --color-accent for gold, --shadow-hover for hover effects).
+  - Add League Spartan font import if not already present: @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap');
+  - The stylesheet above includes basic rules; copy them to assets/base.css for global application.
+  - For premium feel, add subtle animations and ensure responsive grid adapts cleanly (e.g., 2-6 columns based on screen size).
+  Example additional rules:
+  .brands-grid__item {
+    border: 1px solid var(--color-border);
+  }
+  .brands-grid__name {
+    color: var(--color-foreground);
+  }
+  .brands-grid__description {
+    color: var(--color-foreground);
+    opacity: 0.8;
+  }
+{% endcomment %}
