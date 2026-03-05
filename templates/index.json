@@ -171,8 +171,8 @@
       "name": "Announcement Bar",
       "settings": {
         "enable_announcement": true,
-        "background_color": "#e3f7c8",
-        "text_color": "#110933",
+        "background_color": "#000000",
+        "text_color": "#ffffff",
         "show_close_button": false,
         "animation_style": "marquee"
       }
