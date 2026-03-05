@@ -9,6 +9,27 @@
  */
 {
   "sections": {
+    "announcement_bar_HKE8UW": {
+      "type": "announcement-bar",
+      "blocks": {
+        "message_6gLrRf": {
+          "type": "message",
+          "settings": {
+            "text": "Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar.",
+            "enable_timer": false,
+            "end_date": ""
+          }
+        }
+      },
+      "block_order": [
+        "message_6gLrRf"
+      ],
+      "name": "Announcement Bar",
+      "settings": {
+        "background": "#e3f7c8",
+        "text_color": "#110933"
+      }
+    },
     "header_8HFUJf": {
       "type": "header",
       "name": "Header",
@@ -18,27 +39,6 @@
         "nav_products_text": "Productos",
         "show_search": true,
         "show_account": true
-      }
-    },
-    "announcement_bar_DmiRjN": {
-      "type": "announcement-bar",
-      "blocks": {
-        "message_zahVCk": {
-          "type": "message",
-          "settings": {
-            "text": "Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar.",
-            "enable_timer": false,
-            "end_date": ""
-          }
-        }
-      },
-      "block_order": [
-        "message_zahVCk"
-      ],
-      "name": "Announcement Bar",
-      "settings": {
-        "background": "#e3f7c8",
-        "text_color": "#110933"
       }
     },
     "hero_jVaWmY": {
@@ -178,8 +178,8 @@
     }
   },
   "order": [
+    "announcement_bar_HKE8UW",
     "header_8HFUJf",
-    "announcement_bar_DmiRjN",
     "hero_jVaWmY",
     "dreams_hbwTMd",
     "new_arrivals_eiLMCg",
