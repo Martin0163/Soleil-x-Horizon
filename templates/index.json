@@ -161,7 +161,7 @@
         "message_D7UA97": {
           "type": "message",
           "settings": {
-            "text": "Welcome to our store!, Welcome to our store!, Welcome to our store!, Welcome to our store!, Welcome to our store!, Welcome to our store!"
+            "text": "Welcome to our store!, Welcome to our store!, Welcome to our store!, Welcome to our store!, Welcome to our store!, Welcome to our store!, Welcome to our store!<strong>, </strong>Welcome to our store!, Welcome to our store!"
           }
         }
       },
