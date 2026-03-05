@@ -119,7 +119,7 @@
         "enable_announcement": true,
         "background_color": "#e3f7c8",
         "text_color": "#110933",
-        "show_close_button": true
+        "show_close_button": false
       }
     },
     "dreams_hbwTMd": {
