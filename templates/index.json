@@ -9,6 +9,28 @@
  */
 {
   "sections": {
+    "announcement_bar_VeagUm": {
+      "type": "announcement-bar",
+      "blocks": {
+        "message_D7UA97": {
+          "type": "message",
+          "settings": {
+            "text": "Welcome to our store!, Welcome to our store!, Welcome to our store!, Welcome to our store!, Welcome to our store!, Welcome to our store!, Welcome to our store!<strong>, </strong>Welcome to our store!, Welcome to our store!"
+          }
+        }
+      },
+      "block_order": [
+        "message_D7UA97"
+      ],
+      "name": "Announcement Bar",
+      "settings": {
+        "enable_announcement": true,
+        "background_color": "#e3f7c8",
+        "text_color": "#110933",
+        "show_close_button": false,
+        "animation_style": "marquee"
+      }
+    },
     "header_8HFUJf": {
       "type": "header",
       "name": "Header",
@@ -154,36 +176,14 @@
         "products_per_page": 24,
         "enable_pagination": true
       }
-    },
-    "announcement_bar_VeagUm": {
-      "type": "announcement-bar",
-      "blocks": {
-        "message_D7UA97": {
-          "type": "message",
-          "settings": {
-            "text": "Welcome to our store!, Welcome to our store!, Welcome to our store!, Welcome to our store!, Welcome to our store!, Welcome to our store!, Welcome to our store!<strong>, </strong>Welcome to our store!, Welcome to our store!"
-          }
-        }
-      },
-      "block_order": [
-        "message_D7UA97"
-      ],
-      "name": "Announcement Bar",
-      "settings": {
-        "enable_announcement": true,
-        "background_color": "#e3f7c8",
-        "text_color": "#110933",
-        "show_close_button": false,
-        "animation_style": "marquee"
-      }
     }
   },
   "order": [
     "header_8HFUJf",
+    "announcement_bar_VeagUm",
     "hero_jVaWmY",
     "dreams_hbwTMd",
     "new_arrivals_eiLMCg",
-    "soleil_products_gFXUHy",
-    "announcement_bar_VeagUm"
+    "soleil_products_gFXUHy"
   ]
 }
