@@ -4,8 +4,8 @@
    ============================================================================ */
 
 /* Import all layout style files */
-@import 'layout.grid.css';
-@import 'layout.sections.css';
-@import 'layout.flex.css';
-@import 'layout.drawer.css';
-@import 'layout.sticky.css';
+@import 'layout.grid.css.liquid';
+@import 'layout.sections.css.liquid';
+@import 'layout.flex.css.liquid';
+@import 'layout.drawer.css.liquid';
+@import 'layout.sticky.css.liquid';
