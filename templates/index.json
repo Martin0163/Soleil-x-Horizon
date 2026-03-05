@@ -9,27 +9,6 @@
  */
 {
   "sections": {
-    "announcement_bar_HKE8UW": {
-      "type": "announcement-bar",
-      "blocks": {
-        "message_6gLrRf": {
-          "type": "message",
-          "settings": {
-            "text": "Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar.",
-            "enable_timer": false,
-            "end_date": ""
-          }
-        }
-      },
-      "block_order": [
-        "message_6gLrRf"
-      ],
-      "name": "Announcement Bar",
-      "settings": {
-        "background": "#e3f7c8",
-        "text_color": "#110933"
-      }
-    },
     "header_8HFUJf": {
       "type": "header",
       "name": "Header",
@@ -175,39 +154,13 @@
         "products_per_page": 24,
         "enable_pagination": true
       }
-    },
-    "soleil_mini_cart_enzA79": {
-      "type": "soleil-mini-cart",
-      "name": "Soleil Mini Cart",
-      "settings": {
-        "color_scheme": "scheme-5",
-        "title": "Your Cart",
-        "show_free_shipping": true,
-        "free_shipping_threshold": 50,
-        "shipping_message": "You are",
-        "free_shipping_message": "You qualify for free shipping!",
-        "show_note": true,
-        "note_label": "Order notes",
-        "note_placeholder": "Add special instructions...",
-        "show_tax_note": true,
-        "tax_note": "Taxes and shipping calculated at checkout",
-        "view_cart_text": "View Cart",
-        "checkout_text": "Checkout",
-        "show_payment_icons": true,
-        "empty_title": "Your cart is empty",
-        "empty_text": "Add some products to get started!",
-        "empty_button_text": "Continue Shopping",
-        "empty_button_link": ""
-      }
     }
   },
   "order": [
-    "announcement_bar_HKE8UW",
     "header_8HFUJf",
     "hero_jVaWmY",
     "dreams_hbwTMd",
     "new_arrivals_eiLMCg",
-    "soleil_products_gFXUHy",
-    "soleil_mini_cart_enzA79"
+    "soleil_products_gFXUHy"
   ]
 }
