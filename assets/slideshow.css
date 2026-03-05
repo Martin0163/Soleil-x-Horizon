@@ -1,3 +1,12 @@
+/* ============================================================================
+   FILE: slideshow.css
+   Component: Slideshow / Carousel
+   ============================================================================ */
+
+/* ============================================================================
+   BLOCK: Container
+   ============================================================================ */
+
 .slideshow {
   position: relative;
   overflow: hidden;
@@ -5,11 +14,19 @@
   height: var(--slideshow-height, auto);
 }
 
+/* ============================================================================
+   BLOCK: Track
+   ============================================================================ */
+
 .slideshow__track {
   display: flex;
   transition: transform var(--motion-duration-medium) var(--motion-ease-standard);
   gap: var(--slideshow-gutter);
 }
+
+/* ============================================================================
+   BLOCK: Slide
+   ============================================================================ */
 
 .slideshow__slide {
   flex: 0 0 100%;
@@ -17,6 +34,10 @@
   border-radius: var(--card-radius);
   overflow: hidden;
 }
+
+/* ============================================================================
+   BLOCK: Caption
+   ============================================================================ */
 
 .slideshow__caption {
   position: absolute;
@@ -28,6 +49,11 @@
   border-radius: var(--radius-sm);
 }
 
+/* ============================================================================
+   BLOCK: Arrows
+   ============================================================================ */
+
+/* --- Base --- */
 .slideshow__arrow {
   position: absolute;
   top: 50%;
@@ -41,8 +67,13 @@
   cursor: pointer;
 }
 
+/* --- Variants (--prev, --next) --- */
 .slideshow__arrow--prev { left: var(--space-md); }
 .slideshow__arrow--next { right: var(--space-md); }
+
+/* ============================================================================
+   BLOCK: Dots / Pagination
+   ============================================================================ */
 
 .slideshow__dots {
   position: absolute;
@@ -53,6 +84,7 @@
   gap: var(--space-xs);
 }
 
+/* --- Base --- */
 .slideshow__dots button {
   width: var(--slideshow-dot-size);
   height: var(--slideshow-dot-size);
@@ -62,11 +94,15 @@
   cursor: pointer;
 }
 
+/* --- Variants (.is-active) --- */
 .slideshow__dots button.is-active {
   background: var(--color-brand-primary);
 }
 
-/* Reduced motion */
+/* ============================================================================
+   BLOCK: Reduced Motion
+   ============================================================================ */
+
 @media (prefers-reduced-motion: reduce) {
   .slideshow__track {
     transition: none;

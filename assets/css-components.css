@@ -1,0 +1,12 @@
+/* ============================================================================
+   FILE: css-components.css
+   Component Styles for Soleil x Horizon Theme
+   ============================================================================ */
+
+/* Import all component style files */
+@import 'components/card.css';
+@import 'components/navigation.css';
+@import 'components/slideshow.css';
+@import 'components/announcement-bar.css';
+@import 'components/fly-to-cart.css';
+@import 'components/product.css';

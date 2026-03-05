@@ -1,29 +1,10 @@
-/**
- * ============================================================================
- * SOLEIL THEME STYLES - Visual Design Enhancements for Horizon
- * ============================================================================
- * 
- * Purpose: Enhanced visual styling for Soleil sections integrated into Horizon
- * Author: Senior Shopify Theme Engineer
- * Integration Date: Current
- * 
- * This stylesheet provides:
- * - Enhanced color schemes and gradients
- * - Advanced typography styles
- * - Smooth animations and transitions
- * - Visual effects (shadows, overlays, blur)
- * - Responsive design enhancements
- * 
- * Dependencies:
- * - Horizon base.css (must be loaded first)
- * - Horizon color scheme system
- * 
- * Aquí puedes agregar nueva información al código sin romperlo.
- * ============================================================================
- */
+/* ============================================================================
+   FILE: soleil-theme-styles.css
+   Visual Enhancements: Soleil Design Layer for Horizon
+   ============================================================================ */
 
 /* ============================================================================
-   CUSTOM PROPERTIES - Soleil Design Tokens
+   BLOCK: Custom Properties — Soleil Design Tokens
    ============================================================================ */
 
 :root {
@@ -61,14 +42,12 @@
   --soleil-space-3xl: 4rem;
   --soleil-space-4xl: 6rem;
   
-  /* Aquí puedes agregar nueva información al código sin romperlo */
 }
 
 /* ============================================================================
-   TYPOGRAPHY ENHANCEMENTS
+   BLOCK: Typography — Headings
    ============================================================================ */
 
-/* Soleil Heading Styles */
 .soleil-heading-display {
   font-size: clamp(2.5rem, 6vw, 4.5rem);
   font-weight: 800;
@@ -93,7 +72,10 @@
   line-height: 1.3;
 }
 
-/* Soleil Text Styles */
+/* ============================================================================
+   BLOCK: Typography — Text Styles
+   ============================================================================ */
+
 .soleil-text-lead {
   font-size: clamp(1.125rem, 2vw, 1.25rem);
   line-height: 1.7;
@@ -105,13 +87,11 @@
   font-weight: 600;
 }
 
-/* Aquí puedes agregar nueva información al código sin romperlo */
-
 /* ============================================================================
-   BUTTON ENHANCEMENTS
+   BLOCK: Buttons — Primary
    ============================================================================ */
 
-/* Soleil Primary Button */
+/* --- Base --- */
 .soleil-button-primary {
   position: relative;
   padding: 1rem 2rem;
@@ -126,6 +106,7 @@
   transition: transform var(--soleil-transition-base), box-shadow var(--soleil-transition-base);
 }
 
+/* --- Pseudo-elements (::before) --- */
 .soleil-button-primary::before {
   content: '';
   position: absolute;
@@ -138,6 +119,7 @@
   transition: opacity var(--soleil-transition-base);
 }
 
+/* --- States (:hover) --- */
 .soleil-button-primary:hover {
   transform: translateY(-2px);
   box-shadow: var(--soleil-shadow-lg);
@@ -147,7 +129,11 @@
   opacity: 1;
 }
 
-/* Soleil Secondary Button */
+/* ============================================================================
+   BLOCK: Buttons — Secondary
+   ============================================================================ */
+
+/* --- Base --- */
 .soleil-button-secondary {
   padding: 1rem 2rem;
   background: transparent;
@@ -157,22 +143,23 @@
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  transition: all var(--soleil-transition-base);
+  transition: background-color var(--soleil-transition-base),
+              color var(--soleil-transition-base),
+              transform var(--soleil-transition-base);
 }
 
+/* --- States (:hover) --- */
 .soleil-button-secondary:hover {
   background: var(--color-foreground);
   color: var(--color-background);
   transform: translateY(-2px);
 }
 
-/* Aquí puedes agregar nueva información al código sin romperlo */
-
 /* ============================================================================
-   CARD ENHANCEMENTS
+   BLOCK: Cards — Base
    ============================================================================ */
 
-/* Soleil Card Base */
+/* --- Base --- */
 .soleil-card {
   background: var(--color-background);
   border-radius: 16px;
@@ -180,12 +167,17 @@
   transition: transform var(--soleil-transition-base), box-shadow var(--soleil-transition-base);
 }
 
+/* --- States (:hover) --- */
 .soleil-card:hover {
   transform: translateY(-8px);
   box-shadow: var(--soleil-shadow-xl);
 }
 
-/* Soleil Card with Gradient Border */
+/* ============================================================================
+   BLOCK: Cards — Gradient Border
+   ============================================================================ */
+
+/* --- Base --- */
 .soleil-card-gradient {
   position: relative;
   background: var(--color-background);
@@ -193,6 +185,7 @@
   padding: 2px;
 }
 
+/* --- Pseudo-elements (::before) --- */
 .soleil-card-gradient::before {
   content: '';
   position: absolute;
@@ -212,7 +205,10 @@
   padding: var(--padding-xl);
 }
 
-/* Soleil Glass Card */
+/* ============================================================================
+   BLOCK: Cards — Glass
+   ============================================================================ */
+
 .soleil-card-glass {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
@@ -221,13 +217,10 @@
   box-shadow: var(--soleil-shadow-lg);
 }
 
-/* Aquí puedes agregar nueva información al código sin romperlo */
-
 /* ============================================================================
-   ANIMATION UTILITIES
+   BLOCK: Animations — Fade In
    ============================================================================ */
 
-/* Fade In Animation */
 @keyframes soleil-fade-in {
   from {
     opacity: 0;
@@ -243,7 +236,10 @@
   animation: soleil-fade-in 0.6s ease-out forwards;
 }
 
-/* Slide In Animation */
+/* ============================================================================
+   BLOCK: Animations — Slide In
+   ============================================================================ */
+
 @keyframes soleil-slide-in-left {
   from {
     opacity: 0;
@@ -274,7 +270,10 @@
   animation: soleil-slide-in-right 0.6s ease-out forwards;
 }
 
-/* Scale In Animation */
+/* ============================================================================
+   BLOCK: Animations — Scale In
+   ============================================================================ */
+
 @keyframes soleil-scale-in {
   from {
     opacity: 0;
@@ -290,7 +289,10 @@
   animation: soleil-scale-in 0.5s ease-out forwards;
 }
 
-/* Shimmer Effect */
+/* ============================================================================
+   BLOCK: Animations — Shimmer
+   ============================================================================ */
+
 @keyframes soleil-shimmer {
   0% {
     background-position: -1000px 0;
@@ -311,13 +313,10 @@
   animation: soleil-shimmer 2s infinite;
 }
 
-/* Aquí puedes agregar nueva información al código sin romperlo */
-
 /* ============================================================================
-   SECTION-SPECIFIC ENHANCEMENTS
+   BLOCK: Section — About Us
    ============================================================================ */
 
-/* About Us Section Enhancements */
 .soleil-about-us-section .soleil-hero-content {
   position: relative;
   z-index: 2;
@@ -335,17 +334,23 @@
   background: var(--soleil-gradient-gold);
 }
 
+/* --- States (:hover) --- */
 .soleil-value-card:hover .soleil-value-icon {
   transform: scale(1.1) rotate(5deg);
   transition: transform var(--soleil-transition-base);
 }
 
-/* Brands Section Enhancements */
+/* ============================================================================
+   BLOCK: Section — Brands
+   ============================================================================ */
+
+/* --- Base --- */
 .soleil-brand-card {
   position: relative;
   overflow: hidden;
 }
 
+/* --- Pseudo-elements (::after) --- */
 .soleil-brand-card::after {
   content: '';
   position: absolute;
@@ -362,11 +367,15 @@
   transition: left 0.5s;
 }
 
+/* --- States (:hover::after) --- */
 .soleil-brand-card:hover::after {
   left: 100%;
 }
 
-/* Dreams Section Enhancements */
+/* ============================================================================
+   BLOCK: Section — Dreams
+   ============================================================================ */
+
 .soleil-dreams-section .soleil-dreams-media::before {
   content: '';
   position: absolute;
@@ -385,19 +394,27 @@
   background: rgba(255, 255, 255, 0.95);
 }
 
-/* New Arrivals Section Enhancements */
+/* ============================================================================
+   BLOCK: Section — New Arrivals
+   ============================================================================ */
+
+/* --- Base --- */
 .soleil-slider-btn {
   backdrop-filter: blur(10px);
   background: rgba(255, 255, 255, 0.9);
 }
 
+/* --- States (:hover) --- */
 .soleil-slider-btn:hover {
   background: var(--soleil-primary);
   color: white;
   border-color: var(--soleil-primary);
 }
 
-/* Mini Cart Enhancements */
+/* ============================================================================
+   BLOCK: Section — Mini Cart
+   ============================================================================ */
+
 .soleil-mini-cart-drawer {
   box-shadow: -8px 0 32px rgba(0, 0, 0, 0.15);
 }
@@ -407,17 +424,23 @@
   box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
 }
 
+/* --- States (:hover) --- */
 .soleil-cart-item:hover {
   background: rgba(212, 175, 55, 0.05);
   transition: background var(--soleil-transition-base);
 }
 
-/* Promotions Banner Enhancements */
+/* ============================================================================
+   BLOCK: Section — Promotions Banner
+   ============================================================================ */
+
+/* --- Base --- */
 .soleil-promo-banner {
   position: relative;
   overflow: hidden;
 }
 
+/* --- Pseudo-elements (::before) --- */
 .soleil-promo-banner::before {
   content: '';
   position: absolute;
@@ -433,6 +456,7 @@
   animation: soleil-pulse 3s ease-in-out infinite;
 }
 
+/* --- Keyframes --- */
 @keyframes soleil-pulse {
   0%, 100% {
     transform: scale(1);
@@ -444,13 +468,10 @@
   }
 }
 
-/* Aquí puedes agregar nueva información al código sin romperlo */
-
 /* ============================================================================
-   UTILITY CLASSES
+   BLOCK: Utilities — Gradient Text
    ============================================================================ */
 
-/* Gradient Text */
 .soleil-gradient-text {
   background: var(--soleil-gradient-gold);
   -webkit-background-clip: text;
@@ -458,42 +479,63 @@
   background-clip: text;
 }
 
-/* Glass Effect */
+/* ============================================================================
+   BLOCK: Utilities — Glass Effect
+   ============================================================================ */
+
 .soleil-glass {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Hover Lift */
+/* ============================================================================
+   BLOCK: Utilities — Hover Lift
+   ============================================================================ */
+
+/* --- Base --- */
 .soleil-hover-lift {
   transition: transform var(--soleil-transition-base), box-shadow var(--soleil-transition-base);
 }
 
+/* --- States (:hover) --- */
 .soleil-hover-lift:hover {
   transform: translateY(-4px);
   box-shadow: var(--soleil-shadow-lg);
 }
 
-/* Hover Scale */
+/* ============================================================================
+   BLOCK: Utilities — Hover Scale
+   ============================================================================ */
+
+/* --- Base --- */
 .soleil-hover-scale {
   transition: transform var(--soleil-transition-base);
 }
 
+/* --- States (:hover) --- */
 .soleil-hover-scale:hover {
   transform: scale(1.05);
 }
 
-/* Hover Glow */
+/* ============================================================================
+   BLOCK: Utilities — Hover Glow
+   ============================================================================ */
+
+/* --- Base --- */
 .soleil-hover-glow {
   transition: box-shadow var(--soleil-transition-base);
 }
 
+/* --- States (:hover) --- */
 .soleil-hover-glow:hover {
   box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
 }
 
-/* Overlay */
+/* ============================================================================
+   BLOCK: Utilities — Overlay
+   ============================================================================ */
+
 .soleil-overlay {
   position: absolute;
   inset: 0;
@@ -504,19 +546,19 @@
   );
 }
 
-/* Blur Background */
+/* ============================================================================
+   BLOCK: Utilities — Blur Background
+   ============================================================================ */
+
 .soleil-blur-bg {
   backdrop-filter: blur(20px);
   background: rgba(255, 255, 255, 0.8);
 }
 
-/* Aquí puedes agregar nueva información al código sin romperlo */
-
 /* ============================================================================
-   RESPONSIVE DESIGN ENHANCEMENTS
+   BLOCK: Responsive — Tablet
    ============================================================================ */
 
-/* Tablet Adjustments */
 @media (max-width: 1023px) {
   :root {
     --soleil-space-4xl: 4rem;
@@ -532,7 +574,10 @@
   }
 }
 
-/* Mobile Adjustments */
+/* ============================================================================
+   BLOCK: Responsive — Mobile
+   ============================================================================ */
+
 @media (max-width: 749px) {
   :root {
     --soleil-space-4xl: 3rem;
@@ -559,29 +604,21 @@
   }
 }
 
-/* Aquí puedes agregar nueva información al código sin romperlo */
-
 /* ============================================================================
-   ACCESSIBILITY ENHANCEMENTS
+   BLOCK: Accessibility — Focus Visible
    ============================================================================ */
 
-/* Focus Visible Styles */
 .soleil-button-primary:focus-visible,
 .soleil-button-secondary:focus-visible {
   outline: 3px solid var(--soleil-primary);
   outline-offset: 2px;
 }
 
-/* Reduced Motion */
+/* ============================================================================
+   BLOCK: Accessibility — Reduced Motion (Soleil-specific; universal in base.css)
+   ============================================================================ */
+
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  
   .soleil-animate-fade-in,
   .soleil-animate-slide-left,
   .soleil-animate-slide-right,
@@ -592,7 +629,10 @@
   }
 }
 
-/* High Contrast Mode */
+/* ============================================================================
+   BLOCK: Accessibility — High Contrast
+   ============================================================================ */
+
 @media (prefers-contrast: high) {
   .soleil-card {
     border: 2px solid currentColor;
@@ -604,10 +644,8 @@
   }
 }
 
-/* Aquí puedes agregar nueva información al código sin romperlo */
-
 /* ============================================================================
-   PRINT STYLES
+   BLOCK: Print Styles
    ============================================================================ */
 
 @media print {
@@ -629,20 +667,3 @@
   }
 }
 
-/* Aquí puedes agregar nueva información al código sin romperlo */
-
-/**
- * ============================================================================
- * END OF SOLEIL THEME STYLES
- * ============================================================================
- * 
- * Future Developers:
- * - All custom properties are defined at :root for easy customization
- * - Use utility classes for common patterns
- * - Follow BEM naming convention for new components
- * - Test all changes across different browsers and devices
- * - Maintain accessibility standards (WCAG 2.1 AA minimum)
- * 
- * Aquí puedes agregar nueva información al código sin romperlo.
- * ============================================================================
- */

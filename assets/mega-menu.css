@@ -1,9 +1,22 @@
+/* ============================================================================
+   FILE: mega-menu.css
+   Component: Mega Menu (Desktop Navigation Dropdown)
+   ============================================================================ */
+
+/* ============================================================================
+   BLOCK: Container
+   ============================================================================ */
+
 .mega-menu {
   position: relative;
   z-index: var(--layer-mega-menu);
   background: var(--color-bg-primary);
   font-size: var(--font-size-sm);
 }
+
+/* ============================================================================
+   BLOCK: List
+   ============================================================================ */
 
 .mega-menu__list {
   display: flex;
@@ -13,6 +26,11 @@
   padding: 0;
 }
 
+/* ============================================================================
+   BLOCK: Summary Trigger
+   ============================================================================ */
+
+/* --- Base --- */
 .mega-menu__summary {
   cursor: pointer;
   font-weight: var(--font-weight-medium);
@@ -21,11 +39,17 @@
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
+/* --- States (:hover, :focus-visible) --- */
 .mega-menu__summary:hover,
 .mega-menu__summary:focus-visible {
   background-color: var(--color-border-light);
 }
 
+/* ============================================================================
+   BLOCK: Panel (Dropdown)
+   ============================================================================ */
+
+/* --- Base --- */
 .mega-menu__panel {
   position: absolute;
   top: 100%;
@@ -37,9 +61,14 @@
   display: none;
 }
 
+/* --- Variants ([open]) --- */
 .mega-menu__details[open] > .mega-menu__panel {
   display: block;
 }
+
+/* ============================================================================
+   BLOCK: Columns Grid
+   ============================================================================ */
 
 .mega-menu__columns {
   display: grid;
@@ -47,6 +76,11 @@
   gap: var(--mega-menu-column-gap);
 }
 
+/* ============================================================================
+   BLOCK: Links
+   ============================================================================ */
+
+/* --- Base --- */
 .mega-menu__link {
   display: block;
   padding: var(--space-xs) 0;
@@ -55,10 +89,15 @@
   text-decoration: none;
 }
 
+/* --- States (:hover, :focus-visible) --- */
 .mega-menu__link:hover,
 .mega-menu__link:focus-visible {
   color: var(--color-brand-primary);
 }
+
+/* ============================================================================
+   BLOCK: Sublinks
+   ============================================================================ */
 
 .mega-menu__sublist {
   list-style: none;
@@ -66,6 +105,7 @@
   padding: 0;
 }
 
+/* --- Base --- */
 .mega-menu__sublink {
   display: block;
   padding: var(--space-2xs) 0;
@@ -74,6 +114,7 @@
   text-decoration: none;
 }
 
+/* --- States (:hover, :focus-visible) --- */
 .mega-menu__sublink:hover,
 .mega-menu__sublink:focus-visible {
   color: var(--color-brand-primary);

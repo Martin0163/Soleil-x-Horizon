@@ -1,0 +1,11 @@
+/* ============================================================================
+   FILE: css-layout.css
+   Layout Styles for Soleil x Horizon Theme
+   ============================================================================ */
+
+/* Import all layout style files */
+@import 'layout/grid.css';
+@import 'layout/sections.css';
+@import 'layout/flex.css';
+@import 'layout/drawer.css';
+@import 'layout/sticky.css';

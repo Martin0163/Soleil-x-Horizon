@@ -1,0 +1,11 @@
+/* ============================================================================
+   FILE: css-utilities.css
+   Utility Styles for Soleil x Horizon Theme
+   ============================================================================ */
+
+/* Import all utility style files */
+@import 'utilities/spacing.css';
+@import 'utilities/text.css';
+@import 'utilities/display.css';
+@import 'utilities/flex.css';
+@import 'utilities/animations.css';

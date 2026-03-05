@@ -1,22 +1,10 @@
-/*
- * ============================================================================
- * custom-sections.css
- * Horizon Theme — Custom Sections Stylesheet
- * ============================================================================
- * Contains styles for:
- *   1. Hero Banner Responsive (Luna Hernández)
- *   2. New Arrivals Section (Luna Hernández)
- *   3. Multicolumn Info Section (Luna Hernández)
- *   4. Animated Announcement Bar (Koelleza dual-direction marquee)
- *   5. Sephora-style Product Card enhancements
- *   6. Visual Separation utilities (header/content)
- *
- * All rules use Horizon's CSS custom properties for full theme compatibility.
- * ============================================================================
- */
+/* ============================================================================
+   FILE: custom-sections.css
+   Custom Sections: Hero, New Arrivals, Multicolumn, Product Card, Filters
+   ============================================================================ */
 
 /* ============================================================================
-   Start Hero Banner Responsive
+   BLOCK: Hero Banner Responsive — Container
    ============================================================================ */
 
 .hero-banner-responsive {
@@ -28,7 +16,10 @@
   min-height: var(--hbr-min-height, 500px);
 }
 
-/* Start: Hero Banner — Picture Element */
+/* ============================================================================
+   BLOCK: Hero Banner Responsive — Picture & Image
+   ============================================================================ */
+
 .hero-banner-responsive__picture {
   position: absolute;
   inset: 0;
@@ -45,9 +36,11 @@
   object-position: center center;
   display: block;
 }
-/* End: Hero Banner — Picture Element */
 
-/* Start: Hero Banner — Overlay */
+/* ============================================================================
+   BLOCK: Hero Banner Responsive — Overlay
+   ============================================================================ */
+
 .hero-banner-responsive__overlay {
   position: absolute;
   inset: 0;
@@ -55,9 +48,7 @@
   background: var(--hbr-overlay-color, transparent);
   pointer-events: none;
 }
-/* End: Hero Banner — Overlay */
 
-/* Start: Hero Banner — Content */
 .hero-banner-responsive__content {
   position: relative;
   z-index: 2;
@@ -80,6 +71,10 @@
   text-align: right;
   margin-inline-start: auto;
 }
+
+/* ============================================================================
+   BLOCK: Hero Banner Responsive — Typography
+   ============================================================================ */
 
 .hero-banner-responsive__eyebrow {
   font-size: 0.75rem;
@@ -113,6 +108,7 @@
   max-width: 100%;
 }
 
+/* --- Base --- */
 .hero-banner-responsive__button {
   display: inline-flex;
   align-items: center;
@@ -131,6 +127,7 @@
   cursor: pointer;
 }
 
+/* --- Variants (--center, --right) --- */
 .hero-banner-responsive__content--center .hero-banner-responsive__button {
   align-self: center;
 }
@@ -139,11 +136,17 @@
   align-self: flex-end;
 }
 
+/* --- States (:hover) --- */
 .hero-banner-responsive__button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgb(0 0 0 / 0.15);
 }
 
+/* ============================================================================
+   BLOCK: Hero Banner Responsive — Mobile
+   ============================================================================ */
+
+/* --- Media Queries --- */
 @media screen and (max-width: 749px) {
   .hero-banner-responsive__content {
     padding: var(--hbr-padding-block-mobile, 40px) var(--hbr-padding-inline-mobile, 20px);
@@ -154,24 +157,16 @@
     font-size: clamp(1.75rem, 8vw, 2.5rem);
   }
 }
-/* End: Hero Banner — Content */
-
-/* End Hero Banner Responsive */
-/* You can paste future updates here without breaking anything */
-
 
 /* ============================================================================
-   Start New Arrivals Section
+   BLOCK: New Arrivals — Section & Header
    ============================================================================ */
 
-/* Start: New Arrivals — Section Wrapper */
 .new-arrivals-section {
   padding-block: var(--na-padding-block, 64px);
   background-color: var(--color-background);
 }
-/* End: New Arrivals — Section Wrapper */
 
-/* Start: New Arrivals — Header */
 .new-arrivals__header {
   text-align: var(--na-text-align, center);
   margin-bottom: 48px;
@@ -205,15 +200,15 @@
   max-width: 560px;
   margin-inline: auto;
 }
-/* End: New Arrivals — Header */
 
-/* Start: New Arrivals — Grid */
+/* --- Base --- */
 .new-arrivals__grid {
   display: grid;
   grid-template-columns: repeat(var(--na-cols-mobile, 2), 1fr);
   gap: var(--na-gap, 16px);
 }
 
+/* --- Media Queries --- */
 @media screen and (min-width: 750px) {
   .new-arrivals__grid {
     grid-template-columns: repeat(var(--na-cols-tablet, 3), 1fr);
@@ -226,13 +221,16 @@
     grid-template-columns: repeat(var(--na-cols-desktop, 4), 1fr);
   }
 }
-/* End: New Arrivals — Grid */
 
-/* Start: New Arrivals — Carousel */
+/* ============================================================================
+   BLOCK: New Arrivals — Carousel
+   ============================================================================ */
+
 .new-arrivals__carousel-wrapper {
   position: relative;
 }
 
+/* --- Base --- */
 .new-arrivals__carousel {
   display: flex;
   gap: var(--na-gap, 16px);
@@ -244,6 +242,7 @@
   padding-bottom: 4px;
 }
 
+/* --- Pseudo-elements (::-webkit-scrollbar) --- */
 .new-arrivals__carousel::-webkit-scrollbar {
   display: none;
 }
@@ -265,6 +264,7 @@
   }
 }
 
+/* --- Base --- */
 .new-arrivals__carousel-btn {
   position: absolute;
   top: 50%;
@@ -284,6 +284,7 @@
   box-shadow: 0 2px 8px rgb(0 0 0 / 0.08);
 }
 
+/* --- States (:hover) --- */
 .new-arrivals__carousel-btn:hover {
   background: var(--color-foreground);
   color: var(--color-background);
@@ -291,26 +292,31 @@
   transform: translateY(-50%) scale(1.05);
 }
 
+/* --- States (:disabled) --- */
 .new-arrivals__carousel-btn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
   pointer-events: none;
 }
 
+/* --- Variants (--prev, --next) --- */
 .new-arrivals__carousel-btn--prev { left: -22px; }
 .new-arrivals__carousel-btn--next { right: -22px; }
 
 @media screen and (max-width: 749px) {
   .new-arrivals__carousel-btn { display: none; }
 }
-/* End: New Arrivals — Carousel */
 
-/* Start: New Arrivals — CTA */
+/* ============================================================================
+   BLOCK: New Arrivals — CTA
+   ============================================================================ */
+
 .new-arrivals__cta {
   text-align: center;
   margin-top: 40px;
 }
 
+/* --- Base --- */
 .new-arrivals__cta-link {
   display: inline-flex;
   align-items: center;
@@ -326,28 +332,21 @@
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
+/* --- States (:hover) --- */
 .new-arrivals__cta-link:hover {
   background: var(--color-foreground);
   color: var(--color-background);
 }
-/* End: New Arrivals — CTA */
-
-/* End New Arrivals Section */
-/* You can paste future updates here without breaking anything */
-
 
 /* ============================================================================
-   Start Multicolumn Info Section
+   BLOCK: Multicolumn — Section & Header
    ============================================================================ */
 
-/* Start: Multicolumn — Wrapper */
 .multicolumn-section {
   padding-block: var(--mc-padding-block, 64px);
   background-color: var(--color-background);
 }
-/* End: Multicolumn — Wrapper */
 
-/* Start: Multicolumn — Header */
 .multicolumn__header {
   text-align: center;
   margin-bottom: 48px;
@@ -381,9 +380,7 @@
   max-width: 560px;
   margin-inline: auto;
 }
-/* End: Multicolumn — Header */
 
-/* Start: Multicolumn — Grid */
 .multicolumn__grid {
   display: grid;
   grid-template-columns: repeat(var(--mc-cols-mobile, 1), 1fr);
@@ -402,9 +399,11 @@
     gap: var(--mc-gap-desktop, 40px);
   }
 }
-/* End: Multicolumn — Grid */
 
-/* Start: Multicolumn — Column Item */
+/* ============================================================================
+   BLOCK: Multicolumn — Item
+   ============================================================================ */
+
 .multicolumn__item {
   display: flex;
   flex-direction: column;
@@ -418,6 +417,7 @@
   text-align: center;
 }
 
+/* --- Variants (--bordered) --- */
 .multicolumn__item--bordered {
   padding: 28px 24px;
   border: 1.5px solid rgb(var(--color-border-rgb) / 0.2);
@@ -425,13 +425,16 @@
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
+/* --- States (:hover) --- */
 .multicolumn__item--bordered:hover {
   border-color: rgb(var(--color-border-rgb) / 0.5);
   box-shadow: 0 4px 20px rgb(0 0 0 / 0.06);
 }
-/* End: Multicolumn — Column Item */
 
-/* Start: Multicolumn — Icon */
+/* ============================================================================
+   BLOCK: Multicolumn — Icon
+   ============================================================================ */
+
 .multicolumn__icon-wrapper {
   display: flex;
   align-items: center;
@@ -449,9 +452,11 @@
   height: calc(var(--mc-icon-size, 56px) * 0.5);
   object-fit: contain;
 }
-/* End: Multicolumn — Icon */
 
-/* Start: Multicolumn — Text */
+/* ============================================================================
+   BLOCK: Multicolumn — Item Content
+   ============================================================================ */
+
 .multicolumn__item-title {
   font-size: 1.0625rem;
   font-weight: 700;
@@ -468,6 +473,7 @@
   margin: 0;
 }
 
+/* --- Base --- */
 .multicolumn__item-link {
   display: inline-flex;
   align-items: center;
@@ -481,19 +487,15 @@
   transition: text-decoration-color 0.2s ease;
 }
 
+/* --- States (:hover) --- */
 .multicolumn__item-link:hover {
   text-decoration-color: currentColor;
 }
-/* End: Multicolumn — Text */
-
-/* End Multicolumn Info Section */
-/* You can paste future updates here without breaking anything */
 
 /* ============================================================================
-   Start Sephora-Style Product Card Enhancements
+   BLOCK: Product Card — Brand & Name
    ============================================================================ */
 
-/* Start: Product Card — Brand + Name + Description + Price layout */
 .product-card__brand {
   font-size: 0.6875rem;
   font-weight: 600;
@@ -517,6 +519,10 @@
   overflow: hidden;
 }
 
+/* ============================================================================
+   BLOCK: Product Card — Description
+   ============================================================================ */
+
 .product-card__short-desc {
   font-size: 0.8125rem;
   line-height: 1.5;
@@ -528,9 +534,11 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-/* End: Product Card — Brand + Name + Description */
 
-/* Start: Product Card — Sephora Price Format */
+/* ============================================================================
+   BLOCK: Product Card — Price
+   ============================================================================ */
+
 .product-card__price-block {
   display: flex;
   align-items: baseline;
@@ -571,31 +579,21 @@
 .product-card__price-current--sale {
   color: #E63946;
 }
-/* End: Product Card — Sephora Price Format */
-
-/* End Sephora-Style Product Card Enhancements */
-/* You can paste future updates here without breaking anything */
-
 
 /* ============================================================================
-   Start Visual Separation Utilities (Header / Content)
+   BLOCK: Visual Separation Utilities
    ============================================================================ */
 
-/* Start: Header Group Separation */
 #header-group {
   position: relative;
   z-index: var(--layer-sticky, 300);
 }
 
-/* Subtle bottom shadow on header group to separate from content */
 .header-section {
   box-shadow: 0 1px 0 0 rgb(var(--color-border-rgb) / 0.12),
               0 2px 8px 0 rgb(0 0 0 / 0.04);
 }
 
-/* End: Header Group Separation */
-
-/* Start: Section Spacing Utilities */
 .section-separator {
   height: 1px;
   background: rgb(var(--color-border-rgb) / 0.15);
@@ -609,32 +607,20 @@
 .section-separator--spaced {
   margin-block: 32px;
 }
-/* End: Section Spacing Utilities */
 
-/* Start: Content Area Top Spacing */
 .content-for-layout > .shopify-section:first-child {
-  /* Ensure first section doesn't collapse into header */
   position: relative;
 }
-/* End: Content Area Top Spacing */
-
-/* End Visual Separation Utilities */
-/* You can paste future updates here without breaking anything */
-
 
 /* ============================================================================
-   Start Sephora-Style Collection Filters
+   BLOCK: Collection Filters — Sidebar Layout
    ============================================================================ */
 
-/* Start: Filter Panel — Sephora Visual Design */
-
-/* ── Filter sidebar/panel base ── */
 .facets-block-wrapper--vertical .facets--vertical {
   border-right: 1px solid var(--color-gray-200, #E5E7EB);
   padding-right: 1.5rem;
 }
 
-/* ── Filter heading ── */
 .facets--filters-title {
   font-family: var(--font-heading, 'Playfair Display', serif);
   font-size: 1.125rem;
@@ -646,16 +632,20 @@
   margin-bottom: 1rem;
 }
 
-/* ── Filter item (accordion) ── */
 .facets__item {
   border-bottom: 1px solid var(--color-gray-100, #F5F5F0);
 }
 
+/* --- Pseudo-elements (::before) --- */
 .facets__item::before {
-  display: none !important; /* Remove Horizon's default border — we use our own */
+  display: none !important;
 }
 
-/* ── Filter summary (accordion toggle) ── */
+/* ============================================================================
+   BLOCK: Collection Filters — Summary / Accordion
+   ============================================================================ */
+
+/* --- Base --- */
 .facets__summary {
   font-family: var(--font-body, 'Inter', sans-serif);
   font-size: 0.875rem;
@@ -673,15 +663,16 @@
   transition: color var(--duration-fast, 150ms) ease;
 }
 
+/* --- States (:hover) --- */
 .facets__summary:hover {
   color: var(--color-yellow-dark, #E6A500);
 }
 
+/* --- Pseudo-elements (::-webkit-details-marker) --- */
 .facets__summary::-webkit-details-marker {
   display: none;
 }
 
-/* ── Filter caret icon ── */
 .facets__summary .icon-caret {
   width: 16px;
   height: 16px;
@@ -689,16 +680,20 @@
   color: var(--color-gray-500, #8D8D8D);
 }
 
+/* --- Variants ([open]) --- */
 details[open] .facets__summary .icon-caret {
   transform: rotate(180deg);
 }
 
-/* ── Filter inputs wrapper ── */
+/* ============================================================================
+   BLOCK: Collection Filters — Inputs & Labels
+   ============================================================================ */
+
 .facets__inputs-wrapper {
   padding: 0.5rem 0 1rem;
 }
 
-/* ── Filter checkbox label ── */
+/* --- Base --- */
 .facets__label {
   font-size: 0.875rem;
   color: var(--color-gray-700, #4A4A4A);
@@ -711,11 +706,12 @@ details[open] .facets__summary .icon-caret {
   padding: 0.25rem 0;
 }
 
+/* --- States (:hover) --- */
 .facets__label:hover {
   color: var(--color-black, #000);
 }
 
-/* ── Checkbox styling ── */
+/* --- Base --- */
 .facets__label input[type="checkbox"] {
   width: 16px;
   height: 16px;
@@ -730,11 +726,13 @@ details[open] .facets__summary .icon-caret {
   position: relative;
 }
 
+/* --- States (:checked) --- */
 .facets__label input[type="checkbox"]:checked {
   background-color: var(--color-yellow, #FFD700);
   border-color: var(--color-yellow, #FFD700);
 }
 
+/* --- Pseudo-elements (:checked::after) --- */
 .facets__label input[type="checkbox"]:checked::after {
   content: '';
   position: absolute;
@@ -748,12 +746,16 @@ details[open] .facets__summary .icon-caret {
   transform: rotate(45deg);
 }
 
+/* --- States (:focus-visible) --- */
 .facets__label input[type="checkbox"]:focus-visible {
   outline: 2px solid var(--color-yellow, #FFD700);
   outline-offset: 2px;
 }
 
-/* ── Active filter count bubble ── */
+/* ============================================================================
+   BLOCK: Collection Filters — Bubble Count
+   ============================================================================ */
+
 .facets__bubble {
   background: var(--color-yellow, #FFD700);
   color: var(--color-black, #000);
@@ -768,7 +770,10 @@ details[open] .facets__summary .icon-caret {
   margin-left: 0.375rem;
 }
 
-/* ── Price range filter ── */
+/* ============================================================================
+   BLOCK: Collection Filters — Price Range
+   ============================================================================ */
+
 .price-filter__range-wrapper {
   padding: 0.5rem 0;
 }
@@ -779,6 +784,7 @@ details[open] .facets__summary .icon-caret {
   align-items: center;
 }
 
+/* --- Base --- */
 .price-filter__input {
   flex: 1;
   padding: 0.5rem 0.75rem;
@@ -790,13 +796,13 @@ details[open] .facets__summary .icon-caret {
   transition: border-color var(--duration-fast, 150ms) ease;
 }
 
+/* --- States (:focus) --- */
 .price-filter__input:focus {
   border-color: var(--color-yellow, #FFD700);
   outline: none;
   box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.15);
 }
 
-/* ── Price range slider ── */
 .price-filter__range {
   -webkit-appearance: none;
   appearance: none;
@@ -808,6 +814,7 @@ details[open] .facets__summary .icon-caret {
   margin: 0.75rem 0;
 }
 
+/* --- Pseudo-elements (::-webkit-slider-thumb) --- */
 .price-filter__range::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -820,17 +827,22 @@ details[open] .facets__summary .icon-caret {
   transition: transform var(--duration-fast, 150ms) ease;
 }
 
+/* --- States (:hover) --- */
 .price-filter__range::-webkit-slider-thumb:hover {
   transform: scale(1.2);
 }
 
-/* ── Swatch filters (color/finish) ── */
+/* ============================================================================
+   BLOCK: Collection Filters — Swatches
+   ============================================================================ */
+
 .facets__inputs-list--swatches {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
 
+/* --- Base --- */
 .variant-option__swatch-wrapper {
   width: 28px;
   height: 28px;
@@ -842,17 +854,22 @@ details[open] .facets__summary .icon-caret {
   overflow: hidden;
 }
 
+/* --- States (:hover) --- */
 .variant-option__swatch-wrapper:hover {
   border-color: var(--color-black, #000);
   transform: scale(1.1);
 }
 
+/* --- Variants (.is-active) --- */
 .variant-option__swatch-wrapper.is-active {
   border-color: var(--color-yellow, #FFD700);
   box-shadow: 0 0 0 2px var(--color-black, #000);
 }
 
-/* ── Filter remove buttons (active filters) ── */
+/* ============================================================================
+   BLOCK: Collection Filters — Active Filter Tags
+   ============================================================================ */
+
 .filter-remove-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -860,6 +877,7 @@ details[open] .facets__summary .icon-caret {
   padding: 0.75rem 0;
 }
 
+/* --- Base --- */
 .filter-remove-button {
   display: inline-flex;
   align-items: center;
@@ -875,6 +893,7 @@ details[open] .facets__summary .icon-caret {
   transition: background-color var(--duration-fast, 150ms) ease;
 }
 
+/* --- States (:hover) --- */
 .filter-remove-button:hover {
   background: var(--color-yellow, #FFD700);
 }
@@ -884,7 +903,11 @@ details[open] .facets__summary .icon-caret {
   height: 12px;
 }
 
-/* ── Clear all filters button ── */
+/* ============================================================================
+   BLOCK: Collection Filters — Clear & Actions
+   ============================================================================ */
+
+/* --- Base --- */
 .facets__clear-all,
 .clear-filter {
   font-size: 0.8125rem;
@@ -901,13 +924,17 @@ details[open] .facets__summary .icon-caret {
   padding: 0;
 }
 
+/* --- States (:hover) --- */
 .facets__clear-all:hover,
 .clear-filter:hover {
   color: var(--color-black, #000);
   text-decoration-color: currentColor;
 }
 
-/* ── Filter actions (Apply / See Results) ── */
+/* ============================================================================
+   BLOCK: Collection Filters — Results & Toggle
+   ============================================================================ */
+
 .facets__actions {
   padding: 1rem 1.5rem;
   border-top: 1px solid var(--color-gray-200, #E5E7EB);
@@ -918,6 +945,7 @@ details[open] .facets__summary .icon-caret {
   background: var(--color-white, #fff);
 }
 
+/* --- Base --- */
 .facets__see-results {
   flex: 1;
   padding: 0.75rem 1.5rem;
@@ -933,12 +961,13 @@ details[open] .facets__summary .icon-caret {
   text-align: center;
 }
 
+/* --- States (:hover) --- */
 .facets__see-results:hover {
   background: var(--color-yellow-dark, #E6A500);
   transform: translateY(-1px);
 }
 
-/* ── Filter toggle button (mobile) ── */
+/* --- Base --- */
 .facets-toggle__button {
   display: inline-flex;
   align-items: center;
@@ -955,12 +984,12 @@ details[open] .facets__summary .icon-caret {
               color var(--duration-fast, 150ms) ease;
 }
 
+/* --- States (:hover) --- */
 .facets-toggle__button:hover {
   background: var(--color-black, #000);
   color: var(--color-white, #fff);
 }
 
-/* ── Filter count bubble (toggle button) ── */
 .filter-count-bubble {
   background: var(--color-yellow, #FFD700) !important;
   color: var(--color-black, #000) !important;
@@ -971,7 +1000,11 @@ details[open] .facets__summary .icon-caret {
   background-color: var(--color-yellow, #FFD700) !important;
 }
 
-/* ── Sorting dropdown ── */
+/* ============================================================================
+   BLOCK: Collection Filters — Sorting
+   ============================================================================ */
+
+/* --- Base --- */
 .sorting-filter-component select,
 .facets .sorting select {
   padding: 0.5rem 2rem 0.5rem 0.75rem;
@@ -990,21 +1023,16 @@ details[open] .facets__summary .icon-caret {
   transition: border-color var(--duration-fast, 150ms) ease;
 }
 
-.sorting-filter-component select:focus,
-.facets .sorting select:focus {
-  border-color: var(--color-yellow, #FFD700);
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.15);
-}
+/* ============================================================================
+   BLOCK: Collection Filters — Drawer & Misc
+   ============================================================================ */
 
-/* ── Products count ── */
 .products-count-wrapper {
   font-size: 0.8125rem;
   color: var(--color-gray-500, #8D8D8D);
   font-weight: 400;
 }
 
-/* ── Drawer filter panel ── */
 .facets--drawer {
   border-right: none;
   border-radius: var(--radius-xl, 0.75rem) 0 0 var(--radius-xl, 0.75rem);
@@ -1017,7 +1045,6 @@ details[open] .facets__summary .icon-caret {
   color: var(--color-black, #000);
 }
 
-/* ── Show more button ── */
 .facets__inputs .show-more__button {
   font-size: 0.8125rem;
   font-weight: 600;
@@ -1038,17 +1065,10 @@ details[open] .facets__summary .icon-caret {
   color: var(--color-black, #000);
 }
 
-/* End: Filter Panel — Sephora Visual Design */
-
-/* End Sephora-Style Collection Filters */
-/* You can paste future updates here without breaking anything */
-
-
 /* ============================================================================
-   Start Scroll Reveal Animation Utility
+   BLOCK: Scroll Reveal Animation
    ============================================================================ */
 
-/* Start: Scroll Reveal */
 .reveal-on-scroll {
   opacity: 0;
   transform: translateY(24px);
@@ -1067,7 +1087,3 @@ details[open] .facets__summary .icon-caret {
     transition: none;
   }
 }
-/* End: Scroll Reveal */
-
-/* End Scroll Reveal Animation Utility */
-/* You can paste future updates here without breaking anything */
