@@ -22,17 +22,6 @@
           {% endfor %}
         </div>
 
-        <!-- TRACK 2 (duplicado para marquee infinito) -->
-        <div class="announcement-bar__track">
-          {% for block in section.blocks %}
-            <div class="announcement-bar__message" {{ block.shopify_attributes }}>
-              {{ block.settings.text }}
-            </div>
-          {% endfor %}
-        </div>
-
-      </div>
-
       {%- if section.settings.show_close_button -%}
         <button
           type="button"
@@ -47,3 +36,4 @@
     </div>
   </announcement-bar>
 {%- endif -%}
+
