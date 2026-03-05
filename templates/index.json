@@ -9,25 +9,45 @@
  */
 {
   "sections": {
-    "announcement_bar_jrfAfh": {
-      "type": "announcement-bar",
+    "marquee_QybQdh": {
+      "type": "marquee",
       "blocks": {
-        "message_GWL78r": {
-          "type": "message",
+        "text_yxKiEE": {
+          "type": "text",
           "settings": {
-            "text": "Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar, Prueba del announcement bar.",
-            "enable_timer": false,
-            "end_date": ""
-          }
+            "text": "<p>We make things that work better and last longer.</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "custom",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "tight",
+            "letter_spacing": "tight",
+            "case": "none",
+            "wrap": "nowrap",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
         }
       },
       "block_order": [
-        "message_GWL78r"
+        "text_yxKiEE"
       ],
-      "name": "Announcement Bar",
+      "name": "t:names.marquee_section",
       "settings": {
-        "background": "#e3f7c8",
-        "text_color": "#110933"
+        "movement_direction": "reverse",
+        "color_scheme": "",
+        "padding-block-start": 24,
+        "padding-block-end": 24,
+        "gap_between_elements": 24
       }
     },
     "header_8HFUJf": {
@@ -178,7 +198,7 @@
     }
   },
   "order": [
-    "announcement_bar_jrfAfh",
+    "marquee_QybQdh",
     "header_8HFUJf",
     "hero_jVaWmY",
     "dreams_hbwTMd",
