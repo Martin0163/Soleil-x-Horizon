@@ -157,6 +157,17 @@
     },
     "announcement_bar_VeagUm": {
       "type": "announcement-bar",
+      "blocks": {
+        "message_D7UA97": {
+          "type": "message",
+          "settings": {
+            "text": "Welcome to our store!, Welcome to our store!, Welcome to our store!, Welcome to our store!, Welcome to our store!, Welcome to our store!"
+          }
+        }
+      },
+      "block_order": [
+        "message_D7UA97"
+      ],
       "name": "Announcement Bar",
       "settings": {
         "enable_announcement": true,
