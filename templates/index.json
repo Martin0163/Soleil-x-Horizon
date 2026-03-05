@@ -157,6 +157,17 @@
     },
     "announcement_bar_Gx3MkN": {
       "type": "announcement-bar",
+      "blocks": {
+        "message_ahFwAN": {
+          "type": "message",
+          "settings": {
+            "text": "Welcome to our store!, Welcome to our store!, Welcome to our store!, Welcome to our store!, Welcome to our store!, Welcome to our store!"
+          }
+        }
+      },
+      "block_order": [
+        "message_ahFwAN"
+      ],
       "name": "Announcement Bar",
       "settings": {
         "enable_announcement": true,
