@@ -154,9 +154,20 @@
         "products_per_page": 24,
         "enable_pagination": true
       }
+    },
+    "announcement_bar_BVGxzk": {
+      "type": "announcement-bar",
+      "name": "Announcement Bar",
+      "settings": {
+        "enable_announcement": true,
+        "background_color": "#e3f7c8",
+        "text_color": "#110933",
+        "show_close_button": true
+      }
     }
   },
   "order": [
+    "announcement_bar_BVGxzk",
     "header_8HFUJf",
     "hero_jVaWmY",
     "dreams_hbwTMd",
