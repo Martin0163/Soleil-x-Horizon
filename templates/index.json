@@ -570,9 +570,21 @@
         "content": "<p>About Us section content</p>",
         "color_scheme": "scheme-1"
       }
+    },
+    "header_8HFUJf": {
+      "type": "header",
+      "name": "Header",
+      "settings": {
+        "main_menu": "main-menu",
+        "nav_home_text": "Inicio",
+        "nav_products_text": "Productos",
+        "show_search": true,
+        "show_account": true
+      }
     }
   },
   "order": [
+    "header_8HFUJf",
     "announcement_bar_DmiRjN",
     "hero_jVaWmY",
     "collection-tabs",
