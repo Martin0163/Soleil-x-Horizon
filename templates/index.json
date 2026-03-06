@@ -8,27 +8,6 @@
  * ------------------------------------------------------------
  */
 {
-  "sections": {
-    "header_8HFUJf": {
-      "type": "header",
-      "name": "Header",
-      "settings": {
-        "main_menu": "main-menu",
-        "nav_home_text": "Inicio",
-        "nav_products_text": "Productos",
-        "show_search": true,
-        "show_account": true
-      }
-    },
-    "announcement_bar_MtmhLm": {
-      "type": "announcement-bar",
-      "blocks": {
-        "message_kyDBUa": {
-          "type": "message",
-          "settings": {
-            "text": "Welcome to our store!"
-          }
-        }
       },
       "block_order": [
         "message_kyDBUa"
