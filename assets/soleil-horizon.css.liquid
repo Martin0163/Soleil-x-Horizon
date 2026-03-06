@@ -11,6 +11,18 @@
    5. Utilities (Spacing, Text, etc.)
 */
 
+/* ============================
+   GLOBAL VARIABLES (TOKENS)
+   ============================ */
+:root {
+  --header-height: 80px;
+  --announcement-height: 36px;
+
+  /* Puedes ajustar estos si quieres más separación */
+  --header-bg: #ffffff;
+  --announcement-bg: #e3f7c8;
+}
+
 /* 1. Tokens */
 @import 'css-tokens.css';
 
@@ -26,12 +38,27 @@
 /* 5. Utilities */
 @import 'css-utilities.css';
 
-:root {
-  --header-height: 80px;
-  --announcement-height: 36px;
-}
-
+/* ============================
+   ANNOUNCEMENT BAR
+   ============================ */
 .announcement-bar {
   height: var(--announcement-height);
   line-height: var(--announcement-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--announcement-bg);
+  position: relative;
+  z-index: 60;
+}
+
+/* ============================
+   HEADER
+   ============================ */
+.site-header {
+  height: var(--header-height);
+  background: var(--header-bg);
+  position: sticky;
+  top: var(--announcement-height);
+  z-index: 50;
 }
