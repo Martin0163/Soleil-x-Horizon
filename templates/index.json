@@ -20,6 +20,28 @@
         "show_account": true
       }
     },
+    "announcement_bar_MtmhLm": {
+      "type": "announcement-bar",
+      "blocks": {
+        "message_kyDBUa": {
+          "type": "message",
+          "settings": {
+            "text": "Welcome to our store!"
+          }
+        }
+      },
+      "block_order": [
+        "message_kyDBUa"
+      ],
+      "name": "Announcement Bar",
+      "settings": {
+        "enable_announcement": true,
+        "background_color": "#e3f7c8",
+        "text_color": "#110933",
+        "show_close_button": true,
+        "animation_style": "marquee"
+      }
+    },
     "hero_jVaWmY": {
       "type": "hero",
       "blocks": {
@@ -154,25 +176,14 @@
         "products_per_page": 24,
         "enable_pagination": true
       }
-    },
-    "announcement_bar_MtmhLm": {
-      "type": "announcement-bar",
-      "name": "Announcement Bar",
-      "settings": {
-        "enable_announcement": true,
-        "background_color": "#e3f7c8",
-        "text_color": "#110933",
-        "show_close_button": true,
-        "animation_style": "marquee"
-      }
     }
   },
   "order": [
     "header_8HFUJf",
+    "announcement_bar_MtmhLm",
     "hero_jVaWmY",
     "dreams_hbwTMd",
     "new_arrivals_eiLMCg",
-    "soleil_products_gFXUHy",
-    "announcement_bar_MtmhLm"
+    "soleil_products_gFXUHy"
   ]
 }
