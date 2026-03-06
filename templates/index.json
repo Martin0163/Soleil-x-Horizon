@@ -1,26 +1,30 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
-      },
-      "block_order": [
-        "message_kyDBUa"
-      ],
-      "name": "Announcement Bar",
-      "settings": {
-        "enable_announcement": true,
-        "background_color": "#e3f7c8",
-        "text_color": "#110933",
-        "show_close_button": false,
-        "animation_style": "marquee"
-      }
+  "sections": {
+    "hero_jVaWmY": {
+      "type": "hero",
+      ...
+    },
+    "dreams_hbwTMd": {
+      "type": "dreams",
+      ...
+    },
+    "new_arrivals_eiLMCg": {
+      "type": "new-arrivals",
+      ...
+    },
+    "soleil_products_gFXUHy": {
+      "type": "soleil-products",
+      ...
     }
+  },
+  "order": [
+    "hero_jVaWmY",
+    "dreams_hbwTMd",
+    "new_arrivals_eiLMCg",
+    "soleil_products_gFXUHy"
+  ]
+}
+    },
     "hero_jVaWmY": {
       "type": "hero",
       "blocks": {
