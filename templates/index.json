@@ -1,38 +1,31 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "hero_jVaWmY": {
       "type": "hero",
-      
-    },
-    "dreams_hbwTMd": {
-      "type": "dreams",
-      
-    },
-    "new_arrivals_eiLMCg": {
-      "type": "new-arrivals",
-      
-    },
-    "soleil_products_gFXUHy": {
-      "type": "soleil-products",
-      
-    }
-  },
-  "order": [
-    "hero_jVaWmY",
-    "dreams_hbwTMd",
-    "new_arrivals_eiLMCg",
-    "soleil_products_gFXUHy"
-  ]
-}
+      "blocks": {
+        "text_YLPk4p": {
+          "type": "text",
+          "name": "t:names.heading",
+          "settings": {
+            "text": "<p>Browse our latest products</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "h2",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground-heading)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
           },
           "blocks": {}
         },
@@ -88,6 +81,7 @@
         "padding-block-end": 72
       }
     },
+
     "dreams_hbwTMd": {
       "type": "dreams",
       "name": "Dreams",
@@ -104,6 +98,7 @@
         "show_stats": false
       }
     },
+
     "new_arrivals_eiLMCg": {
       "type": "new-arrivals",
       "name": "New Arrivals",
@@ -126,6 +121,7 @@
         "padding-block-end": 60
       }
     },
+
     "soleil_products_gFXUHy": {
       "type": "soleil-products",
       "name": "Products",
@@ -143,11 +139,12 @@
       }
     }
   },
+
   "order": [
-    "header_8HFUJf",
     "hero_jVaWmY",
     "dreams_hbwTMd",
     "new_arrivals_eiLMCg",
     "soleil_products_gFXUHy"
   ]
 }
+
