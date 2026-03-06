@@ -11,19 +11,19 @@
   "sections": {
     "hero_jVaWmY": {
       "type": "hero",
-      ...
+      
     },
     "dreams_hbwTMd": {
       "type": "dreams",
-      ...
+      
     },
     "new_arrivals_eiLMCg": {
       "type": "new-arrivals",
-      ...
+      
     },
     "soleil_products_gFXUHy": {
       "type": "soleil-products",
-      ...
+      
     }
   },
   "order": [
