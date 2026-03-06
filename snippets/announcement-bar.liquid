@@ -16,7 +16,7 @@
         <!-- TRACK 1 -->
         <div class="announcement-bar__track">
           {% for block in section.blocks %}
-            <div class="announcement-bar__message" {{ block.shopify_attributes }}>
+            <div class="announcement-bar__message" {{ block.settings.text }}</div>
               {{ block.settings.text }}
             </div>
           {% endfor %}
@@ -47,3 +47,4 @@
     </div>
   </announcement-bar>
 {%- endif -%}
+
