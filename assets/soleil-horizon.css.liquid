@@ -42,23 +42,26 @@
    ANNOUNCEMENT BAR
    ============================ */
 .announcement-bar {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+
   height: var(--announcement-height);
   line-height: var(--announcement-height);
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--announcement-bg);
-  position: relative;
-  z-index: 60;
 }
 
 /* ============================
    HEADER
    ============================ */
 .site-header {
-  height: var(--header-height);
-  background: var(--header-bg);
   position: sticky;
   top: var(--announcement-height);
-  z-index: 50;
+  z-index: 9998;
+
+  height: var(--header-height);
+  background: var(--header-bg);
 }
