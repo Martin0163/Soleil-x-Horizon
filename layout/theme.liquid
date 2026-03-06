@@ -46,6 +46,8 @@
 
   <body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}">
     <div id="header-group">
+      {% section 'header' %}
+      {% section 'announcement-bar' %}
       {%- render 'announcement-bar', section: section -%}
     </div>
 
