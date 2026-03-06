@@ -1,29 +1,24 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "hero_jVaWmY": {
-      "type": "hero",
-      ...
-    },
-    "dreams_hbwTMd": {
-      "type": "dreams",
-      ...
-    },
-    "new_arrivals_eiLMCg": {
-      "type": "new-arrivals",
-      ...
-    },
-    "soleil_products_gFXUHy": {
-      "type": "soleil-products",
-      ...
-    }
-  },
-  "order": [
-    "hero_jVaWmY",
-    "dreams_hbwTMd",
-    "new_arrivals_eiLMCg",
-    "soleil_products_gFXUHy"
-  ]
-}
+    "header_8HFUJf": {
+      "type": "header",
+      "name": "Header",
+      "settings": {
+        "main_menu": "main-menu",
+        "nav_home_text": "Inicio",
+        "nav_products_text": "Productos",
+        "show_search": true,
+        "show_account": true
+      }
     },
     "hero_jVaWmY": {
       "type": "hero",
@@ -163,7 +158,6 @@
   },
   "order": [
     "header_8HFUJf",
-    "announcement_bar_MtmhLm",
     "hero_jVaWmY",
     "dreams_hbwTMd",
     "new_arrivals_eiLMCg",
