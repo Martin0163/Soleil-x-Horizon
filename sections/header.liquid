@@ -1,25 +1,20 @@
 <header class="site-header sticky-header" role="banner" id="site-header">
 <div class="header-inner">
+
 <!-- Logo -->
 <div class="site-logo">
-<a href="{{ routes.root_url }}" aria-label="{{ 'Go to homepage' }}: {{ shop.name }}">
-{% if section.settings.logo %}
-<img 
-src="{{ section.settings.logo | image_url: width: 300 }}" 
-srcset="
-{{ section.settings.logo | image_url: width: 150 }} 150w,
-{{ section.settings.logo | image_url: width: 300 }} 300w"
-sizes="(max-width: 768px) 150px, 200px"
-alt="{{ shop.name }}"
-width="200" 
-height="auto"
-loading="eager"
-/>
-{% else %}
-<span class="site-logo-text">{{ shop.name }}</span>
-{% endif %}
+<a href="/" aria-label="Translation missing: en.general.accessibility.go_to_homepage: Soleil Beauty Shop">
+<span class="site-logo-text">Soleil Beauty Shop</span>
 </a>
 </div>
+
+<!-- Mobile Menu Toggle -->
+<button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-expanded="false" 
+aria-controls="main-navigation" aria-label="Menu">
+<span></span>
+<span></span>
+<span></span>
+</button>
 
 <!-- Main Navigation -->
 <nav class="main-nav" id="main-navigation" role="navigation" aria-label="Main navigation">
